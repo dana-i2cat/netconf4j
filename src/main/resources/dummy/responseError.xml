@@ -1,0 +1,25 @@
+<rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns:junos="http://xml.juniper.net/junos/10.0R1/junos" message-id="###" >
+<rpc-error>
+<error-severity>error</error-severity>
+<source-daemon>
+dcd
+</source-daemon>
+<error-path>
+[edit interfaces]
+</error-path>
+<error-info>
+<bad-element>
+lt-0/3/0
+</bad-element>
+</error-info>
+<error-message>
+Interface lt-0/3/0 unit 555 refers to itself in peer-unit
+</error-message>
+</rpc-error>
+<rpc-error>
+<error-severity>error</error-severity>
+<error-message>
+configuration check-out failed
+</error-message>
+</rpc-error>
+</rpc-reply>]]>]]>
