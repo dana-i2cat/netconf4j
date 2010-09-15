@@ -1,0 +1,177 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>net.i2cat.netconf</groupId>
+	<artifactId>netconf4j</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>bundle</packaging>
+
+	<name>netconf4j</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<!-- TODO: Add requirement on 1.5 -->
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.ethz.ganymed</groupId>
+			<artifactId>ganymed-ssh2</artifactId>
+			<version>build210</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.6</version>
+		</dependency>
+		<!-- TOFIX This goes out before release-->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.12</version>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>JBOSS</id>
+			<name>JBoss Repository</name>
+			<url>http://repository.jboss.org/maven2/</url>
+		</repository>
+	</repositories>
+
+	<organization>
+		<name>http://www.i2cat.net/en</name>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License</name>
+			<url>http://www.gnu.org/licenses/lgpl.html</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Pau Minoves</name>
+			<email>pau.minoves@i2cat.net</email>
+		</developer>
+		<developer>
+			<name>Carlos Baez</name>
+			<email>carlos.baez@i2cat.net</email>
+		</developer>
+	</developers>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<!--
+				<resource> <directory>src/test/resources</directory> </resource>
+			-->
+		</resources>
+		
+		<pluginManagement>
+			<plugins>
+				<plugin>
+        			<groupId>com.google.code.maven-license-plugin</groupId>
+        			<artifactId>maven-license-plugin</artifactId>
+        			<version>1.4.0</version>
+        		</plugin>
+        	</plugins>
+		</pluginManagement>
+		
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.code.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<version>1.4.0</version>
+				<configuration>
+                	<header>COPYING.HEADER</header>
+                	<includes>
+                    	<include>**/src/main/java/**</include>
+                    	<include>**/src/test/java/**</include>
+                    </includes>
+                    <useDefaultExcludes>true</useDefaultExcludes>
+            	</configuration>
+            	<executions>
+	                <execution>
+	                    <goals>
+	                        <goal>check</goal>
+	                    </goals>
+	                </execution>
+            	</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.ops4j</groupId>
+				<artifactId>maven-pax-plugin</artifactId>
+				<version>1.4</version>
+				<!--
+					| enable improved OSGi compilation support for the bundle
+					life-cycle. | to switch back to the standard bundle life-cycle,
+					move this setting | down to the maven-bundle-plugin section
+				-->
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>1.4.2</version>
+				<extensions>true</extensions>
+				<!--
+					| the following instructions build a simple set of public/private
+					classes into an OSGi bundle
+				-->
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Bundle-Version>${project.version}</Bundle-Version>
+						<!--
+							| assume public classes are in the top package, and private
+							classes are under ".internal"
+						-->
+						<!--
+							<Private-Package></Private-Package> if i need a private package
+						-->
+						<!--
+							<Import-Package>!${bundle.namespace}.*,
+							org.springmodules.*;version="0.8",org.slf4j;version="1.5.6",*</Import-Package>
+						-->
+						<Export-Package>net.i2cat.netconf.*</Export-Package>
+						<Bundle-Activator>net.i2cat.mantychore.models.router.internal.RouterModelActivator</Bundle-Activator>
+
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
