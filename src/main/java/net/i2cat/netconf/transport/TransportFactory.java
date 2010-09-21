@@ -16,27 +16,45 @@
  */
 package net.i2cat.netconf.transport;
 
+import net.i2cat.netconf.errors.TransportNotImplementedException;
 
 public class TransportFactory {
 	private static enum TypeTransport {
 		SSH, VIRTUAL, UNKNOWN;
 	}
 
-	private static TypeTransport determineTransportType(String scheme) {
+	public static TypeTransport checkTransportType(String scheme) throws TransportNotImplementedException {
+
+		TypeTransport type;
+
 		if (scheme.equalsIgnoreCase("ssh"))
-			return TypeTransport.SSH;
+			type = TypeTransport.SSH;
 		else if (scheme.equalsIgnoreCase("virtual"))
-			return TypeTransport.VIRTUAL;
+			type = TypeTransport.VIRTUAL;
 		else
-			return TypeTransport.UNKNOWN;
+			type = TypeTransport.UNKNOWN;
+
+		switch (type) {
+			case SSH:
+			case VIRTUAL:
+				// TODO extra checks
+				break;
+			default:
+				throw new TransportNotImplementedException("Unknown transport: " + scheme);
+		}
+
+		return type;
 	}
 
-	public static boolean isTransport(String scheme) {
-		return determineTransportType(scheme) != TypeTransport.UNKNOWN;
+	public static Transport getTransport(String scheme) throws TransportNotImplementedException {
+
+		TypeTransport type = checkTransportType(scheme);
+
+		return getTransport(type);
 	}
 
-	public static Transport getTransport(String scheme) {
-		TypeTransport type = determineTransportType(scheme);
+	public static Transport getTransport(TypeTransport type) throws TransportNotImplementedException {
+
 		switch (type) {
 			case SSH:
 				return new SSHTransport();
@@ -45,5 +63,4 @@ public class TransportFactory {
 		}
 		return null;
 	}
-
 }
