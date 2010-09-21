@@ -16,7 +16,12 @@
  */
 package net.i2cat.netconf;
 
-import java.util.Vector;
+import java.util.ArrayList;
+
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import net.i2cat.netconf.errors.NetconfProtocolException;
 import net.i2cat.netconf.errors.TransportException;
@@ -32,11 +37,6 @@ import net.i2cat.netconf.transport.Transport;
 import net.i2cat.netconf.transport.TransportFactory;
 import net.i2cat.netconf.transport.TransportListener;
 import net.i2cat.netconf.utils.TimerKeepAlive;
-
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class NetconfSession implements TransportListener, MessageQueueListener {
 
@@ -57,28 +57,12 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 
 	String					sessionId;
 
-	Vector<Capability>		activeCapabilities;
-
-	public void setActiveCapabilities(Vector<Capability> activeCapabilities) {
-		this.activeCapabilities = activeCapabilities;
-	}
-
-	MessageQueue	messageQueue;
-
-	public Vector<Capability> getActiveCapabilities() {
-		return activeCapabilities;
-	}
+	MessageQueue			messageQueue;
 
 	public NetconfSession(SessionContext sessionContext) throws TransportNotImplementedException, ConfigurationException {
 		this.sessionContext = sessionContext;
 
-		if (!TransportFactory.isTransport(sessionContext.getURI().getScheme()))
-			throw new TransportNotImplementedException("Transport " + sessionContext.getURI().getScheme() + " is not implemented");
-
-	}
-
-	public void loadConfiguration(Configuration source) {
-		sessionContext.addConfiguration(source);
+		TransportFactory.checkTransportType(sessionContext.getURI().getScheme()); // throws TNIE
 	}
 
 	public void connect() throws TransportException, NetconfProtocolException {
@@ -87,10 +71,21 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 		Hello clientHello;
 		Hello serverHello;
 
+		ArrayList<Capability> activeCapabilities;
+		ArrayList<Capability> clientCapabilities;
+		ArrayList<Capability> serverCapabilities;
+
 		messageQueue = new MessageQueue();
 		messageQueue.addListener(this);
 
-		transport = TransportFactory.getTransport(sessionContext.getURI().getScheme());
+		try {
+			transport = TransportFactory.getTransport(sessionContext.getURI().getScheme());
+		} catch (TransportNotImplementedException e) {
+			TransportException te = new TransportException(e.getMessage());
+			te.initCause(e);
+			throw te;
+		}
+
 		transport.setMessageQueue(messageQueue);
 		transport.addListener(this);
 
@@ -101,7 +96,8 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 		log.info("Transport connected");
 
 		clientHello = new Hello();
-		clientHello.setCapabilities(Capability.getSupportedCapabilities());
+		clientCapabilities = Capability.getSupportedCapabilities();
+		clientHello.setCapabilities(clientCapabilities);
 
 		log.info("Sending hello");
 		transport.sendAsyncQuery(clientHello);
@@ -119,13 +115,16 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 		this.sessionId = serverHello.getSessionId();
 
 		// trim to common capabilities.
-		clientHello.getCapabilities().retainAll(serverHello.getCapabilities());
-		activeCapabilities = new Vector<Capability>(clientHello.getCapabilities());
+		serverCapabilities = serverHello.getCapabilities();
+		activeCapabilities = (ArrayList<Capability>) clientCapabilities.clone();
+		activeCapabilities.retainAll(serverCapabilities);
 
-		sessionContext.setProperty(SessionContext.CAPABILITIES, activeCapabilities);
+		sessionContext.setProperty(SessionContext.CAPABILITIES_ACTIVE, activeCapabilities);
+		sessionContext.setProperty(SessionContext.CAPABILITIES_CLIENT, clientCapabilities);
+		sessionContext.setProperty(SessionContext.CAPABILITIES_SERVER, serverCapabilities);
 
 		log.info("Session " + this.sessionId + " opened with:");
-		for (Capability capability : clientHello.getCapabilities())
+		for (Capability capability : activeCapabilities)
 			log.info(" - Capability: " + capability);
 
 		/* Activate flags */
@@ -142,14 +141,6 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 		transport.disconnect();
 	}
 
-	public void registerTransportListener(TransportListener handler) {
-		transport.addListener(handler);
-	}
-
-	public void registerMessageQueueListener(MessageQueueListener handler) {
-		messageQueue.addListener(handler);
-	}
-
 	/**
 	 * Send a Netconf Query and wait for the response.
 	 * 
@@ -164,7 +155,7 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 		log.info("Sending query (" + query.getOperation() + ")");
 
 		query.setMessageId(generateMessageId());
-		validate(query);
+		// validate(query);
 
 		transport.sendAsyncQuery(query);
 
@@ -175,16 +166,14 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 		return reply;
 	}
 
-	private void validate(Query query) {
-		// TODO, check that the content of this query object follow the base
-		// netconf rules.
-		// check active capabilities too, to see additional constrains.
-
-	}
+	// private void validate(Query query) {
+	// // TODO, check that the content of this query object follow the base
+	// // netconf rules.
+	// // check active capabilities too, to see additional constrains.
+	// }
 
 	/**
-	 * Send a Netconf Query and return immediately. You will have to get the
-	 * reply (if any) via a NetconfReplyHandler or polling receiveReply() for
+	 * Send a Netconf Query and return immediately. You will have to get the reply (if any) via a NetconfReplyHandler or polling receiveReply() for
 	 * it.
 	 * 
 	 * Don't set message-id, it will be ignored and overridden by the session.
@@ -201,6 +190,34 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 	private String generateMessageId() {
 		sessionContext.setLastMessageId(sessionContext.getLastMessageId() + 1);
 		return Integer.toString(sessionContext.getLastMessageId());
+	}
+
+	/*
+	 * Facade methods
+	 */
+
+	public void loadConfiguration(Configuration source) {
+		sessionContext.addConfiguration(source);
+	}
+
+	public ArrayList<Capability> getActiveCapabilities() {
+		return sessionContext.getActiveCapabilities();
+	}
+
+	public ArrayList<Capability> getClientCapabilities() {
+		return sessionContext.getActiveCapabilities();
+	}
+
+	public ArrayList<Capability> getServerCapabilities() {
+		return sessionContext.getActiveCapabilities();
+	}
+
+	public void registerTransportListener(TransportListener handler) {
+		transport.addListener(handler);
+	}
+
+	public void registerMessageQueueListener(MessageQueueListener handler) {
+		messageQueue.addListener(handler);
 	}
 
 	/*

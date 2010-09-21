@@ -17,34 +17,53 @@
 package net.i2cat.netconf;
 
 import java.net.URI;
-import java.util.Vector;
-
-import net.i2cat.netconf.rpc.Capability;
+import java.util.ArrayList;
 
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
-public class SessionContext extends CompositeConfiguration {
-	public final static String	LASTMESSAGEID	= "lastMessageId";
-	public final static String	CAPABILITIES	= "capabilities";
+import net.i2cat.netconf.rpc.Capability;
 
-	public final static String	URI				= "uri";
-	public final static String	KEEPALIVE		= "keepalive";
-	public final static String	LOGRESPXML		= "logrespxml";
+public class SessionContext extends CompositeConfiguration {
+	public final static String	LASTMESSAGEID		= "lastMessageId";
+	public final static String	CAPABILITIES_CLIENT	= "clientCapabilities";
+	public final static String	CAPABILITIES_SERVER	= "serverCapabilities";
+	public final static String	CAPABILITIES_ACTIVE	= "activeCapabilities";
+
+	public final static String	URI					= "uri";
+	public final static String	KEEPALIVE			= "keepalive";
+	public final static String	LOGRESPXML			= "logrespxml";
 
 	public SessionContext() throws ConfigurationException {
 		this.addConfiguration(new PropertiesConfiguration("netconf-default.properties"));
 	}
 
-	public void setCapabilities(Vector<Capability> capabilities) {
-		this.setProperty(CAPABILITIES, capabilities);
+	public void setActiveCapabilities(ArrayList<Capability> capabilities) {
+		this.setProperty(CAPABILITIES_ACTIVE, capabilities);
 
 	}
 
-	public Vector<Capability> getCapabilities() {
-		return (Vector<Capability>) this.getProperty(CAPABILITIES);
+	public ArrayList<Capability> getActiveCapabilities() {
+		return (ArrayList<Capability>) this.getProperty(CAPABILITIES_ACTIVE);
+	}
 
+	public void setClientCapabilities(ArrayList<Capability> capabilities) {
+		this.setProperty(CAPABILITIES_ACTIVE, capabilities);
+
+	}
+
+	public ArrayList<Capability> getClientCapabilities() {
+		return (ArrayList<Capability>) this.getProperty(CAPABILITIES_ACTIVE);
+	}
+
+	public void setServerCapabilities(ArrayList<Capability> capabilities) {
+		this.setProperty(CAPABILITIES_ACTIVE, capabilities);
+
+	}
+
+	public ArrayList<Capability> getServerCapabilities() {
+		return (ArrayList<Capability>) this.getProperty(CAPABILITIES_ACTIVE);
 	}
 
 	/* message id management */
