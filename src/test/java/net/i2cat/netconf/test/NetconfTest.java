@@ -20,7 +20,7 @@ import static org.junit.Assert.fail;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -197,9 +197,9 @@ public class NetconfTest {
 		NetconfSession netconfSession = initNetconf();
 		try {
 			netconfSession.connect();
-			Vector<Capability> capabilityVector = netconfSession
+			ArrayList<Capability> capabilityVector = netconfSession
 					.getActiveCapabilities();
-			Vector<Capability> baseVectorCapability = new Vector<Capability>();
+			ArrayList<Capability> baseVectorCapability = new ArrayList<Capability>();
 			baseVectorCapability.add(Capability.BASE);
 			// Check received messages
 			netconfSession.disconnect();
