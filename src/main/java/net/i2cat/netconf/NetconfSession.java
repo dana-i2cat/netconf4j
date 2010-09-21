@@ -119,9 +119,11 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 		activeCapabilities = (ArrayList<Capability>) clientCapabilities.clone();
 		activeCapabilities.retainAll(serverCapabilities);
 
-		sessionContext.setProperty(SessionContext.CAPABILITIES_ACTIVE, activeCapabilities);
-		sessionContext.setProperty(SessionContext.CAPABILITIES_CLIENT, clientCapabilities);
-		sessionContext.setProperty(SessionContext.CAPABILITIES_SERVER, serverCapabilities);
+		log.debug("ACT_CAP " + activeCapabilities);
+
+		sessionContext.setActiveCapabilities(activeCapabilities);
+		sessionContext.setClientCapabilities(clientCapabilities);
+		sessionContext.setServerCapabilities(serverCapabilities);
 
 		log.info("Session " + this.sessionId + " opened with:");
 		for (Capability capability : activeCapabilities)
@@ -152,7 +154,7 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 	 */
 	public Reply sendSyncQuery(Query query) throws TransportException {
 
-		log.info("Sending query (" + query.getOperation() + ")");
+		log.info("Sending query (" + query.getOperation().getName() + ")");
 
 		query.setMessageId(generateMessageId());
 		// validate(query);

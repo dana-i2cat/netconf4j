@@ -26,14 +26,17 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import net.i2cat.netconf.rpc.Capability;
 
 public class SessionContext extends CompositeConfiguration {
-	public final static String	LASTMESSAGEID		= "lastMessageId";
-	public final static String	CAPABILITIES_CLIENT	= "clientCapabilities";
-	public final static String	CAPABILITIES_SERVER	= "serverCapabilities";
-	public final static String	CAPABILITIES_ACTIVE	= "activeCapabilities";
 
-	public final static String	URI					= "uri";
-	public final static String	KEEPALIVE			= "keepalive";
-	public final static String	LOGRESPXML			= "logrespxml";
+	public final static String	BASE				= "net.i2cat.netconf.";
+
+	public final static String	LASTMESSAGEID		= BASE + "session.lastMessageId";
+	public final static String	CAPABILITIES_CLIENT	= BASE + "session.clientCapabilities";
+	public final static String	CAPABILITIES_SERVER	= BASE + "session.serverCapabilities";
+	public final static String	CAPABILITIES_ACTIVE	= BASE + "session.activeCapabilities";
+	public final static String	URI					= BASE + "session.uri";
+	public final static String	KEEPALIVE			= BASE + "session.keepalive";
+
+	public final static String	LOGRESPXML			= BASE + "transport.logXMLStream";
 
 	public SessionContext() throws ConfigurationException {
 		this.addConfiguration(new PropertiesConfiguration("netconf-default.properties"));
@@ -45,25 +48,24 @@ public class SessionContext extends CompositeConfiguration {
 	}
 
 	public ArrayList<Capability> getActiveCapabilities() {
-		return (ArrayList<Capability>) this.getProperty(CAPABILITIES_ACTIVE);
+		return (ArrayList<Capability>) this.getList(CAPABILITIES_ACTIVE);
 	}
 
 	public void setClientCapabilities(ArrayList<Capability> capabilities) {
-		this.setProperty(CAPABILITIES_ACTIVE, capabilities);
-
+		this.setProperty(CAPABILITIES_CLIENT, capabilities);
 	}
 
 	public ArrayList<Capability> getClientCapabilities() {
-		return (ArrayList<Capability>) this.getProperty(CAPABILITIES_ACTIVE);
+		return (ArrayList<Capability>) this.getList(CAPABILITIES_CLIENT);
 	}
 
 	public void setServerCapabilities(ArrayList<Capability> capabilities) {
-		this.setProperty(CAPABILITIES_ACTIVE, capabilities);
+		this.setProperty(CAPABILITIES_SERVER, capabilities);
 
 	}
 
 	public ArrayList<Capability> getServerCapabilities() {
-		return (ArrayList<Capability>) this.getProperty(CAPABILITIES_ACTIVE);
+		return (ArrayList<Capability>) this.getList(CAPABILITIES_SERVER);
 	}
 
 	/* message id management */
@@ -91,7 +93,7 @@ public class SessionContext extends CompositeConfiguration {
 		this.setProperty(KEEPALIVE, keepAlive);
 	}
 
-	public boolean isLogRespXML() {
+	public boolean logRespXML() {
 		return this.getBoolean(LOGRESPXML);
 	}
 

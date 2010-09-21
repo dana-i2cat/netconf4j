@@ -203,7 +203,7 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 						log.debug("Starting parser.");
 
 						// flag to log server response
-						if (sessionContext.isLogRespXML())
+						if (sessionContext.logRespXML())
 							parser.parse(new InputSource(new TeeInputStream(session.getStdout(), new FileOutputStream("server.xml.log"))));
 						else
 							parser.parse(new InputSource(session.getStdout()));
