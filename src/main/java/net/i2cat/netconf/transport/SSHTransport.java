@@ -21,11 +21,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Vector;
 
-import net.i2cat.netconf.SessionContext;
-import net.i2cat.netconf.errors.TransportException;
-import net.i2cat.netconf.messageQueue.MessageQueue;
-import net.i2cat.netconf.rpc.RPCElement;
-
 import org.apache.commons.io.input.TeeInputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,6 +32,11 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.ConnectionMonitor;
 import ch.ethz.ssh2.Session;
+
+import net.i2cat.netconf.SessionContext;
+import net.i2cat.netconf.errors.TransportException;
+import net.i2cat.netconf.messageQueue.MessageQueue;
+import net.i2cat.netconf.rpc.RPCElement;
 
 public class SSHTransport implements Transport, ConnectionMonitor {
 
@@ -102,7 +102,7 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 
 			host = sessionContext.getHost();
 			port = sessionContext.getPort();
-			if (port < 0)
+			if (port <= 0)
 				port = 22;
 
 			subsystem = sessionContext.getSubsystem();
@@ -212,7 +212,7 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 						e.printStackTrace();
 					} catch (SAXException e) {
 						if (e.getMessage().compareTo("Content is not allowed in trailing section.") == 0) {
-							// Using shitty non-xml delimiters makes us detect
+							// Using shitty non-xml delimiters forces us to detect
 							// end-of-frame by a SAX error.
 							// Do nothing will just restart the parser.
 							// Blame netconf
