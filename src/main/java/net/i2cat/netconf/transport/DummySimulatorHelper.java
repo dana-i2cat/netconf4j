@@ -23,13 +23,13 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import net.i2cat.netconf.rpc.Hello;
 import net.i2cat.netconf.rpc.Operation;
 import net.i2cat.netconf.rpc.Query;
 import net.i2cat.netconf.rpc.RPCElement;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class DummySimulatorHelper {
 
@@ -52,16 +52,23 @@ public class DummySimulatorHelper {
 	}
 
 	public String generateReply(RPCElement request) {
+
 		String pathFile = "";
 		String strResponse = "";
 		String messageId = "-1";
-		log.info("Request: ");
-		log.info(request.toXML());
+
+		log.debug("Request: ");
+		log.debug(request.toXML());
+
 		if (request instanceof Hello) {
+			log.debug("Crafting a Hello response.");
 			pathFile = helloFile;
 		} else if (request instanceof Query) {
+
 			// Check if we want to response errors
 			if (responseError) {
+
+				log.debug("Crafting an Error response.");
 				pathFile = errorFile;
 
 			} else {
@@ -69,9 +76,12 @@ public class DummySimulatorHelper {
 				Operation oper = ((Query) request).getOperation();
 				/* get message ID */
 				messageId = ((Query) request).getMessageId();
+
 				if (oper.equals(Operation.GET) || oper.equals(Operation.GET_CONFIG)) {
+					log.debug("Crafting an Info response.");
 					pathFile = infoFile;
 				} else {
+					log.debug("Crafting an Ok response.");
 					pathFile = okFile;
 				}
 
@@ -84,7 +94,7 @@ public class DummySimulatorHelper {
 		try {
 			FileInputStream inputFile = new FileInputStream(pathFile);
 			strResponse = readStringFromFile(inputFile);
-			strResponse = deleteStringEndNETCONF(strResponse);
+			// strResponse = deleteStringEndNETCONF(strResponse);
 			/* change message ID */
 			if (!messageId.equals("-1"))
 				strResponse = changeMessageIdNETCONF(strResponse, messageId);
