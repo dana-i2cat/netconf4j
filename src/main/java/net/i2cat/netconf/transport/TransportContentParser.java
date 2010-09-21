@@ -36,8 +36,7 @@ import net.i2cat.netconf.rpc.Hello;
 import net.i2cat.netconf.rpc.Reply;
 
 /**
- * This class intends to be a reusable (across transports) component that
- * receives SAX events and returns instantiated Netconf's RPCElement objects.
+ * This class intends to be a reusable (across transports) component that receives SAX events and returns instantiated Netconf's RPCElement objects.
  * 
  * @author Pau Minoves
  * 
@@ -92,7 +91,10 @@ public class TransportContentParser extends DefaultHandler2 {
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		super.startElement(uri, localName, qName, attributes);
 
-		log.debug("startElement <" + uri + ":" + localName + ">");
+		if (insideDataTag && !localName.equalsIgnoreCase("data"))
+			return;
+
+		log.debug("startElement <" + uri + "::" + localName + ">");
 
 		// if (insideDataTag)
 		// return;
@@ -269,13 +271,13 @@ public class TransportContentParser extends DefaultHandler2 {
 	@Override
 	public void error(SAXParseException e) throws SAXException {
 		// super.error(e);
-		log.error(e.getMessage());
+		log.warn(e.getMessage());
 	}
 
 	@Override
 	public void fatalError(SAXParseException e) throws SAXException {
 		// TODO Auto-generated method stub
 		// super.fatalError(e);
-		log.error(e.getMessage());
+		log.warn(e.getMessage());
 	}
 }
