@@ -91,13 +91,10 @@ public class TransportContentParser extends DefaultHandler2 {
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		super.startElement(uri, localName, qName, attributes);
 
-		if (insideDataTag && !localName.equalsIgnoreCase("data"))
-			return;
+		// if (insideDataTag && !localName.equalsIgnoreCase("data"))
+		// return;
 
 		log.debug("startElement <" + uri + "::" + localName + ">");
-
-		// if (insideDataTag)
-		// return;
 
 		if (localName.equalsIgnoreCase("hello")) {
 			hello = new Hello();
