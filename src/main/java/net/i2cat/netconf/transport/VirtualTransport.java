@@ -178,8 +178,8 @@ public class VirtualTransport implements Transport {
 						log.debug("Starting parser.");
 
 						// flag to log server response
-						if (sessionContext.logRespXML())
-							parser.parse(new InputSource(new TeeInputStream(inStream, new FileOutputStream("server.xml.log"))));
+						if (sessionContext.isLogRespXML())
+							parser.parse(new InputSource(new TeeInputStream(inStream, new FileOutputStream(sessionContext.getLogFileXML()))));
 						else
 							parser.parse(new InputSource(inStream));
 
@@ -191,12 +191,12 @@ public class VirtualTransport implements Transport {
 						if (e.getMessage().contentEquals("Content is not allowed in trailing section.")) {
 							log.debug("Detected netconf delimiter.");
 							// Using shitty non-xml delimiters forces us to detect
-							// end-of-frame by a SAX error.
+							// end-of-frame delimiter by a SAX error.
 							// Do nothing will just restart the parser.
 							// Blame netconf
 						}
 						else {
-							log.error("|" + e.getMessage() + "|");
+							log.error(e.getMessage());
 							e.printStackTrace();
 							disconnect();
 						}

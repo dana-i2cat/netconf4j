@@ -37,6 +37,7 @@ public class SessionContext extends CompositeConfiguration {
 	public final static String	KEEPALIVE			= BASE + "session.keepalive";
 
 	public final static String	LOGRESPXML			= BASE + "transport.logXMLStream";
+	public final static String	LOGFILEXML			= BASE + "transport.logXMLOutputFile";
 
 	public SessionContext() throws ConfigurationException {
 		this.addConfiguration(new PropertiesConfiguration("netconf-default.properties"));
@@ -44,7 +45,6 @@ public class SessionContext extends CompositeConfiguration {
 
 	public void setActiveCapabilities(ArrayList<Capability> capabilities) {
 		this.setProperty(CAPABILITIES_ACTIVE, capabilities);
-
 	}
 
 	public ArrayList<Capability> getActiveCapabilities() {
@@ -61,7 +61,6 @@ public class SessionContext extends CompositeConfiguration {
 
 	public void setServerCapabilities(ArrayList<Capability> capabilities) {
 		this.setProperty(CAPABILITIES_SERVER, capabilities);
-
 	}
 
 	public ArrayList<Capability> getServerCapabilities() {
@@ -93,12 +92,20 @@ public class SessionContext extends CompositeConfiguration {
 		this.setProperty(KEEPALIVE, keepAlive);
 	}
 
-	public boolean logRespXML() {
+	public boolean isLogRespXML() {
 		return this.getBoolean(LOGRESPXML);
 	}
 
 	public void setLogRespXML(boolean logRespXML) {
-		this.setProperty(KEEPALIVE, logRespXML);
+		this.setProperty(LOGRESPXML, logRespXML);
+	}
+
+	public String getLogFileXML() {
+		return this.getString(LOGFILEXML);
+	}
+
+	public void setLogFileXML(String logRespXML) {
+		this.setProperty(LOGFILEXML, logRespXML);
 	}
 
 	public String getUser() {

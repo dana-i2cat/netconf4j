@@ -203,15 +203,16 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 						log.debug("Starting parser.");
 
 						// flag to log server response
-						if (sessionContext.logRespXML())
-							parser.parse(new InputSource(new TeeInputStream(session.getStdout(), new FileOutputStream("server.xml.log"))));
+						if (sessionContext.isLogRespXML())
+							parser.parse(new InputSource(
+									new TeeInputStream(session.getStdout(), new FileOutputStream(sessionContext.getLogFileXML()))));
 						else
 							parser.parse(new InputSource(session.getStdout()));
 
 					} catch (IOException e) {
 						e.printStackTrace();
 					} catch (SAXException e) {
-						if (e.getMessage().compareTo("Content is not allowed in trailing section.") == 0) {
+						if (e.getMessage().contentEquals("Content is not allowed in trailing section.")) {
 							// Using shitty non-xml delimiters forces us to detect
 							// end-of-frame by a SAX error.
 							// Do nothing will just restart the parser.

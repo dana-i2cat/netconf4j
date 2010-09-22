@@ -207,11 +207,11 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 	}
 
 	public ArrayList<Capability> getClientCapabilities() {
-		return sessionContext.getActiveCapabilities();
+		return sessionContext.getClientCapabilities();
 	}
 
 	public ArrayList<Capability> getServerCapabilities() {
-		return sessionContext.getActiveCapabilities();
+		return sessionContext.getServerCapabilities();
 	}
 
 	public void registerTransportListener(TransportListener handler) {
