@@ -23,6 +23,11 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Vector;
 
+import net.i2cat.netconf.SessionContext;
+import net.i2cat.netconf.errors.TransportException;
+import net.i2cat.netconf.messageQueue.MessageQueue;
+import net.i2cat.netconf.rpc.RPCElement;
+
 import org.apache.commons.io.input.TeeInputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,11 +35,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-
-import net.i2cat.netconf.SessionContext;
-import net.i2cat.netconf.errors.TransportException;
-import net.i2cat.netconf.messageQueue.MessageQueue;
-import net.i2cat.netconf.rpc.RPCElement;
 
 public class VirtualTransport implements Transport {
 
@@ -83,7 +83,8 @@ public class VirtualTransport implements Transport {
 
 	public void setMessageQueue(MessageQueue queue) {
 		this.queue = queue;
-		xmlHandler.setMessageQueue(queue); // set the queue this handler will add messages to
+		xmlHandler.setMessageQueue(queue); // set the queue this handler will
+		// add messages to
 	}
 
 	public void addListener(TransportListener handler) {
@@ -153,6 +154,8 @@ public class VirtualTransport implements Transport {
 
 		try {
 			outStream.write(simHelper.generateReply(query).getBytes());
+			outStream.flush();
+
 		} catch (IOException e) {
 			// Can't throw:
 			// throw new TransportException(e.getMessage());
@@ -180,9 +183,9 @@ public class VirtualTransport implements Transport {
 						// flag to log server response
 						if (sessionContext.isLogRespXML())
 							parser.parse(new InputSource(new TeeInputStream(inStream, new FileOutputStream(sessionContext.getLogFileXML()))));
-						else
+						else {
 							parser.parse(new InputSource(inStream));
-
+						}
 					} catch (InterruptedIOException ie) {
 						log.warn("Got and InterruptedIOException from inside the parser. If you are closing it may be normal.");
 					} catch (IOException e) {
@@ -190,7 +193,8 @@ public class VirtualTransport implements Transport {
 					} catch (SAXException e) {
 						if (e.getMessage().contentEquals("Content is not allowed in trailing section.")) {
 							log.debug("Detected netconf delimiter.");
-							// Using shitty non-xml delimiters forces us to detect
+							// Using shitty non-xml delimiters forces us to
+							// detect
 							// end-of-frame delimiter by a SAX error.
 							// Do nothing will just restart the parser.
 							// Blame netconf
