@@ -34,6 +34,8 @@ import net.i2cat.netconf.rpc.Reply;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -41,6 +43,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class BaseNetconf {
+	private Log				log	= LogFactory.getLog(BaseNetconf.class);
 
 	static SessionContext	sessionContext;
 	static NetconfSession	session;
@@ -69,6 +72,16 @@ public class BaseNetconf {
 
 	@After
 	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void testSessionContext() throws Exception {
+		SessionContext sessionContext = new SessionContext();
+		sessionContext.newConfiguration(new PropertiesConfiguration("test-default.properties"));
+		log.info("LOG FILE: " + sessionContext.getLogFileXML());
+		log.info("LOG RESPONSE: " + sessionContext.isLogRespXML());
+		log.info("NUMBER CONFIGS: " + sessionContext.getNumberOfConfigurations());
+
 	}
 
 	@Test
