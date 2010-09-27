@@ -31,7 +31,6 @@ import net.i2cat.netconf.rpc.Reply;
 import net.i2cat.netconf.transport.Transport;
 import net.i2cat.netconf.transport.TransportFactory;
 import net.i2cat.netconf.transport.TransportListener;
-import net.i2cat.netconf.utils.TimerKeepAlive;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -40,7 +39,7 @@ import org.apache.commons.logging.LogFactory;
 
 public class NetconfSession implements TransportListener, MessageQueueListener {
 
-	TimerKeepAlive			timerKeepAlive;
+	// TimerKeepAlive timerKeepAlive;
 
 	public static final int	PERIOD	= 3;										// PERIOD
 	// OF
@@ -132,14 +131,14 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 		/* Activate flags */
 
 		// Activate keep Alive command
-		timerKeepAlive = new TimerKeepAlive(this);
-		timerKeepAlive.start(PERIOD);
+		// timerKeepAlive = new TimerKeepAlive(this);
+		// timerKeepAlive.start(PERIOD);
 
 	}
 
 	public void disconnect() throws TransportException {
-		if (timerKeepAlive != null)
-			timerKeepAlive.close();
+		// if (timerKeepAlive != null)
+		// timerKeepAlive.close();
 		transport.disconnect();
 	}
 
@@ -187,7 +186,7 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 	public void sendAsyncQuery(Query query) throws TransportException {
 		query.setMessageId(generateMessageId());
 
-		timerKeepAlive.reset(); // Reset the time for the keep alive
+		// timerKeepAlive.reset(); // Reset the time for the keep alive
 
 		transport.sendAsyncQuery(query);
 
@@ -203,7 +202,7 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 	 */
 
 	public void loadConfiguration(Configuration source) {
-		sessionContext.addConfiguration(source);
+		sessionContext.newConfiguration(source);
 	}
 
 	public ArrayList<Capability> getActiveCapabilities() {

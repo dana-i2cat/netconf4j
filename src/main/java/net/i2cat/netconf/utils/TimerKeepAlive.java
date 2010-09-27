@@ -38,25 +38,23 @@ public class TimerKeepAlive implements Runnable {
 	ScheduledExecutorService	timer;
 	private int					period	= 0;
 	private ScheduledFuture<?>	schedulerHandler;
-	public boolean				isOK	= true;
 
 	public static final int		DELAY	= 1;
 
 	public TimerKeepAlive(NetconfSession netconfSession) {
 		this.netconfSession = netconfSession;
 		timer = Executors.newSingleThreadScheduledExecutor();
-
 	}
 
 	public void start(int period) {
 		this.period = period;
 		log.info("KeepAlive timer started");
-		schedulerHandler = timer.scheduleAtFixedRate(this, 0, period, TimeUnit.MINUTES);
+		schedulerHandler = timer.scheduleAtFixedRate(this, period, period, TimeUnit.MINUTES);
 	}
 
 	public void reset() {
 		close();
-		schedulerHandler = timer.scheduleAtFixedRate(this, 0, period, TimeUnit.MINUTES);
+		schedulerHandler = timer.scheduleAtFixedRate(this, period, period, TimeUnit.MINUTES);
 	}
 
 	public void close() {
@@ -74,21 +72,15 @@ public class TimerKeepAlive implements Runnable {
 			if (reply.containsErrors()) {
 				// there are errors in the response
 				log.error("Problem in the reply: " + '\n' + reply.toXML() + '\n');
-				isOK = false;
+				netconfSession.disconnect();
 			} else {
 				// the reply doesn t contain errors, it is ok
 				log.info("The reply is correct!");
-				isOK = true;
 			}
 		} catch (TransportException e) {
 			log.error(e.getMessage());
-			isOK = true;
 		}
 
-	}
-
-	public boolean isOK() {
-		return isOK;
 	}
 
 }
