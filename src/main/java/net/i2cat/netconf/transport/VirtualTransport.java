@@ -182,7 +182,7 @@ public class VirtualTransport implements Transport {
 
 						// flag to log server response
 						if (sessionContext.isLogRespXML())
-							parser.parse(new InputSource(new TeeInputStream(inStream, new FileOutputStream(sessionContext.getLogFileXML()))));
+							parser.parse(new InputSource(new TeeInputStream(inStream, new FileOutputStream(sessionContext.getLogFileXML()), true)));
 						else {
 							parser.parse(new InputSource(inStream));
 						}

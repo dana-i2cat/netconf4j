@@ -206,7 +206,7 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 						if (sessionContext.isLogRespXML()) {
 							log.debug("Logging to " + sessionContext.getLogFileXML());
 							parser.parse(new InputSource(
-									new TeeInputStream(session.getStdout(), new FileOutputStream(sessionContext.getLogFileXML()))));
+									new TeeInputStream(session.getStdout(), new FileOutputStream(sessionContext.getLogFileXML()), true)));
 						}
 						else {
 							parser.parse(new InputSource(session.getStdout()));
