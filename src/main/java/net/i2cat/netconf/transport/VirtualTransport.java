@@ -23,11 +23,6 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Vector;
 
-import net.i2cat.netconf.SessionContext;
-import net.i2cat.netconf.errors.TransportException;
-import net.i2cat.netconf.messageQueue.MessageQueue;
-import net.i2cat.netconf.rpc.RPCElement;
-
 import org.apache.commons.io.input.TeeInputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,6 +30,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import net.i2cat.netconf.SessionContext;
+import net.i2cat.netconf.errors.TransportException;
+import net.i2cat.netconf.messageQueue.MessageQueue;
+import net.i2cat.netconf.rpc.RPCElement;
 
 public class VirtualTransport implements Transport {
 
@@ -159,7 +159,7 @@ public class VirtualTransport implements Transport {
 		} catch (IOException e) {
 			// Can't throw:
 			// throw new TransportException(e.getMessage());
-			log.error(e.getMessage());
+			log.error("Exception while writing fake reply to pipe: " + e.getMessage());
 		}
 
 		log.info("Operation sent, response text queued for parsing");
@@ -187,12 +187,13 @@ public class VirtualTransport implements Transport {
 							parser.parse(new InputSource(inStream));
 						}
 					} catch (InterruptedIOException ie) {
-						log.warn("Got and InterruptedIOException from inside the parser. If you are closing it may be normal.");
+						log.warn("While parsing: Got and InterruptedIOException. If you are closing it may be normal.");
 					} catch (IOException e) {
+						log.error("While parsing (IOException): " + e.getMessage());
 						e.printStackTrace();
 					} catch (SAXException e) {
 						if (e.getMessage().contentEquals("Content is not allowed in trailing section.")) {
-							log.debug("Detected netconf delimiter.");
+							log.debug("While parsing: Detected netconf delimiter.");
 							// Using shitty non-xml delimiters forces us to
 							// detect
 							// end-of-frame delimiter by a SAX error.
@@ -200,7 +201,7 @@ public class VirtualTransport implements Transport {
 							// Blame netconf
 						}
 						else {
-							log.error(e.getMessage());
+							log.error("While parsing (SAXException): " + e.getMessage());
 							e.printStackTrace();
 							disconnect();
 						}
