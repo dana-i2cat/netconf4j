@@ -18,11 +18,6 @@ package net.i2cat.netconf;
 
 import java.util.ArrayList;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import net.i2cat.netconf.errors.NetconfProtocolException;
 import net.i2cat.netconf.errors.TransportException;
 import net.i2cat.netconf.errors.TransportNotImplementedException;
@@ -37,6 +32,11 @@ import net.i2cat.netconf.transport.Transport;
 import net.i2cat.netconf.transport.TransportFactory;
 import net.i2cat.netconf.transport.TransportListener;
 import net.i2cat.netconf.utils.TimerKeepAlive;
+
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class NetconfSession implements TransportListener, MessageQueueListener {
 
@@ -62,11 +62,11 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 	public NetconfSession(SessionContext sessionContext) throws TransportNotImplementedException, ConfigurationException {
 		this.sessionContext = sessionContext;
 
-		TransportFactory.checkTransportType(sessionContext.getURI().getScheme()); // throws TNIE
+		TransportFactory.checkTransportType(sessionContext.getURI().getScheme()); // throws
+		// TNIE
 	}
 
 	public void connect() throws TransportException, NetconfProtocolException {
-		TimerKeepAlive timerKeepAlive;
 		RPCElement reply;
 		Hello clientHello;
 		Hello serverHello;
@@ -175,7 +175,8 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 	// }
 
 	/**
-	 * Send a Netconf Query and return immediately. You will have to get the reply (if any) via a NetconfReplyHandler or polling receiveReply() for
+	 * Send a Netconf Query and return immediately. You will have to get the
+	 * reply (if any) via a NetconfReplyHandler or polling receiveReply() for
 	 * it.
 	 * 
 	 * Don't set message-id, it will be ignored and overridden by the session.
@@ -186,7 +187,10 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 	public void sendAsyncQuery(Query query) throws TransportException {
 		query.setMessageId(generateMessageId());
 
+		timerKeepAlive.reset(); // Reset the time for the keep alive
+
 		transport.sendAsyncQuery(query);
+
 	}
 
 	private String generateMessageId() {

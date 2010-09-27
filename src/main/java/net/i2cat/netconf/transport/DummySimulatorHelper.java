@@ -23,13 +23,13 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import net.i2cat.netconf.rpc.Hello;
 import net.i2cat.netconf.rpc.Operation;
 import net.i2cat.netconf.rpc.Query;
 import net.i2cat.netconf.rpc.RPCElement;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class DummySimulatorHelper {
 
@@ -98,6 +98,7 @@ public class DummySimulatorHelper {
 			/* change message ID */
 			if (!messageId.equals("-1"))
 				strResponse = changeMessageIdNETCONF(strResponse, messageId);
+
 		} catch (FileNotFoundException e) {
 			log.error("The response could not be generated: " + e.getMessage());
 		}
