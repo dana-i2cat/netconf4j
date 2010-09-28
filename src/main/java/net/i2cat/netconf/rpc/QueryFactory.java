@@ -30,7 +30,7 @@ public class QueryFactory {
 		query.setOperation(Operation.GET_CONFIG);
 		query.setSource(source);
 		query.setFilter(filter);
-		query.setFilterType(attrFilter);
+		query.setAttrFilter(attrFilter);
 		return query;
 	}
 
@@ -103,7 +103,7 @@ public class QueryFactory {
 		Query query = new Query();
 		query.setOperation(Operation.GET);
 		query.setFilter("");
-		query.setFilterType("subtree");
+		query.setAttrFilter("subtree");
 
 		return query;
 	}

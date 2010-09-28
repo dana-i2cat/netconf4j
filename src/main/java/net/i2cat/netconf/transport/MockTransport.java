@@ -107,9 +107,9 @@ public class MockTransport implements Transport {
 						}
 					});
 				}
-				if (query.getFilter() != null && query.getFilterType() != null) {
+				if (query.getFilter() != null && query.getAttrFilter() != null) {
 					if (activeCapabilities.contains(Capability.XPATH)) {
-						if (!(query.getFilterType().equals("xpath") || query.getFilterType().equals("subtree")))
+						if (!(query.getAttrFilter().equals("xpath") || query.getAttrFilter().equals("subtree")))
 							errors.add(new Error() {
 								{
 									setTag(ErrorTag.BAD_ATTRIBUTE);
@@ -118,7 +118,7 @@ public class MockTransport implements Transport {
 									setInfo("<bad-attribute> : Wrong filter type. Neither xpath nor subtree.");
 								}
 							});
-						else if (query.getFilterType().equals("subtree"))
+						else if (query.getAttrFilter().equals("subtree"))
 							errors.add(new Error() {
 								{
 									setTag(ErrorTag.BAD_ATTRIBUTE);
