@@ -53,7 +53,7 @@ public class BaseNetconf {
 
 		sessionContext = new SessionContext();
 		sessionContext.setURI(new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
-															"virtual://foo:bar@foo:22/okServer")));
+															"mock://foo:bar@foo:22/okServer")));
 
 		session = new NetconfSession(sessionContext);
 		session.connect();
