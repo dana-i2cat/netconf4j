@@ -94,7 +94,7 @@ public class TransportContentParser extends DefaultHandler2 {
 		// if (insideDataTag && !localName.equalsIgnoreCase("data"))
 		// return;
 
-		log.debug("startElement <" + uri + "::" + localName + ">");
+		// log.debug("startElement <" + uri + "::" + localName + ">");
 
 		if (localName.equalsIgnoreCase("hello")) {
 			hello = new Hello();

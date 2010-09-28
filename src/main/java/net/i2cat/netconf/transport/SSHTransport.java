@@ -16,12 +16,13 @@
  */
 package net.i2cat.netconf.transport;
 
-import java.io.FileOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.util.Vector;
 
-import org.apache.commons.io.input.TeeInputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xml.sax.InputSource;
@@ -202,15 +203,23 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 					try {
 						log.debug("Starting parser.");
 
-						// flag to log server response
-						if (sessionContext.isLogRespXML()) {
-							log.debug("Logging to " + sessionContext.getLogFileXML());
-							parser.parse(new InputSource(
-									new TeeInputStream(session.getStdout(), new FileOutputStream(sessionContext.getLogFileXML()), true)));
-						}
-						else {
-							parser.parse(new InputSource(session.getStdout()));
-						}
+						String buffer = "";
+						BufferedReader reader = new BufferedReader(new InputStreamReader(session.getStdout()));
+
+						do {
+							buffer += reader.readLine();
+						} while (!buffer.endsWith(delimiter));
+
+						parser.parse(new InputSource(new StringReader(buffer)));
+
+						/*
+						 * // flag to log server response if (sessionContext.isLogRespXML()) { log.debug("Logging to " +
+						 * sessionContext.getLogFileXML()); parser.parse(new InputSource(new BufferedReader(new InputStreamReader(new
+						 * TeeInputStream(session.getStdout(), new FileOutputStream(sessionContext.getLogFileXML()), true))))); } else {
+						 * parser.parse(new InputSource(new BufferedReader(new InputStreamReader(session.getStdout()) { public int read(char[] cbuf,
+						 * int offset, int length) throws IOException { log.debug("char:" + new String(cbuf, offset, length)); return super.read(cbuf,
+						 * offset, length); } }))); }
+						 */
 					} catch (IOException e) {
 						e.printStackTrace();
 					} catch (SAXException e) {
