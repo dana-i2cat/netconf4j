@@ -43,7 +43,7 @@ public class Query extends RPCElement implements java.io.Serializable {
 	 * Parameters for get filter. This attribute for netconf is 'subtree' by
 	 * default
 	 */
-	private String				filterType;
+	private String				attrFilter;
 
 	public Query() {
 	}
@@ -128,12 +128,12 @@ public class Query extends RPCElement implements java.io.Serializable {
 		this.config = config;
 	}
 
-	public String getFilterType() {
-		return filterType;
+	public String getAttrFilter() {
+		return attrFilter;
 	}
 
-	public void setFilterType(String attrFilter) {
-		this.filterType = attrFilter;
+	public void setAttrFilter(String attrFilter) {
+		this.attrFilter = attrFilter;
 	}
 
 	public String toXML() {
@@ -156,9 +156,9 @@ public class Query extends RPCElement implements java.io.Serializable {
 			xml += "<source><" + source + "/></source>";
 		if (filter != null) {
 			xml += "<filter";
-			if (filterType != null)
-				xml += " type=" + filterType;
-			xml += ">" + filter + "/></filter>";
+			if (attrFilter != null)
+				xml += " type=" + attrFilter;
+			xml += ">" + filter + "</filter>";
 
 		}
 
