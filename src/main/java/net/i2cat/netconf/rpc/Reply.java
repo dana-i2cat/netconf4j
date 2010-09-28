@@ -25,7 +25,7 @@ public class Reply extends RPCElement {
 
 	Vector<Error>			errors;
 
-	boolean					ok;
+	boolean					ok	= false;
 	String					data;
 
 	HashMap<String, String>	attributes;
