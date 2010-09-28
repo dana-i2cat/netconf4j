@@ -97,10 +97,19 @@ public class MockTransport implements Transport {
 							setInfo("<bad-element> : No source configuration specified");
 						}
 					});
-
+				if (query.getSource() == null && query.getSource().equals("running")) {
+					errors.add(new Error() {
+						{
+							setTag(ErrorTag.BAD_ELEMENT);
+							setType(ErrorType.PROTOCOL);
+							setSeverity(ErrorSeverity.ERROR);
+							setInfo("<bad-element> : Wrong configuration.");
+						}
+					});
+				}
 				if (query.getFilter() != null && query.getFilterType() != null) {
 					if (activeCapabilities.contains(Capability.XPATH)) {
-						if (!(query.getFilterType().compareTo("xpath") == 0 || query.getFilterType().compareTo("subtree") == 0))
+						if (!(query.getFilterType().equals("xpath") || query.getFilterType().equals("subtree")))
 							errors.add(new Error() {
 								{
 									setTag(ErrorTag.BAD_ATTRIBUTE);
@@ -109,7 +118,7 @@ public class MockTransport implements Transport {
 									setInfo("<bad-attribute> : Wrong filter type. Neither xpath nor subtree.");
 								}
 							});
-						else if (query.getFilterType().compareTo("subtree") != 0)
+						else if (query.getFilterType().equals("subtree"))
 							errors.add(new Error() {
 								{
 									setTag(ErrorTag.BAD_ATTRIBUTE);
