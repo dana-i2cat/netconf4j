@@ -20,7 +20,7 @@ import net.i2cat.netconf.errors.TransportNotImplementedException;
 
 public class TransportFactory {
 	private static enum TypeTransport {
-		SSH, VIRTUAL, UNKNOWN;
+		SSH, VIRTUAL, MOCK, UNKNOWN;
 	}
 
 	public static TypeTransport checkTransportType(String scheme) throws TransportNotImplementedException {
@@ -31,12 +31,15 @@ public class TransportFactory {
 			type = TypeTransport.SSH;
 		else if (scheme.equalsIgnoreCase("virtual"))
 			type = TypeTransport.VIRTUAL;
+		else if (scheme.equalsIgnoreCase("mock"))
+			type = TypeTransport.MOCK;
 		else
 			type = TypeTransport.UNKNOWN;
 
 		switch (type) {
 			case SSH:
 			case VIRTUAL:
+			case MOCK:
 				// TODO extra checks
 				break;
 			default:
@@ -60,6 +63,8 @@ public class TransportFactory {
 				return new SSHTransport();
 			case VIRTUAL:
 				return new VirtualTransport();
+			case MOCK:
+				return new MockTransport();
 		}
 		return null;
 	}

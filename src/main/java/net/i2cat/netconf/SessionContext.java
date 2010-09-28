@@ -19,12 +19,12 @@ package net.i2cat.netconf;
 import java.net.URI;
 import java.util.ArrayList;
 
-import net.i2cat.netconf.rpc.Capability;
-
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+
+import net.i2cat.netconf.rpc.Capability;
 
 public class SessionContext extends CompositeConfiguration {
 
@@ -127,6 +127,11 @@ public class SessionContext extends CompositeConfiguration {
 
 	public String getSubsystem() {
 		return ((URI) this.getProperty(URI)).getPath().replaceFirst("/", "");
+
+	}
+
+	public String getScheme() {
+		return ((URI) this.getProperty(URI)).getScheme();
 
 	}
 
