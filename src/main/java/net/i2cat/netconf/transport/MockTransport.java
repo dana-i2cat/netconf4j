@@ -23,7 +23,6 @@ public class MockTransport implements Transport {
 
 	SessionContext				context;
 	ArrayList<Capability>		supportedCapabilities;
-	ArrayList<Capability>		activeCapabilities;
 	MessageQueue				queue;
 
 	int							lastMessageId	= 0;
@@ -75,7 +74,8 @@ public class MockTransport implements Transport {
 			// Capability b
 			ArrayList<Capability> capabilities = ((Hello) elem).getCapabilities();
 			capabilities.retainAll(this.supportedCapabilities);
-			this.activeCapabilities = capabilities;
+			context.setActiveCapabilities(capabilities);
+
 		}
 		if (elem instanceof Query) {
 			Query query = (Query) elem;
@@ -91,7 +91,7 @@ public class MockTransport implements Transport {
 			if (op == Operation.GET) {
 
 				if (query.getFilter() != null && query.getFilterType() != null) {
-					if (activeCapabilities.contains(Capability.XPATH)) {
+					if (context.getActiveCapabilities().contains(Capability.XPATH)) {
 						if (!(query.getFilterType().equals("xpath") || query.getFilterType().equals("subtree")))
 							errors.add(new Error() {
 								{
@@ -138,7 +138,7 @@ public class MockTransport implements Transport {
 					});
 				}
 				if (query.getFilter() != null && query.getFilterType() != null) {
-					if (activeCapabilities.contains(Capability.XPATH)) {
+					if (context.getActiveCapabilities().contains(Capability.XPATH)) {
 						if (!(query.getFilterType().equals("xpath") || query.getFilterType().equals("subtree")))
 							errors.add(new Error() {
 								{

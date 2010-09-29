@@ -99,4 +99,10 @@ public class Capability implements java.io.Serializable {
 	public static ArrayList<Capability> getKnownCapabilities() {
 		return knownCapabilities;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return namespace.equals(((Capability) obj).namespace);
+	}
+
 }
