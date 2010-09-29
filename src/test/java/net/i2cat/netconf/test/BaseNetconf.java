@@ -38,6 +38,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -159,6 +160,21 @@ public class BaseNetconf {
 	}
 
 	@Test
+	public void CheckCapabilitiesTest() {
+		ArrayList<Capability> capabilityVector = session
+				.getActiveCapabilities();
+		ArrayList<Capability> baseVectorCapability = new ArrayList<Capability>();
+		baseVectorCapability.add(Capability.BASE);
+		/*
+		 * If it is not contain the base capability, it is impossible to check
+		 * capabilities
+		 */
+		boolean isChecked = capabilityVector.equals(baseVectorCapability);
+		Assert.assertTrue(isChecked);
+
+	}
+
+	@Test
 	public void testLoadConfiguration() {
 		try {
 			session.loadConfiguration(new
@@ -167,4 +183,5 @@ public class BaseNetconf {
 			e.printStackTrace();
 		}
 	}
+
 }
