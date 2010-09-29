@@ -45,7 +45,7 @@ public class MockTransport implements Transport {
 
 		Hello hello = new Hello();
 
-		hello.setMessageId("mock-" + lastMessageId);
+		hello.setMessageId(String.valueOf(lastMessageId));
 		hello.setSessionId("1234");
 
 		supportedCapabilities = new ArrayList<Capability>();
@@ -72,11 +72,10 @@ public class MockTransport implements Transport {
 
 		if (elem instanceof Hello) {
 
-			Hello hello = new Hello();
-			activeCapabilities = Capability.getSupportedCapabilities();
-			hello.setCapabilities(activeCapabilities); // base
-			// capabilities
-			queue.put(hello);
+			// Capability b
+			ArrayList<Capability> capabilities = ((Hello) elem).getCapabilities();
+			capabilities.retainAll(this.supportedCapabilities);
+			this.activeCapabilities = capabilities;
 		}
 		if (elem instanceof Query) {
 			Query query = (Query) elem;

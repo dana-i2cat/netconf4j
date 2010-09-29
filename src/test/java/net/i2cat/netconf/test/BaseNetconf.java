@@ -118,21 +118,31 @@ public class BaseNetconf {
 		}
 	}
 
+	class TestMessageQueueListener implements MessageQueueListener {
+
+		Object	monitor	= new Object();
+
+		public TestMessageQueueListener(Object monitor) {
+			this.monitor = monitor;
+		}
+
+		public void receiveRPCElement(RPCElement element) {
+			synchronized (monitor) {
+				monitor.notifyAll();
+			}
+
+		}
+
+	}
+
 	// 2 second timeout
-	@Test(timeout = 2000)
+	@Test(timeout = 10000)
 	public void testSendAsyncQuery() {
 
 		final Object monitor = new Object();
 		Query query = QueryFactory.newKeepAlive();
 
-		session.registerMessageQueueListener(new MessageQueueListener() {
-
-			public void receiveRPCElement(RPCElement element) {
-				synchronized (monitor) {
-					monitor.notifyAll();
-				}
-			}
-		});
+		session.registerMessageQueueListener(new TestMessageQueueListener(monitor));
 
 		try {
 			session.sendAsyncQuery(query);
