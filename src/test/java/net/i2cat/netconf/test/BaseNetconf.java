@@ -120,42 +120,41 @@ public class BaseNetconf {
 
 	class TestMessageQueueListener implements MessageQueueListener {
 
-		Object	monitor	= new Object();
+		boolean	isReceived;
 
-		public TestMessageQueueListener(Object monitor) {
-			this.monitor = monitor;
+		public TestMessageQueueListener() {
+			this.isReceived = false;
 		}
 
 		public void receiveRPCElement(RPCElement element) {
-			synchronized (monitor) {
-				monitor.notifyAll();
-			}
+			isReceived = true;
 
 		}
 
+		public boolean isReceived() {
+			return isReceived;
+		}
 	}
 
 	// 2 second timeout
-	@Test(timeout = 10000)
+	@Test(timeout = 2000)
 	public void testSendAsyncQuery() {
 
-		final Object monitor = new Object();
 		Query query = QueryFactory.newKeepAlive();
 
-		session.registerMessageQueueListener(new TestMessageQueueListener(monitor));
+		TestMessageQueueListener testMsgQueueList = new TestMessageQueueListener();
+		session.registerMessageQueueListener(testMsgQueueList);
 
 		try {
 			session.sendAsyncQuery(query);
-
-			synchronized (monitor) {
-				monitor.wait();
+			while (!testMsgQueueList.isReceived()) {
+				Thread.sleep(1000);
 			}
 
 		} catch (TransportException e) {
 			fail(e.getMessage());
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail(e.getMessage());
 		}
 	}
 
