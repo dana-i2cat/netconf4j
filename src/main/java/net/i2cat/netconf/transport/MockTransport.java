@@ -17,6 +17,11 @@ import net.i2cat.netconf.rpc.Query;
 import net.i2cat.netconf.rpc.RPCElement;
 import net.i2cat.netconf.rpc.Reply;
 
+/**
+ * This class was implemented to be a dummy transport which could simulate a
+ * real connection with a device. This connection via SSH with netconf
+ */
+
 public class MockTransport implements Transport {
 
 	Vector<TransportListener>	listeners		= new Vector<TransportListener>();
@@ -26,6 +31,10 @@ public class MockTransport implements Transport {
 	MessageQueue				queue;
 
 	int							lastMessageId	= 0;
+
+	String						subsystem		= "";
+
+	boolean						modeErrors		= false;
 
 	public void addListener(TransportListener handler) {
 		listeners.add(handler);
@@ -41,6 +50,8 @@ public class MockTransport implements Transport {
 
 		if (!context.getScheme().equals("mock"))
 			throw new TransportException("Mock transport initialized with other scheme: " + context.getScheme());
+
+		subsystem = sessionContext.getSubsystem();
 
 		Hello hello = new Hello();
 
@@ -168,7 +179,7 @@ public class MockTransport implements Transport {
 				return;
 			}
 			if (op == Operation.CLOSE_SESSION) {
-
+				reply.setMessageId(query.getMessageId());
 				reply.setOk(true);
 				disconnect();
 			}
@@ -180,6 +191,21 @@ public class MockTransport implements Transport {
 			}
 		}
 
+		// force to add errors in the response message
+		if (subsystem.equals("errorServer"))
+			addErrors(errors);
+
+		if (errors.size() > 0)
+			reply.setErrors(errors);
+
+		queue.put(reply);
+	}
+
+	private void error(String msg) throws TransportException {
+		throw new TransportException(msg);
+	}
+
+	private void addErrors(Vector<Error> errors) {
 		errors.add(new Error() {
 			{
 				setTag(ErrorTag.INVALID_VALUE);
@@ -224,14 +250,5 @@ public class MockTransport implements Transport {
 				setInfo("<bad-element> : ");
 			}
 		});
-
-		if (errors.size() > 0)
-			reply.setErrors(errors);
-
-		queue.put(reply);
-	}
-
-	private void error(String msg) throws TransportException {
-		throw new TransportException(msg);
 	}
 }

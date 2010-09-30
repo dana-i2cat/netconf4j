@@ -13,6 +13,10 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with Netconf4j. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * This class was implemented to be a dummy transport which could simulate a real connection 
+ * with a device. This connection via SSH with netconf. 
+ * IT WAS REPLACED FOR MockTransport. THIS CLASS DOES NOT SUPPORT THE ALL IMPLEMENTATION FOR MANTYCHORE
  */
 package net.i2cat.netconf.transport;
 
@@ -23,6 +27,11 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Vector;
 
+import net.i2cat.netconf.SessionContext;
+import net.i2cat.netconf.errors.TransportException;
+import net.i2cat.netconf.messageQueue.MessageQueue;
+import net.i2cat.netconf.rpc.RPCElement;
+
 import org.apache.commons.io.input.TeeInputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,11 +40,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import net.i2cat.netconf.SessionContext;
-import net.i2cat.netconf.errors.TransportException;
-import net.i2cat.netconf.messageQueue.MessageQueue;
-import net.i2cat.netconf.rpc.RPCElement;
-
+@Deprecated
 public class VirtualTransport implements Transport {
 
 	private Log					log			= LogFactory.getLog(VirtualTransport.class);
