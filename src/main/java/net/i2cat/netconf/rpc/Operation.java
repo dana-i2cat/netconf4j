@@ -40,7 +40,7 @@ public class Operation implements java.io.Serializable {
 	}
 
 	public boolean equals(Operation compareOperation) {
-		return (this.name == compareOperation.name && this.capability == compareOperation.capability);
+		return (this.name.equals(compareOperation.name) && this.capability.equals(compareOperation.capability));
 
 	}
 

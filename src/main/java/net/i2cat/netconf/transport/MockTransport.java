@@ -108,12 +108,12 @@ public class MockTransport implements Transport {
 			Query query = (Query) elem;
 			Operation op = query.getOperation();
 
-			if (op == Operation.COPY_CONFIG) {
+			if (op.equals(Operation.COPY_CONFIG)) {
 			}
-			if (op == Operation.DELETE_CONFIG) {
+			if (op.equals(Operation.DELETE_CONFIG)) {
 				reply.setOk(true);
 			}
-			if (op == Operation.EDIT_CONFIG) {
+			if (op.equals(Operation.EDIT_CONFIG)) {
 			}
 			if (op.equals(Operation.GET)) {
 
@@ -144,7 +144,7 @@ public class MockTransport implements Transport {
 				reply.setData("<patata></patata><autobus/>");
 
 			}
-			if (op == Operation.GET_CONFIG) {
+			if (op.equals(Operation.GET_CONFIG)) {
 				if (query.getSource() == null)
 					errors.add(new Error() {
 						{
@@ -190,19 +190,19 @@ public class MockTransport implements Transport {
 				reply.setMessageId(query.getMessageId());
 				reply.setData("<patata></patata><autobus/>");
 			}
-			if (op == Operation.KILL_SESSION) {
+			if (op.equals(Operation.KILL_SESSION)) {
 				disconnect();
 				return;
 			}
-			if (op == Operation.CLOSE_SESSION) {
+			if (op.equals(Operation.CLOSE_SESSION)) {
 				reply.setMessageId(query.getMessageId());
 				reply.setOk(true);
 				disconnect();
 			}
-			if (op == Operation.LOCK) {
+			if (op.equals(Operation.LOCK)) {
 				error("LOCK not implemented");
 			}
-			if (op == Operation.UNLOCK) {
+			if (op.equals(Operation.UNLOCK)) {
 				error("UNLOCK not implemented");
 			}
 		}
