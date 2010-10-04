@@ -109,13 +109,10 @@ public class MockTransport implements Transport {
 			Operation op = query.getOperation();
 
 			if (op.equals(Operation.COPY_CONFIG)) {
-			}
-			if (op.equals(Operation.DELETE_CONFIG)) {
+			} else if (op.equals(Operation.DELETE_CONFIG)) {
 				reply.setOk(true);
-			}
-			if (op.equals(Operation.EDIT_CONFIG)) {
-			}
-			if (op.equals(Operation.GET)) {
+			} else if (op.equals(Operation.EDIT_CONFIG)) {
+			} else if (op.equals(Operation.GET)) {
 
 				if (query.getFilter() != null && query.getFilterType() != null) {
 					if (context.getActiveCapabilities().contains(Capability.XPATH)) {
@@ -143,8 +140,7 @@ public class MockTransport implements Transport {
 				reply.setMessageId(query.getMessageId());
 				reply.setData("<patata></patata><autobus/>");
 
-			}
-			if (op.equals(Operation.GET_CONFIG)) {
+			} else if (op.equals(Operation.GET_CONFIG)) {
 				if (query.getSource() == null)
 					errors.add(new Error() {
 						{
@@ -189,17 +185,14 @@ public class MockTransport implements Transport {
 
 				reply.setMessageId(query.getMessageId());
 				reply.setData("<patata></patata><autobus/>");
-			}
-			if (op.equals(Operation.KILL_SESSION)) {
+			} else if (op.equals(Operation.KILL_SESSION)) {
 				disconnect();
 				return;
-			}
-			if (op.equals(Operation.CLOSE_SESSION)) {
+			} else if (op.equals(Operation.CLOSE_SESSION)) {
 				reply.setMessageId(query.getMessageId());
 				reply.setOk(true);
 				disconnect();
-			}
-			if (op.equals(Operation.LOCK)) {
+			} else if (op.equals(Operation.LOCK)) {
 				error("LOCK not implemented");
 			}
 			if (op.equals(Operation.UNLOCK)) {

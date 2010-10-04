@@ -34,7 +34,7 @@ public class Operation implements java.io.Serializable {
 	public static final Operation	CLOSE_SESSION		= new Operation("close-session", Capability.BASE);
 	public static final Operation	KILL_SESSION		= new Operation("kill-session", Capability.BASE);
 
-	public Operation(String name, Capability capability) {
+	protected Operation(String name, Capability capability) {
 		this.name = name;
 		this.capability = capability;
 	}
