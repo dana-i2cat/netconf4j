@@ -43,19 +43,19 @@
 			<artifactId>commons-configuration</artifactId>
 			<version>1.6</version>
 		</dependency>
-		
-		
+
+
 		<!--  it will add how a dependency -->
 		<dependency>
-		    <groupId>commons-beanutils</groupId>
-		    <artifactId>commons-beanutils</artifactId>
-		    <version>1.8.3</version>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.8.3</version>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>commons-digester</groupId>
-		    <artifactId>commons-digester</artifactId>
-		    <version>1.8.1</version>
+			<groupId>commons-digester</groupId>
+			<artifactId>commons-digester</artifactId>
+			<version>1.8.1</version>
 		</dependency>
 
 
@@ -90,7 +90,7 @@
 			<email>carlos.baez@i2cat.net</email>
 		</developer>
 	</developers>
-
+	
 	<build>
 		<resources>
 			<resource>
@@ -100,44 +100,36 @@
 				<resource> <directory>src/test/resources</directory> </resource>
 			-->
 		</resources>
-		
 		<pluginManagement>
 			<plugins>
 				<plugin>
-        			<groupId>com.google.code.maven-license-plugin</groupId>
-        			<artifactId>maven-license-plugin</artifactId>
-        			<version>1.4.0</version>
-        		</plugin>
-        	</plugins>
+					<groupId>com.google.code.maven-license-plugin</groupId>
+					<artifactId>maven-license-plugin</artifactId>
+					<version>1.4.0</version>
+				</plugin>
+			</plugins>
 		</pluginManagement>
-		
 		<plugins>
-		
-		
-		
-		      <plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-source-plugin</artifactId>
-		        <version>2.1.2</version>
-		        <executions>
-		          <execution>
-		            <id>attach-sources</id>
-		            <phase>verify</phase>
-		            <goals>
-		              <goal>jar-no-fork</goal>
-		            </goals>
-		          </execution>
-		        </executions>
-		      </plugin>
-		
-				
-		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.0.2</version>
 				<configuration>
-				<!--  compile with 1.5 -->
+					<!--  compile with 1.5 -->
 					<source>1.5</source>
 					<target>1.5</target>
 				</configuration>
@@ -147,20 +139,20 @@
 				<artifactId>maven-license-plugin</artifactId>
 				<version>1.4.0</version>
 				<configuration>
-                	<header>COPYING.HEADER</header>
-                	<includes>
-                    	<include>**/src/main/java/**</include>
-                    	<include>**/src/test/java/**</include>
-                    </includes>
-                    <useDefaultExcludes>true</useDefaultExcludes>
-            	</configuration>
-            	<executions>
-	                <execution>
-	                    <goals>
-	                        <goal>check</goal>
-	                    </goals>
-	                </execution>
-            	</executions>
+					<header>COPYING.HEADER</header>
+					<includes>
+						<include>**/src/main/java/**</include>
+						<include>**/src/test/java/**</include>
+					</includes>
+					<useDefaultExcludes>true</useDefaultExcludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.ops4j</groupId>
@@ -200,17 +192,16 @@
 						<Export-Package>net.i2cat.netconf.*</Export-Package>
 						<!--  include in lib folder necessary dependencies -->
 						<Bundle-ClassPath>.,
-						 			lib/ganymed-ssh2-build210.jar,
-						 			lib/commons-digester-1.8.1.jar,
-									lib/commons-beanutils-1.8.3.jar,
-									lib/commons-logging-1.1.1.jar,
-									lib/commons-io-1.4.jar,
-									lib/commons-configuration-1.6.jar
+							lib/ganymed-ssh2-build210.jar,
+							lib/commons-digester-1.8.1.jar,
+							lib/commons-beanutils-1.8.3.jar,
+							lib/commons-logging-1.1.1.jar,
+							lib/commons-io-1.4.jar,
+							lib/commons-configuration-1.6.jar
 						</Bundle-ClassPath>
-						
-    					<Embed-Directory>lib</Embed-Directory>
-						<Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
 
+						<Embed-Directory>lib</Embed-Directory>
+						<Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
 					</instructions>
 				</configuration>
 			</plugin>
