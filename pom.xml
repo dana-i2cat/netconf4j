@@ -185,12 +185,12 @@
 						<!--
 							<Private-Package></Private-Package> if i need a private package
 						-->
-						<!--
-							<Import-Package>!${bundle.namespace}.*,
-							org.springmodules.*;version="0.8",org.slf4j;version="1.5.6",*</Import-Package>
-						-->
+						
+						<Import-Package>!${bundle.namespace}.*,org.springmodules.*;version="0.8",org.slf4j;version="1.5.6",*</Import-Package>
+						
 						<Export-Package>net.i2cat.netconf.*</Export-Package>
 						<!--  include in lib folder necessary dependencies -->
+						<!-- 
 						<Bundle-ClassPath>.,
 							lib/ganymed-ssh2-build210.jar,
 							lib/commons-digester-1.8.1.jar,
@@ -202,6 +202,7 @@
 
 						<Embed-Directory>lib</Embed-Directory>
 						<Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+						-->
 					</instructions>
 				</configuration>
 			</plugin>
