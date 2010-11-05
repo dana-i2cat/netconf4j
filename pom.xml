@@ -14,7 +14,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<!-- TODO: Add requirement on 1.5 -->
 
 	<dependencies>
 		<dependency>
@@ -37,18 +36,29 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>1.4</version>
+
 		</dependency>
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
 			<version>1.6</version>
 		</dependency>
-		<!-- TOFIX This goes out before release-->
+		
+		
+		<!--  it will add how a dependency -->
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.12</version>
+		    <groupId>commons-beanutils</groupId>
+		    <artifactId>commons-beanutils</artifactId>
+		    <version>1.8.3</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>commons-digester</groupId>
+		    <artifactId>commons-digester</artifactId>
+		    <version>1.8.1</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<repositories>
@@ -127,6 +137,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.0.2</version>
 				<configuration>
+				<!--  compile with 1.5 -->
 					<source>1.5</source>
 					<target>1.5</target>
 				</configuration>
@@ -187,7 +198,18 @@
 							org.springmodules.*;version="0.8",org.slf4j;version="1.5.6",*</Import-Package>
 						-->
 						<Export-Package>net.i2cat.netconf.*</Export-Package>
-						<Bundle-Activator>net.i2cat.mantychore.models.router.internal.RouterModelActivator</Bundle-Activator>
+						<!--  include in lib folder necessary dependencies -->
+						<Bundle-ClassPath>.,
+						 			lib/ganymed-ssh2-build210.jar,
+						 			lib/commons-digester-1.8.1.jar,
+									lib/commons-beanutils-1.8.3.jar,
+									lib/commons-logging-1.1.1.jar,
+									lib/commons-io-1.4.jar,
+									lib/commons-configuration-1.6.jar
+						</Bundle-ClassPath>
+						
+    					<Embed-Directory>lib</Embed-Directory>
+						<Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
 
 					</instructions>
 				</configuration>
