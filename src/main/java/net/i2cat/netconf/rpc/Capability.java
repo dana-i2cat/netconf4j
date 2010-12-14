@@ -20,53 +20,53 @@ import java.util.ArrayList;
 
 public class Capability implements java.io.Serializable {
 
-	private static final long		serialVersionUID		= 2906619409518387155L;
+	private static final long			serialVersionUID		= 2906619409518387155L;
 
 	// RFC4741-8
-	public static final Capability	BASE					= new Capability("urn:ietf:params:xml:ns:netconf:base:1.0");
-	public static final Capability	WRITABLE_RUNNING		= new Capability("urn:ietf:params:xml:ns:netconf:capability:writable-running:1.0");
-	public static final Capability	CANDIDATE				= new Capability("urn:ietf:params:xml:ns:netconf:capability:candidate:1.0");
-	public static final Capability	CONFIRMED_COMMIT		= new Capability("urn:ietf:params:xml:ns:netconf:capability:confirmed-commit:1.0");
-	public static final Capability	ROLLBACK_ON_ERROR		= new Capability("urn:ietf:params:xml:ns:netconf:capability:rollbach-on-error:1.0");
-	public static final Capability	VALIDATE				= new Capability("urn:ietf:params:xml:ns:netconf:capability:validate:1.0");
-	public static final Capability	DISTINCT_STARTUP		= new Capability("urn:ietf:params:xml:ns:netconf:capability:distinc-startup:1.0");
-	public static final Capability	URL						= new Capability("urn:ietf:params:xml:ns:netconf:capability:url:1.0");
-	public static final Capability	XPATH					= new Capability("urn:ietf:params:xml:ns:netconf:capability:xpath:1.0");
+	public static final Capability		BASE					= new Capability("urn:ietf:params:xml:ns:netconf:base:1.0");
+	public static final Capability		WRITABLE_RUNNING		= new Capability("urn:ietf:params:xml:ns:netconf:capability:writable-running:1.0");
+	public static final Capability		CANDIDATE				= new Capability("urn:ietf:params:xml:ns:netconf:capability:candidate:1.0");
+	public static final Capability		CONFIRMED_COMMIT		= new Capability("urn:ietf:params:xml:ns:netconf:capability:confirmed-commit:1.0");
+	public static final Capability		ROLLBACK_ON_ERROR		= new Capability("urn:ietf:params:xml:ns:netconf:capability:rollbach-on-error:1.0");
+	public static final Capability		VALIDATE				= new Capability("urn:ietf:params:xml:ns:netconf:capability:validate:1.0");
+	public static final Capability		DISTINCT_STARTUP		= new Capability("urn:ietf:params:xml:ns:netconf:capability:distinc-startup:1.0");
+	public static final Capability		URL						= new Capability("urn:ietf:params:xml:ns:netconf:capability:url:1.0");
+	public static final Capability		XPATH					= new Capability("urn:ietf:params:xml:ns:netconf:capability:xpath:1.0");
 
-	private String					namespace;
+	private String						namespace;
 
-	static ArrayList<Capability>	knownCapabilities		= new ArrayList<Capability>()
-															{
-																private static final long	serialVersionUID	= 1L;
-
+	static final ArrayList<Capability>	knownCapabilities		= new ArrayList<Capability>()
 																{
-																	// RFC4741
-																	// Mandatory
-																	add(BASE);
+																	private static final long	serialVersionUID	= 1L;
 
-																	// RFC4741
-																	// Optional
-																	add(WRITABLE_RUNNING);
-																	add(CANDIDATE);
-																	add(CONFIRMED_COMMIT);
-																	add(ROLLBACK_ON_ERROR);
-																	add(VALIDATE);
-																	add(DISTINCT_STARTUP);
-																	add(URL);
-																	add(XPATH);
-																}
-															};
+																	{
+																		// RFC4741
+																		// Mandatory
+																		add(BASE);
 
-	static ArrayList<Capability>	supportedCapabilities	= new ArrayList<Capability>()
-															{
-																private static final long	serialVersionUID	= 1L;
+																		// RFC4741
+																		// Optional
+																		add(WRITABLE_RUNNING);
+																		add(CANDIDATE);
+																		add(CONFIRMED_COMMIT);
+																		add(ROLLBACK_ON_ERROR);
+																		add(VALIDATE);
+																		add(DISTINCT_STARTUP);
+																		add(URL);
+																		add(XPATH);
+																	}
+																};
 
+	static ArrayList<Capability>		supportedCapabilities	= new ArrayList<Capability>()
 																{
-																	// RFC4741
-																	// Mandatory
-																	add(BASE);
-																}
-															};
+																	private static final long	serialVersionUID	= 1L;
+
+																	{
+																		// RFC4741
+																		// Mandatory
+																		add(BASE);
+																	}
+																};
 
 	private Capability(String ns) {
 		this.namespace = ns;

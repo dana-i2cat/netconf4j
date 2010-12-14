@@ -18,13 +18,6 @@ package net.i2cat.netconf.transport;
 
 import java.util.ArrayList;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.ext.DefaultHandler2;
-
 import net.i2cat.netconf.errors.NetconfProtocolException;
 import net.i2cat.netconf.messageQueue.MessageQueue;
 import net.i2cat.netconf.rpc.Capability;
@@ -35,8 +28,16 @@ import net.i2cat.netconf.rpc.ErrorType;
 import net.i2cat.netconf.rpc.Hello;
 import net.i2cat.netconf.rpc.Reply;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.ext.DefaultHandler2;
+
 /**
- * This class intends to be a reusable (across transports) component that receives SAX events and returns instantiated Netconf's RPCElement objects.
+ * This class intends to be a reusable (across transports) component that
+ * receives SAX events and returns instantiated Netconf's RPCElement objects.
  * 
  * @author Pau Minoves
  * 
@@ -82,6 +83,11 @@ public class TransportContentParser extends DefaultHandler2 {
 
 	boolean					insideErrorInfoTag		= false;
 	String					errorInfoTagContent		= "";
+
+	/* extra functionalities (out RFC) */
+
+	boolean					insideInterfaceInfoTag	= false;
+	String					interfaceInfoTagContent	= "";
 
 	public void setMessageQueue(MessageQueue queue) {
 		this.messageQueue = queue;
@@ -149,6 +155,12 @@ public class TransportContentParser extends DefaultHandler2 {
 		if (localName.equalsIgnoreCase("error-info")) {
 			insideErrorInfoTag = true;
 		}
+
+		/* extra functionalities (out RFC) */
+		if (localName.equalsIgnoreCase("interface-information")) {
+			insideInterfaceInfoTag = true;
+		}
+
 	}
 
 	@Override
@@ -189,6 +201,11 @@ public class TransportContentParser extends DefaultHandler2 {
 		if (insideErrorTypeTag) {
 			errorTypeTagContent += new String(ch, start, length);
 		}
+
+		/* extra functionalities (out RFC) */
+		if (this.insideInterfaceInfoTag) {
+			interfaceInfoTagContent += new String(ch, start, length);
+		}
 	}
 
 	@Override
@@ -222,7 +239,8 @@ public class TransportContentParser extends DefaultHandler2 {
 		}
 		if (localName.equalsIgnoreCase("data")) {
 			insideDataTag = false;
-			reply.setData(dataTagContent);
+			reply.setContain(dataTagContent);
+			reply.setContainName("data");
 			dataTagContent = "";
 		}
 		if (localName.equalsIgnoreCase("rpc-error")) {
@@ -263,6 +281,15 @@ public class TransportContentParser extends DefaultHandler2 {
 			error.setInfo(errorInfoTagContent);
 			errorInfoTagContent = "";
 		}
+
+		/* get extrafunctionalities */
+		if (localName.equalsIgnoreCase("get-interface-information")) {
+			insideInterfaceInfoTag = false;
+			reply.setContain(interfaceInfoTagContent);
+			reply.setContainName("get-interface-information");
+			interfaceInfoTagContent = "";
+		}
+
 	}
 
 	@Override

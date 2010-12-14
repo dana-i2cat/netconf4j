@@ -99,7 +99,7 @@ public class OperationsTest {
 		try {
 
 			URI lola = new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
-					"mock://foo:bar@foo:22/netconf"));
+					"ssh://root:mant6WWe@lola.hea.net:22/netconf"));
 
 			SessionContext sessionContext = new SessionContext();
 			sessionContext.setURI(lola);

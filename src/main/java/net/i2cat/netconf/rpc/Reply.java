@@ -26,7 +26,10 @@ public class Reply extends RPCElement {
 	Vector<Error>			errors;
 
 	boolean					ok	= false;
-	String					data;
+
+	String					containName;
+
+	String					contain;
 
 	HashMap<String, String>	attributes;
 
@@ -67,12 +70,20 @@ public class Reply extends RPCElement {
 		this.attributes = attributes;
 	}
 
-	public String getData() {
-		return data;
+	public String getContain() {
+		return contain;
 	}
 
-	public void setData(String data) {
-		this.data = data;
+	public void setContain(String contain) {
+		this.contain = contain;
+	}
+
+	public String getContainName() {
+		return containName;
+	}
+
+	public void setContainName(String containName) {
+		this.containName = containName;
 	}
 
 	public Vector<Error> getErrors() {

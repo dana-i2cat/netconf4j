@@ -14,14 +14,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Netconf4j. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.i2cat.netconf.transport;
+package net.i2cat.netconf.utils;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import net.i2cat.netconf.rpc.Hello;
 import net.i2cat.netconf.rpc.Operation;
@@ -31,6 +28,7 @@ import net.i2cat.netconf.rpc.RPCElement;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+@Deprecated
 public class DummySimulatorHelper {
 
 	private Log		log				= LogFactory.getLog(DummySimulatorHelper.class);
@@ -93,7 +91,7 @@ public class DummySimulatorHelper {
 		log.info("Trying to open " + currentPath + File.separator + pathFile);
 		try {
 			FileInputStream inputFile = new FileInputStream(pathFile);
-			strResponse = readStringFromFile(inputFile);
+			strResponse = FileHelper.readStringFromFile(inputFile);
 			// strResponse = deleteStringEndNETCONF(strResponse);
 			/* change message ID */
 			if (!messageId.equals("-1"))
@@ -116,35 +114,6 @@ public class DummySimulatorHelper {
 			return str.split("]]>]]>")[0];
 		}
 		return str;
-	}
-
-	/**
-	 * Simple parser. It was used for proves with xml files
-	 * 
-	 * @param stream
-	 * @return
-	 */
-	private String readStringFromFile(InputStream stream) {
-		String answer = null;
-
-		try {
-			InputStreamReader streamReader = new InputStreamReader(stream);
-			StringBuffer fileData = new StringBuffer(1000);
-			BufferedReader reader = new BufferedReader(streamReader);
-			char[] buf = new char[1024];
-			int numRead = 0;
-			while ((numRead = reader.read(buf)) != -1) {
-				String readData = String.valueOf(buf, 0, numRead);
-				fileData.append(readData);
-				buf = new char[1024];
-			}
-			reader.close();
-			answer = fileData.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return answer;
 	}
 
 }

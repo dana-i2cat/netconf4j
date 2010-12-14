@@ -16,6 +16,9 @@
  */
 package net.i2cat.netconf.transport;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -32,6 +35,10 @@ import net.i2cat.netconf.rpc.Operation;
 import net.i2cat.netconf.rpc.Query;
 import net.i2cat.netconf.rpc.RPCElement;
 import net.i2cat.netconf.rpc.Reply;
+import net.i2cat.netconf.utils.FileHelper;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * This class was implemented to be a dummy transport which could simulate a
@@ -40,17 +47,26 @@ import net.i2cat.netconf.rpc.Reply;
 
 public class MockTransport implements Transport {
 
-	Vector<TransportListener>	listeners		= new Vector<TransportListener>();
+	private Log					log					= LogFactory.getLog(MockTransport.class);
+
+	Vector<TransportListener>	listeners			= new Vector<TransportListener>();
 
 	SessionContext				context;
 	ArrayList<Capability>		supportedCapabilities;
 	MessageQueue				queue;
 
-	int							lastMessageId	= 0;
+	int							lastMessageId		= 0;
 
-	String						subsystem		= "";
+	String						subsystem			= "";
 
-	boolean						modeErrors		= false;
+	boolean						modeErrors			= false;
+
+	private static String		path				= "src" + File.separator
+															+ "main" + File.separator
+															+ "resources" + File.separator
+															+ "mock";
+
+	public static final String	fileIPConfiguration	= path + File.separator + "ipconfiguration.xml";
 
 	public void addListener(TransportListener handler) {
 		listeners.add(handler);
@@ -138,7 +154,8 @@ public class MockTransport implements Transport {
 				}
 
 				reply.setMessageId(query.getMessageId());
-				reply.setData("<patata></patata><autobus/>");
+
+				reply.setContain(getDataFromFile(fileIPConfiguration));
 
 			} else if (op.equals(Operation.GET_CONFIG)) {
 				if (query.getSource() == null)
@@ -184,7 +201,8 @@ public class MockTransport implements Transport {
 				}
 
 				reply.setMessageId(query.getMessageId());
-				reply.setData("<patata></patata><autobus/>");
+				reply.setContain(getDataFromFile(fileIPConfiguration));
+
 			} else if (op.equals(Operation.KILL_SESSION)) {
 				disconnect();
 				return;
@@ -208,6 +226,24 @@ public class MockTransport implements Transport {
 			reply.setErrors(errors);
 
 		queue.put(reply);
+	}
+
+	public String getDataFromFile(String fileConfig) {
+
+		String str = "";
+
+		String currentPath = System.getProperty("user.dir");
+		log.info("Trying to open " + currentPath + File.separator + fileConfig);
+		try {
+			FileInputStream inputFile = new FileInputStream(fileConfig);
+			return FileHelper.readStringFromFile(inputFile);
+
+		} catch (FileNotFoundException e) {
+			log.error("The response could not be generated: " + e.getMessage());
+		}
+
+		return str;
+
 	}
 
 	private void error(String msg) throws TransportException {

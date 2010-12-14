@@ -31,6 +31,7 @@ import net.i2cat.netconf.SessionContext;
 import net.i2cat.netconf.errors.TransportException;
 import net.i2cat.netconf.messageQueue.MessageQueue;
 import net.i2cat.netconf.rpc.RPCElement;
+import net.i2cat.netconf.utils.DummySimulatorHelper;
 
 import org.apache.commons.io.input.TeeInputStream;
 import org.apache.commons.logging.Log;
