@@ -143,11 +143,8 @@ public class Query extends RPCElement implements java.io.Serializable {
 		xml += "<rpc message-id=\"" + messageId + "\">";
 		// xml += "<rpc message-id=\"" + messageId + "\" xmlns=\"" +
 		// operation.getNamespace() + "\">";
-		if (operation.equals(Operation.EDIT_CONFIG)) {
-			xml += "<" + operation.getName() + " operation=\"" + editOperation + "\">";
-		} else {
-			xml += "<" + operation.getName() + ">";
-		}
+
+		xml += "<" + operation.getName() + ">";
 
 		if (target != null)
 			xml += "<target><" + target + "/></target>";
