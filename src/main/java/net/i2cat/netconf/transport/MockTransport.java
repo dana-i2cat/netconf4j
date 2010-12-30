@@ -212,11 +212,13 @@ public class MockTransport implements Transport {
 				}
 
 			} else if (op.equals(Operation.KILL_SESSION)) {
+				insideLogicalRouter = false;
 				disconnect();
 				return;
 			} else if (op.equals(Operation.CLOSE_SESSION)) {
 				reply.setMessageId(query.getMessageId());
 				reply.setOk(true);
+				insideLogicalRouter = false;
 				disconnect();
 			} else if (op.equals(Operation.LOCK)) {
 				error("LOCK not implemented");
