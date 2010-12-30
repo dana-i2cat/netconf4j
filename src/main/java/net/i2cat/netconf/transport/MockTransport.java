@@ -47,26 +47,30 @@ import org.apache.commons.logging.LogFactory;
 
 public class MockTransport implements Transport {
 
-	private Log					log					= LogFactory.getLog(MockTransport.class);
+	private Log					log							= LogFactory.getLog(MockTransport.class);
 
-	Vector<TransportListener>	listeners			= new Vector<TransportListener>();
+	Vector<TransportListener>	listeners					= new Vector<TransportListener>();
 
 	SessionContext				context;
 	ArrayList<Capability>		supportedCapabilities;
 	MessageQueue				queue;
 
-	int							lastMessageId		= 0;
+	int							lastMessageId				= 0;
 
-	String						subsystem			= "";
+	String						subsystem					= "";
 
-	boolean						modeErrors			= false;
+	boolean						modeErrors					= false;
 
-	private static String		path				= "src" + File.separator
-															+ "main" + File.separator
-															+ "resources" + File.separator
-															+ "mock";
+	private static String		path						= "src" + File.separator
+																	+ "main" + File.separator
+																	+ "resources" + File.separator
+																	+ "mock";
 
-	public static final String	fileIPConfiguration	= path + File.separator + "ipconfiguration.xml";
+	public static final String	fileIPConfiguration			= path + File.separator + "ipconfiguration.xml";
+
+	/* Extra capabilities */
+	public static final String	fileIPLogicalRouterConfig	= path + File.separator + "iplogicalconfiguration.xml";
+	boolean						insideLogicalRouter			= true;
 
 	public void addListener(TransportListener handler) {
 		listeners.add(handler);
@@ -153,7 +157,6 @@ public class MockTransport implements Transport {
 							});
 					}
 				}
-
 				reply.setMessageId(query.getMessageId());
 
 				reply.setContain(getDataFromFile(fileIPConfiguration));
@@ -202,7 +205,11 @@ public class MockTransport implements Transport {
 				}
 
 				reply.setMessageId(query.getMessageId());
-				reply.setContain(getDataFromFile(fileIPConfiguration));
+				if (!insideLogicalRouter) {
+					reply.setContain(getDataFromFile(fileIPConfiguration));
+				} else {
+					reply.setContain(getDataFromFile(fileIPLogicalRouterConfig));
+				}
 
 			} else if (op.equals(Operation.KILL_SESSION)) {
 				disconnect();
@@ -213,10 +220,17 @@ public class MockTransport implements Transport {
 				disconnect();
 			} else if (op.equals(Operation.LOCK)) {
 				error("LOCK not implemented");
-			}
-			if (op.equals(Operation.UNLOCK)) {
+			} else if (op.equals(Operation.UNLOCK)) {
 				error("UNLOCK not implemented");
 			}
+			/* include junos capabilities operations */
+			else if (op.equals(Operation.SET_LOGICAL_ROUTER)) {
+				reply.setMessageId(query.getMessageId());
+				reply.setContain("<cli><logical-system>" + query.getIdLogicalRouter() + "</logical-system></cli>");
+				insideLogicalRouter = true;
+
+			}
+
 		}
 
 		// force to add errors in the response message
@@ -229,7 +243,7 @@ public class MockTransport implements Transport {
 		queue.put(reply);
 	}
 
-	public String getDataFromFile(String fileConfig) {
+	public String getDataFromFile(String fileConfig) throws TransportException {
 
 		String str = "";
 
@@ -240,10 +254,8 @@ public class MockTransport implements Transport {
 			return FileHelper.readStringFromFile(inputFile);
 
 		} catch (FileNotFoundException e) {
-			log.error("The response could not be generated: " + e.getMessage());
+			throw new TransportException(e.getMessage());
 		}
-
-		return str;
 
 	}
 

@@ -41,6 +41,66 @@ public class OperationsTest {
 
 	private Log	log	= LogFactory.getLog(OperationsTest.class);
 
+	public String sortErrors(Reply reply) {
+		String msg = "";
+		for (Error error : reply.getErrors()) {
+			msg += error.getMessage() + '\n';
+		}
+		return msg;
+
+	}
+
+	@Test
+	public void getGetConfigLogicalRouter() {
+		URI lola;
+		try {
+			lola = new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
+					"mock://foo:bar@foo:22/netconf"));
+
+			SessionContext sessionContext = new SessionContext();
+			sessionContext.setURI(lola);
+
+			NetconfSession session = new NetconfSession(sessionContext);
+
+			session.connect();
+
+			Query query = QueryFactory.newSetLogicalRouter("cpe1");
+			query.setMessageId("1");
+			Reply reply = session.sendSyncQuery(query);
+			/* check first messages */
+			if (reply.containsErrors()) {
+				String msg = sortErrors(reply);
+				fail("It was impossible to access to the logical router: " + msg);
+			}
+
+			query = QueryFactory.newGetConfig("running", null, null);
+			query.setMessageId("2");
+
+			log.info(query.toXML());
+
+			reply = session.sendSyncQuery(query);
+
+			log.info(reply.getContain());
+
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} catch (TransportException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} catch (NetconfProtocolException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} catch (TransportNotImplementedException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} catch (ConfigurationException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+
+	}
+
 	@Test
 	public void getConfig() {
 		try {

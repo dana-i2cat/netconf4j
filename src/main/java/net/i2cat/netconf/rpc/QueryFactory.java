@@ -42,14 +42,13 @@ public class QueryFactory {
 		return query;
 	}
 
-	public static Query newEditConfig(String operation,
-										String target,
+	public static Query newEditConfig(String target,
 										String defaultOperation,
 										String testOption,
 										String errorOption,
 										String config) {
 		Query query = new Query();
-		query.setOperation(Operation.GET);
+		query.setOperation(Operation.EDIT_CONFIG);
 		query.setTarget(target);
 		query.setDefaultOperation(defaultOperation);
 		query.setTestOption(testOption);
@@ -113,6 +112,15 @@ public class QueryFactory {
 		query.setOperation(Operation.UNLOCK);
 		query.setTarget(target);
 
+		return query;
+	}
+
+	/* Extra queries */
+
+	public static Query newSetLogicalRouter(String idLogicalRouter) {
+		Query query = new Query();
+		query.setOperation(Operation.SET_LOGICAL_ROUTER);
+		query.setIdLogicalRouter(idLogicalRouter);
 		return query;
 	}
 

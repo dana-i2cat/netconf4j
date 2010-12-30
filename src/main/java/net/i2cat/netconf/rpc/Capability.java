@@ -32,6 +32,7 @@ public class Capability implements java.io.Serializable {
 	public static final Capability		DISTINCT_STARTUP		= new Capability("urn:ietf:params:xml:ns:netconf:capability:distinc-startup:1.0");
 	public static final Capability		URL						= new Capability("urn:ietf:params:xml:ns:netconf:capability:url:1.0");
 	public static final Capability		XPATH					= new Capability("urn:ietf:params:xml:ns:netconf:capability:xpath:1.0");
+	public static final Capability		JUNOS					= new Capability("http://xml.juniper.net/netconf/junos/1.0");
 
 	private String						namespace;
 
@@ -54,6 +55,7 @@ public class Capability implements java.io.Serializable {
 																		add(DISTINCT_STARTUP);
 																		add(URL);
 																		add(XPATH);
+																		add(JUNOS);
 																	}
 																};
 
@@ -65,10 +67,11 @@ public class Capability implements java.io.Serializable {
 																		// RFC4741
 																		// Mandatory
 																		add(BASE);
+																		add(JUNOS);
 																	}
 																};
 
-	private Capability(String ns) {
+	protected Capability(String ns) {
 		this.namespace = ns;
 	}
 
