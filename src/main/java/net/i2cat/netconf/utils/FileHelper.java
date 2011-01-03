@@ -27,11 +27,12 @@ public class FileHelper {
 	 * @param stream
 	 * @return
 	 */
-	public static String readStringFromFile(InputStream stream) {
+	public static String readStringFromFile(String pathFile) {
 		String answer = null;
 
+		InputStream inputFile = ClassLoader.getSystemResourceAsStream(pathFile);
 		try {
-			InputStreamReader streamReader = new InputStreamReader(stream);
+			InputStreamReader streamReader = new InputStreamReader(inputFile);
 			StringBuffer fileData = new StringBuffer(1000);
 			BufferedReader reader = new BufferedReader(streamReader);
 			char[] buf = new char[1024];

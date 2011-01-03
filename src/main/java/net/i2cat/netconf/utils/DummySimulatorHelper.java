@@ -17,8 +17,6 @@
 package net.i2cat.netconf.utils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 import net.i2cat.netconf.rpc.Hello;
 import net.i2cat.netconf.rpc.Operation;
@@ -33,15 +31,10 @@ public class DummySimulatorHelper {
 
 	private Log		log				= LogFactory.getLog(DummySimulatorHelper.class);
 
-	private String	path			= "src" + File.separator
-											+ "main" + File.separator
-											+ "resources" + File.separator
-											+ "dummy";
-
-	private String	errorFile		= path + File.separator + "responseError.xml";
-	private String	okFile			= path + File.separator + "responseOk.xml";
-	private String	infoFile		= path + File.separator + "responseInfo.xml";
-	private String	helloFile		= path + File.separator + "responseHello.xml";
+	private String	errorFile		= "mock" + File.separator + "responseError.xml";
+	private String	okFile			= "mock" + File.separator + "responseOk.xml";
+	private String	infoFile		= "mock" + File.separator + "responseInfo.xml";
+	private String	helloFile		= "mock" + File.separator + "responseHello.xml";
 
 	private boolean	responseError	= false;
 
@@ -87,19 +80,13 @@ public class DummySimulatorHelper {
 
 		}
 
-		String currentPath = System.getProperty("user.dir");
-		log.info("Trying to open " + currentPath + File.separator + pathFile);
-		try {
-			FileInputStream inputFile = new FileInputStream(pathFile);
-			strResponse = FileHelper.readStringFromFile(inputFile);
-			// strResponse = deleteStringEndNETCONF(strResponse);
-			/* change message ID */
-			if (!messageId.equals("-1"))
-				strResponse = changeMessageIdNETCONF(strResponse, messageId);
+		log.info("Trying to open " + pathFile);
+		strResponse = FileHelper.readStringFromFile(pathFile);
+		// strResponse = deleteStringEndNETCONF(strResponse);
+		/* change message ID */
+		if (!messageId.equals("-1"))
+			strResponse = changeMessageIdNETCONF(strResponse, messageId);
 
-		} catch (FileNotFoundException e) {
-			log.error("The response could not be generated: " + e.getMessage());
-		}
 		return strResponse;
 
 	}

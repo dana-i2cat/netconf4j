@@ -18,7 +18,13 @@ package net.i2cat.netconf.transport;
 
 import net.i2cat.netconf.errors.TransportNotImplementedException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class TransportFactory {
+
+	static private Log	log	= LogFactory.getLog(TransportFactory.class);
+
 	private static enum TypeTransport {
 		SSH, VIRTUAL, MOCK, UNKNOWN;
 	}
@@ -45,7 +51,7 @@ public class TransportFactory {
 			default:
 				throw new TransportNotImplementedException("Unknown transport: " + scheme);
 		}
-
+		log.info("TYPE: " + type);
 		return type;
 	}
 

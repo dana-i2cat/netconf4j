@@ -54,8 +54,10 @@ public class OperationsTest {
 	public void getGetConfigLogicalRouter() {
 		URI lola;
 		try {
+
 			lola = new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
 					"mock://foo:bar@foo:22/netconf"));
+			log.info("URI get: " + lola.toString());
 
 			SessionContext sessionContext = new SessionContext();
 			sessionContext.setURI(lola);
@@ -107,6 +109,7 @@ public class OperationsTest {
 
 			URI lola = new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
 					"mock://foo:bar@foo:22/netconf"));
+			log.info("URI get: " + lola.toString());
 
 			SessionContext sessionContext = new SessionContext();
 			sessionContext.setURI(lola);
@@ -160,6 +163,7 @@ public class OperationsTest {
 
 			URI lola = new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
 					"mock://foo:bar@foo:22/netconf"));
+			log.info("URI get: " + lola.toString());
 
 			SessionContext sessionContext = new SessionContext();
 			sessionContext.setURI(lola);

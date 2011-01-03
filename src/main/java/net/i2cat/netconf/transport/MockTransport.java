@@ -17,8 +17,6 @@
 package net.i2cat.netconf.transport;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -61,15 +59,12 @@ public class MockTransport implements Transport {
 
 	boolean						modeErrors					= false;
 
-	private static String		path						= "src" + File.separator
-																	+ "main" + File.separator
-																	+ "resources" + File.separator
-																	+ "mock";
+	private static String		path						= "mock" + File.separator;
 
-	public static final String	fileIPConfiguration			= path + File.separator + "ipconfiguration.xml";
+	public static final String	fileIPConfiguration			= path + "ipconfiguration.xml";
 
 	/* Extra capabilities */
-	public static final String	fileIPLogicalRouterConfig	= path + File.separator + "iplogicalconfiguration.xml";
+	public static final String	fileIPLogicalRouterConfig	= path + "iplogicalconfiguration.xml";
 	boolean						insideLogicalRouter			= true;
 
 	public void addListener(TransportListener handler) {
@@ -250,14 +245,8 @@ public class MockTransport implements Transport {
 		String str = "";
 
 		String currentPath = System.getProperty("user.dir");
-		log.info("Trying to open " + currentPath + File.separator + fileConfig);
-		try {
-			FileInputStream inputFile = new FileInputStream(fileConfig);
-			return FileHelper.readStringFromFile(inputFile);
-
-		} catch (FileNotFoundException e) {
-			throw new TransportException(e.getMessage());
-		}
+		log.info("Trying to open " + fileConfig);
+		return FileHelper.readStringFromFile(fileConfig);
 
 	}
 
