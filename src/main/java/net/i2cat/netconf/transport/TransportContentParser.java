@@ -100,6 +100,10 @@ public class TransportContentParser extends DefaultHandler2 {
 		// if (insideDataTag && !localName.equalsIgnoreCase("data"))
 		// return;
 
+		if (insideDataTag) {
+			dataTagContent += "<" + localName + ">";
+		}
+
 		// log.debug("startElement <" + uri + "::" + localName + ">");
 
 		if (localName.equalsIgnoreCase("hello")) {
@@ -203,9 +207,10 @@ public class TransportContentParser extends DefaultHandler2 {
 		}
 
 		/* extra functionalities (out RFC) */
-		if (this.insideInterfaceInfoTag) {
+		if (insideInterfaceInfoTag) {
 			interfaceInfoTagContent += new String(ch, start, length);
 		}
+
 	}
 
 	@Override
@@ -217,6 +222,9 @@ public class TransportContentParser extends DefaultHandler2 {
 		// if (insideDataTag && !localName.equalsIgnoreCase("data"))
 		// return;
 
+		if (insideDataTag) {
+			dataTagContent += "<" + localName + ">";
+		}
 		if (localName.equalsIgnoreCase("hello")) {
 			messageQueue.put(hello);
 			hello = null;
@@ -243,6 +251,7 @@ public class TransportContentParser extends DefaultHandler2 {
 			reply.setContainName("data");
 			dataTagContent = "";
 		}
+
 		if (localName.equalsIgnoreCase("rpc-error")) {
 			reply.addError(error);
 		}
