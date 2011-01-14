@@ -244,9 +244,16 @@ public class MockTransport implements Transport {
 
 		String str = "";
 
-		String currentPath = System.getProperty("user.dir");
 		log.info("Trying to open " + fileConfig);
-		return FileHelper.readStringFromFile(fileConfig);
+		try {
+			str = FileHelper.readStringFromFile(fileConfig);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("error message: " + e.getLocalizedMessage());
+			throw new TransportException(e.getMessage());
+		}
+		log.info("OK! the file was read");
+		return str;
 
 	}
 

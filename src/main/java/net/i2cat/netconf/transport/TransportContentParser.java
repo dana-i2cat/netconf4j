@@ -217,14 +217,9 @@ public class TransportContentParser extends DefaultHandler2 {
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		super.endElement(uri, localName, qName);
 
-		// log.debug("endElement </" + localName + ">");
-
 		// if (insideDataTag && !localName.equalsIgnoreCase("data"))
 		// return;
 
-		if (insideDataTag) {
-			dataTagContent += "<" + localName + ">";
-		}
 		if (localName.equalsIgnoreCase("hello")) {
 			messageQueue.put(hello);
 			hello = null;
@@ -297,6 +292,10 @@ public class TransportContentParser extends DefaultHandler2 {
 			reply.setContain(interfaceInfoTagContent);
 			reply.setContainName("get-interface-information");
 			interfaceInfoTagContent = "";
+		}
+
+		if (insideDataTag) {
+			dataTagContent += "</" + localName + ">";
 		}
 
 	}
