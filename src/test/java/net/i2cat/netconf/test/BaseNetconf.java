@@ -53,10 +53,10 @@ public class BaseNetconf {
 	public static void setUpBeforeClass() throws Exception {
 
 		sessionContext = new SessionContext();
-//		sessionContext.setURI(new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
-//															"mock://foo:bar@foo:22/okServer")));
+		sessionContext.setURI(new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
+															"mock://foo:bar@foo:22/okServer")));
 
-		sessionContext.setURI( new URI("ssh://i2cat:mant6WWe@lola.hea.net:22/netconf"));
+//		sessionContext.setURI( new URI("ssh://i2cat:mant6WWe@lola.hea.net:22/netconf"));
 		
 		session = new NetconfSession(sessionContext);
 		session.connect();
