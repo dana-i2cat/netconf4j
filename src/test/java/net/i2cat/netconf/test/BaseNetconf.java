@@ -53,9 +53,11 @@ public class BaseNetconf {
 	public static void setUpBeforeClass() throws Exception {
 
 		sessionContext = new SessionContext();
-		sessionContext.setURI(new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
-															"mock://foo:bar@foo:22/okServer")));
+//		sessionContext.setURI(new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
+//															"mock://foo:bar@foo:22/okServer")));
 
+		sessionContext.setURI( new URI("ssh://i2cat:mant6WWe@lola.hea.net:22/netconf"));
+		
 		session = new NetconfSession(sessionContext);
 		session.connect();
 	}
@@ -160,7 +162,7 @@ public class BaseNetconf {
 	}
 
 	@Test
-	public void CheckCapabilitiesTest() {
+	public void checkCapabilitiesTest() {
 		ArrayList<Capability> capabilityVector = session
 				.getActiveCapabilities();
 		ArrayList<Capability> baseVectorCapability = new ArrayList<Capability>();
@@ -169,9 +171,11 @@ public class BaseNetconf {
 		 * If it is not contain the base capability, it is impossible to check
 		 * capabilities
 		 */
-		boolean isChecked = capabilityVector.equals(baseVectorCapability);
-		Assert.assertTrue(isChecked);
+//		boolean isChecked = capabilityVector.equals(baseVectorCapability);
+//		Assert.assertTrue(isChecked);
 
+		Assert.assertTrue( session.getActiveCapabilities().contains(Capability.BASE) );
+		
 	}
 
 	@Test
