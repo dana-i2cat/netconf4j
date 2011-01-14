@@ -54,40 +54,40 @@ public class TransportContentParser extends DefaultHandler2 {
 	Error					error;
 
 	boolean					insideCapabilityTag		= false;
-	String					capabilityTagContent	= "";
+	StringBuffer			capabilityTagContent	= new StringBuffer();
 	ArrayList<Capability>	capabilities;
 
 	boolean					insideSessionIdTag		= false;
-	String					sessionIdTagContent		= "";
+	StringBuffer			sessionIdTagContent		= new StringBuffer();
 
 	boolean					insideDataTag			= false;
-	String					dataTagContent			= "";
+	StringBuffer			dataTagContent			= new StringBuffer();
 
 	boolean					insideErrorTypeTag		= false;
-	String					errorTypeTagContent		= "";
+	StringBuffer			errorTypeTagContent		= new StringBuffer();
 
 	boolean					insideErrorTagTag		= false;
-	String					errorTagTagContent		= "";
+	StringBuffer			errorTagTagContent		= new StringBuffer();
 
 	boolean					insideErrorSeverityTag	= false;
-	String					errorSeverityTagContent	= "";
+	StringBuffer			errorSeverityTagContent	= new StringBuffer();
 
 	boolean					insideErrorAppTagTag	= false;
-	String					errorAppTagTagContent	= "";
+	StringBuffer			errorAppTagTagContent	= new StringBuffer();
 
 	boolean					insideErrorPathTag		= false;
-	String					errorPathTagContent		= "";
+	StringBuffer			errorPathTagContent		= new StringBuffer();
 
 	boolean					insideErrorMessageTag	= false;
-	String					errorMessageTagContent	= "";
+	StringBuffer			errorMessageTagContent	= new StringBuffer();
 
 	boolean					insideErrorInfoTag		= false;
-	String					errorInfoTagContent		= "";
+	StringBuffer			errorInfoTagContent		= new StringBuffer();
 
 	/* extra functionalities (out RFC) */
 
 	boolean					insideInterfaceInfoTag	= false;
-	String					interfaceInfoTagContent	= "";
+	StringBuffer			interfaceInfoTagContent	= new StringBuffer();
 
 	public void setMessageQueue(MessageQueue queue) {
 		this.messageQueue = queue;
@@ -101,7 +101,7 @@ public class TransportContentParser extends DefaultHandler2 {
 		// return;
 
 		if (insideDataTag) {
-			dataTagContent += "<" + localName + ">";
+			dataTagContent.append("<" + localName + ">");
 		}
 
 		// log.debug("startElement <" + uri + "::" + localName + ">");
@@ -171,44 +171,44 @@ public class TransportContentParser extends DefaultHandler2 {
 	public void characters(char[] ch, int start, int length) throws SAXException {
 		super.characters(ch, start, length);
 
-		// log.info(new String(ch, start, length));
-		// log.info(new String(ch));
+		log.info(new String(ch, start, length));
+//		log.info(new String(ch));
 
 		if (insideCapabilityTag) {
-			capabilityTagContent += new String(ch, start, length);
+			capabilityTagContent.append(ch, start, length);
 			// log.debug("capability content:" + capabilityTagContent);
 		}
 		if (insideSessionIdTag) {
-			sessionIdTagContent += new String(ch, start, length);
+			sessionIdTagContent.append(ch, start, length);
 		}
 		if (insideDataTag) {
-			dataTagContent += new String(ch, start, length);
+			dataTagContent.append(ch, start, length);
 		}
 		if (insideErrorAppTagTag) {
-			errorAppTagTagContent += new String(ch, start, length);
+			errorAppTagTagContent.append(ch, start, length);
 		}
 		if (insideErrorInfoTag) {
-			errorInfoTagContent += new String(ch, start, length);
+			errorInfoTagContent.append(ch, start, length);
 		}
 		if (insideErrorMessageTag) {
-			errorMessageTagContent += new String(ch, start, length);
+			errorMessageTagContent.append(ch, start, length);
 		}
 		if (insideErrorPathTag) {
-			errorPathTagContent += new String(ch, start, length);
+			errorPathTagContent.append(ch, start, length);
 		}
 		if (insideErrorSeverityTag) {
-			errorSeverityTagContent += new String(ch, start, length);
+			errorSeverityTagContent.append(ch, start, length);
 		}
 		if (insideErrorTagTag) {
-			errorTagTagContent += new String(ch, start, length);
+			errorTagTagContent.append(ch, start, length);
 		}
 		if (insideErrorTypeTag) {
-			errorTypeTagContent += new String(ch, start, length);
+			errorTypeTagContent.append(ch, start, length);
 		}
 
 		/* extra functionalities (out RFC) */
 		if (insideInterfaceInfoTag) {
-			interfaceInfoTagContent += new String(ch, start, length);
+			interfaceInfoTagContent.append(ch, start, length);
 		}
 
 	}
@@ -217,9 +217,14 @@ public class TransportContentParser extends DefaultHandler2 {
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		super.endElement(uri, localName, qName);
 
+		// log.debug("endElement </" + localName + ">");
+
 		// if (insideDataTag && !localName.equalsIgnoreCase("data"))
 		// return;
 
+		if (insideDataTag) {
+			dataTagContent.append("<" + localName + ">");
+		}
 		if (localName.equalsIgnoreCase("hello")) {
 			messageQueue.put(hello);
 			hello = null;
@@ -229,12 +234,13 @@ public class TransportContentParser extends DefaultHandler2 {
 		}
 		if (localName.equalsIgnoreCase("capability")) {
 			insideCapabilityTag = false;
-			capabilities.add(Capability.getCapabilityByNamespace(capabilityTagContent));
-			capabilityTagContent = "";
+			capabilities.add(Capability.getCapabilityByNamespace(capabilityTagContent.toString()));
+			capabilityTagContent = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("session-id")) {
 			insideSessionIdTag = false;
-			hello.setSessionId(sessionIdTagContent);
+			hello.setSessionId(sessionIdTagContent.toString());
+			sessionIdTagContent = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("rpc-reply")) {
 			messageQueue.put(reply);
@@ -242,9 +248,9 @@ public class TransportContentParser extends DefaultHandler2 {
 		}
 		if (localName.equalsIgnoreCase("data")) {
 			insideDataTag = false;
-			reply.setContain(dataTagContent);
+			reply.setContain(dataTagContent.toString());
 			reply.setContainName("data");
-			dataTagContent = "";
+			dataTagContent = new StringBuffer();
 		}
 
 		if (localName.equalsIgnoreCase("rpc-error")) {
@@ -252,50 +258,50 @@ public class TransportContentParser extends DefaultHandler2 {
 		}
 		if (localName.equalsIgnoreCase("error-type")) {
 			insideErrorTypeTag = false;
-			error.setType(ErrorType.valueOf(errorTypeTagContent.toUpperCase()));
-			errorTypeTagContent = "";
+			error.setType(ErrorType.valueOf(errorTypeTagContent.toString().toUpperCase()));
+			errorTypeTagContent  = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-tag")) {
 			insideErrorTagTag = false;
-			error.setTag(ErrorTag.valueOf(errorTagTagContent));
-			errorTagTagContent = "";
+			error.setTag(ErrorTag.valueOf(errorTagTagContent.toString()));
+			errorTagTagContent  = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-severity")) {
 			insideErrorSeverityTag = false;
-			error.setSeverity(ErrorSeverity.valueOf(errorSeverityTagContent.toUpperCase()));
-			errorSeverityTagContent = "";
+			error.setSeverity(ErrorSeverity.valueOf(errorSeverityTagContent.toString().toUpperCase()));
+			errorSeverityTagContent  = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-app-tag")) {
 			insideErrorAppTagTag = false;
-			error.setAppTag(errorAppTagTagContent);
-			errorAppTagTagContent = "";
+			error.setAppTag(errorAppTagTagContent.toString());
+			errorAppTagTagContent  = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-path")) {
 			insideErrorPathTag = false;
-			error.setPath(errorPathTagContent);
-			errorPathTagContent = "";
+			error.setPath(errorPathTagContent.toString());
+			errorPathTagContent  = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-message")) {
 			insideErrorMessageTag = false;
-			error.setMessage(errorMessageTagContent);
-			errorMessageTagContent = "";
+			error.setMessage(errorMessageTagContent.toString());
+			errorMessageTagContent  = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-info")) {
 			insideErrorInfoTag = false;
-			error.setInfo(errorInfoTagContent);
-			errorInfoTagContent = "";
+			error.setInfo(errorInfoTagContent.toString());
+			errorInfoTagContent  = new StringBuffer();
 		}
 
 		/* get extrafunctionalities */
 		if (localName.equalsIgnoreCase("get-interface-information")) {
 			insideInterfaceInfoTag = false;
-			reply.setContain(interfaceInfoTagContent);
+			reply.setContain(interfaceInfoTagContent.toString());
 			reply.setContainName("get-interface-information");
-			interfaceInfoTagContent = "";
+			interfaceInfoTagContent  = new StringBuffer();
 		}
 
 		if (insideDataTag) {
-			dataTagContent += "</" + localName + ">";
+			dataTagContent.append("</" + localName + ">");
 		}
 
 	}
