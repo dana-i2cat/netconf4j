@@ -56,8 +56,6 @@ public class BaseNetconf {
 		sessionContext.setURI(new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
 															"mock://foo:bar@foo:22/okServer")));
 
-//		sessionContext.setURI( new URI("ssh://i2cat:mant6WWe@lola.hea.net:22/netconf"));
-		
 		session = new NetconfSession(sessionContext);
 		session.connect();
 	}
