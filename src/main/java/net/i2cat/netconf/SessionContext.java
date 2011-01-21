@@ -19,12 +19,12 @@ package net.i2cat.netconf;
 import java.net.URI;
 import java.util.ArrayList;
 
+import net.i2cat.netconf.rpc.Capability;
+
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-
-import net.i2cat.netconf.rpc.Capability;
 
 public class SessionContext extends CompositeConfiguration {
 
@@ -48,7 +48,19 @@ public class SessionContext extends CompositeConfiguration {
 		this.setProperty(CAPABILITIES_ACTIVE, capabilities);
 	}
 
+	private ArrayList<Capability> getCapability(String key) {
+
+		ArrayList<Capability> capabilities = new ArrayList<Capability>();
+		capabilities.add((Capability) getProperty(key));
+		return capabilities;
+	}
+
 	public ArrayList<Capability> getActiveCapabilities() {
+
+		// FIXME A BETTER METHOD TO DO THIS
+		if (this.getProperty(CAPABILITIES_ACTIVE) instanceof Capability) {
+			return getCapability(CAPABILITIES_ACTIVE);
+		}
 		return (ArrayList<Capability>) this.getList(CAPABILITIES_ACTIVE);
 	}
 
@@ -57,6 +69,12 @@ public class SessionContext extends CompositeConfiguration {
 	}
 
 	public ArrayList<Capability> getClientCapabilities() {
+
+		// FIXME A BETTER METHOD TO DO THIS
+		if (this.getProperty(CAPABILITIES_CLIENT) instanceof Capability) {
+			return getCapability(CAPABILITIES_CLIENT);
+		}
+
 		return (ArrayList<Capability>) this.getList(CAPABILITIES_CLIENT);
 	}
 
@@ -65,6 +83,10 @@ public class SessionContext extends CompositeConfiguration {
 	}
 
 	public ArrayList<Capability> getServerCapabilities() {
+		// FIXME A BETTER METHOD TO DO THIS
+		if (this.getProperty(CAPABILITIES_SERVER) instanceof Capability) {
+			return getCapability(CAPABILITIES_SERVER);
+		}
 		return (ArrayList<Capability>) this.getList(CAPABILITIES_SERVER);
 	}
 
