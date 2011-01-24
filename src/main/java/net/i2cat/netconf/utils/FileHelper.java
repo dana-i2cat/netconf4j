@@ -21,34 +21,39 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class FileHelper {
+	private static FileHelper	fileHelper	= new FileHelper();
+
 	/**
 	 * Simple parser. It was used for proves with xml files
 	 * 
 	 * @param stream
 	 * @return
 	 */
-	public static String readStringFromFile(String pathFile) {
+	public String readStringFromFile(String pathFile) throws Exception {
 		String answer = null;
-
-		InputStream inputFile = ClassLoader.getSystemResourceAsStream(pathFile);
-		try {
-			InputStreamReader streamReader = new InputStreamReader(inputFile);
-			StringBuffer fileData = new StringBuffer(1000);
-			BufferedReader reader = new BufferedReader(streamReader);
-			char[] buf = new char[1024];
-			int numRead = 0;
-			while ((numRead = reader.read(buf)) != -1) {
-				String readData = String.valueOf(buf, 0, numRead);
-				fileData.append(readData);
-				buf = new char[1024];
-			}
-			reader.close();
-			answer = fileData.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
+		// InputStream inputFile =
+		// ClassLoader.getSystemResourceAsStream(pathFile);
+		InputStream inputFile = getClass().getResourceAsStream(pathFile);
+		InputStreamReader streamReader = new InputStreamReader(inputFile);
+		StringBuffer fileData = new StringBuffer(1000);
+		BufferedReader reader = new BufferedReader(streamReader);
+		char[] buf = new char[1024];
+		int numRead = 0;
+		while ((numRead = reader.read(buf)) != -1) {
+			String readData = String.valueOf(buf, 0, numRead);
+			fileData.append(readData);
+			buf = new char[1024];
 		}
+		reader.close();
+		answer = fileData.toString();
 
 		return answer;
+	}
+
+	public static FileHelper getInstance() {
+		if (fileHelper == null)
+			fileHelper = new FileHelper();
+		return fileHelper;
 	}
 
 }

@@ -16,7 +16,6 @@
  */
 package net.i2cat.netconf.transport;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -59,7 +58,7 @@ public class MockTransport implements Transport {
 
 	boolean						modeErrors					= false;
 
-	private static String		path						= "mock" + File.separator;
+	private static String		path						= "/mock/";
 
 	public static final String	fileIPConfiguration			= path + "ipconfiguration.xml";
 
@@ -246,7 +245,7 @@ public class MockTransport implements Transport {
 
 		log.info("Trying to open " + fileConfig);
 		try {
-			str = FileHelper.readStringFromFile(fileConfig);
+			str = FileHelper.getInstance().readStringFromFile(fileConfig);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("error message: " + e.getLocalizedMessage());
