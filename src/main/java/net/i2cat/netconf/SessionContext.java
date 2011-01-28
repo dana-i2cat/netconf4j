@@ -16,15 +16,18 @@
  */
 package net.i2cat.netconf;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 
 import net.i2cat.netconf.rpc.Capability;
 
+import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class SessionContext extends CompositeConfiguration {
 
@@ -40,8 +43,32 @@ public class SessionContext extends CompositeConfiguration {
 	public final static String	LOGRESPXML			= BASE + "transport.logXMLStream";
 	public final static String	LOGFILEXML			= BASE + "transport.logXMLOutputFile";
 
+	public final static String	LOG_STREAM			= "transport.logXMLStream";
+	public final static String	LOG_FILE			= "transport.logXMLOutputFile";
+
+	public final static Log		log					= LogFactory.getLog(SessionContext.class);
+
+	private Configuration createDefaultConfiguration() {
+
+		BaseConfiguration baseConfiguration = new BaseConfiguration();
+		baseConfiguration.addProperty(LOG_STREAM, "false");
+		baseConfiguration.addProperty(LOG_FILE, "server.xml.log");
+
+		return baseConfiguration;
+
+	}
+
 	public SessionContext() throws ConfigurationException {
-		this.addConfiguration(new PropertiesConfiguration("netconf-default.properties"));
+
+		this.addConfiguration(createDefaultConfiguration());
+
+		try {
+			String path = new java.io.File(".").getCanonicalPath();
+			log.info("Current path: " + path);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void setActiveCapabilities(ArrayList<Capability> capabilities) {

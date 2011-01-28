@@ -56,7 +56,7 @@ public class OperationsTest {
 		try {
 
 			lola = new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
-					"mock://foo:bar@foo:22/netconf"));
+					"mock://foo:boo@testing.default.net:22"));
 			log.info("URI get: " + lola.toString());
 
 			SessionContext sessionContext = new SessionContext();
@@ -108,7 +108,7 @@ public class OperationsTest {
 		try {
 
 			URI lola = new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
-					"mock://foo:bar@foo:22/netconf"));
+					"mock://foo:boo@testing.default.net:22"));
 			log.info("URI get: " + lola.toString());
 
 			SessionContext sessionContext = new SessionContext();
@@ -162,7 +162,7 @@ public class OperationsTest {
 		try {
 
 			URI lola = new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
-					"mock://foo:bar@foo:22/netconf"));
+					"mock://foo:boo@testing.default.net:22"));
 			log.info("URI get: " + lola.toString());
 
 			SessionContext sessionContext = new SessionContext();

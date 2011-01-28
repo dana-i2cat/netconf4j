@@ -81,7 +81,11 @@ public class DummySimulatorHelper {
 		}
 
 		log.info("Trying to open " + pathFile);
-		strResponse = FileHelper.readStringFromFile(pathFile);
+		try {
+			strResponse = FileHelper.getInstance().readStringFromFile(pathFile);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
 		// strResponse = deleteStringEndNETCONF(strResponse);
 		/* change message ID */
 		if (!messageId.equals("-1"))
