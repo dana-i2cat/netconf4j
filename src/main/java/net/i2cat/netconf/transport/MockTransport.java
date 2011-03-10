@@ -125,8 +125,10 @@ public class MockTransport implements Transport {
 			if (op.equals(Operation.COPY_CONFIG)) {
 			} else if (op.equals(Operation.DELETE_CONFIG)) {
 				reply.setOk(true);
+				reply.setMessageId(query.getMessageId());
 			} else if (op.equals(Operation.EDIT_CONFIG)) {
 				reply.setOk(true);
+				reply.setMessageId(query.getMessageId());
 			} else if (op.equals(Operation.GET)) {
 
 				if (query.getFilter() != null && query.getFilterType() != null) {
