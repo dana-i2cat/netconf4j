@@ -158,6 +158,7 @@ public class MockTransport implements Transport {
 				reply.setContain(getDataFromFile(fileIPConfiguration));
 
 			} else if (op.equals(Operation.GET_CONFIG)) {
+				//it is not include any get config, it is an error
 				if (query.getSource() == null)
 					errors.add(new Error() {
 						{
@@ -167,16 +168,6 @@ public class MockTransport implements Transport {
 							setInfo("<bad-element> : No source configuration specified");
 						}
 					});
-				if (query.getSource() == null && query.getSource().equals("running")) {
-					errors.add(new Error() {
-						{
-							setTag(ErrorTag.BAD_ELEMENT);
-							setType(ErrorType.PROTOCOL);
-							setSeverity(ErrorSeverity.ERROR);
-							setInfo("<bad-element> : Wrong configuration.");
-						}
-					});
-				}
 				if (query.getFilter() != null && query.getFilterType() != null) {
 					if (context.getActiveCapabilities().contains(Capability.XPATH)) {
 						if (!(query.getFilterType().equals("xpath") || query.getFilterType().equals("subtree")))
