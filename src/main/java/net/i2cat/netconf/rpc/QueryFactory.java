@@ -57,6 +57,7 @@ public class QueryFactory {
 
 		return query;
 	}
+	
 
 	public static Query newCloseSession() {
 		Query query = new Query();
@@ -111,6 +112,13 @@ public class QueryFactory {
 		Query query = new Query();
 		query.setOperation(Operation.UNLOCK);
 		query.setTarget(target);
+
+		return query;
+	}
+	
+	public static Query newCommit() {
+		Query query = new Query();
+		query.setOperation(Operation.COMMIT);
 
 		return query;
 	}

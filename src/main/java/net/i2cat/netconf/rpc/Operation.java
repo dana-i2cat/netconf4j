@@ -18,23 +18,33 @@ package net.i2cat.netconf.rpc;
 
 public class Operation implements java.io.Serializable {
 
-	private static final long		serialVersionUID	= 403825246463035849L;
+	private static final long serialVersionUID = 403825246463035849L;
 
-	private String					name				= "";
+	private String name = "";
 
-	private Capability				capability			= Capability.BASE;
+	private Capability capability = Capability.BASE;
 
-	public static final Operation	GET_CONFIG			= new Operation("get-config", Capability.BASE);
-	public static final Operation	EDIT_CONFIG			= new Operation("edit-config", Capability.BASE);
-	public static final Operation	COPY_CONFIG			= new Operation("copy-config", Capability.BASE);
-	public static final Operation	DELETE_CONFIG		= new Operation("delete-config", Capability.BASE);
-	public static final Operation	LOCK				= new Operation("lock", Capability.BASE);
-	public static final Operation	UNLOCK				= new Operation("unlock", Capability.BASE);
-	public static final Operation	GET					= new Operation("get", Capability.BASE);
-	public static final Operation	CLOSE_SESSION		= new Operation("close-session", Capability.BASE);
-	public static final Operation	KILL_SESSION		= new Operation("kill-session", Capability.BASE);
+	public static final Operation GET_CONFIG = new Operation("get-config",
+			Capability.BASE);
+	public static final Operation EDIT_CONFIG = new Operation("edit-config",
+			Capability.BASE);
+	public static final Operation COPY_CONFIG = new Operation("copy-config",
+			Capability.BASE);
+	public static final Operation DELETE_CONFIG = new Operation(
+			"delete-config", Capability.BASE);
+	public static final Operation LOCK = new Operation("lock", Capability.BASE);
+	public static final Operation UNLOCK = new Operation("unlock",
+			Capability.BASE);
+	public static final Operation GET = new Operation("get", Capability.BASE);
+	public static final Operation CLOSE_SESSION = new Operation(
+			"close-session", Capability.BASE);
+	public static final Operation KILL_SESSION = new Operation("kill-session",
+			Capability.BASE);
+	public static final Operation COMMIT = new Operation("commit",
+			Capability.BASE);
 
-	public static final Operation	SET_LOGICAL_ROUTER	= new Operation("set-logical-router", Capability.JUNOS);
+	public static final Operation SET_LOGICAL_ROUTER = new Operation(
+			"set-logical-router", Capability.JUNOS);
 
 	protected Operation(String name, Capability capability) {
 		this.name = name;
@@ -42,7 +52,8 @@ public class Operation implements java.io.Serializable {
 	}
 
 	public boolean equals(Operation compareOperation) {
-		return (this.name.equals(compareOperation.name) && this.capability.equals(compareOperation.capability));
+		return (this.name.equals(compareOperation.name) && this.capability
+				.equals(compareOperation.capability));
 
 	}
 
