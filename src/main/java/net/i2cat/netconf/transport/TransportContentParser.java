@@ -36,8 +36,7 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.ext.DefaultHandler2;
 
 /**
- * This class intends to be a reusable (across transports) component that
- * receives SAX events and returns instantiated Netconf's RPCElement objects.
+ * This class intends to be a reusable (across transports) component that receives SAX events and returns instantiated Netconf's RPCElement objects.
  * 
  * @author Pau Minoves
  * 
@@ -172,7 +171,7 @@ public class TransportContentParser extends DefaultHandler2 {
 		super.characters(ch, start, length);
 
 		log.info(new String(ch, start, length));
-//		log.info(new String(ch));
+		// log.info(new String(ch));
 
 		if (insideCapabilityTag) {
 			capabilityTagContent.append(ch, start, length);
@@ -222,9 +221,10 @@ public class TransportContentParser extends DefaultHandler2 {
 		// if (insideDataTag && !localName.equalsIgnoreCase("data"))
 		// return;
 
-		if (insideDataTag) {
-			dataTagContent.append("<" + localName + ">");
+		if (insideDataTag && !localName.equalsIgnoreCase("data")) {
+			dataTagContent.append("</" + localName + ">");
 		}
+
 		if (localName.equalsIgnoreCase("hello")) {
 			messageQueue.put(hello);
 			hello = null;
@@ -259,37 +259,37 @@ public class TransportContentParser extends DefaultHandler2 {
 		if (localName.equalsIgnoreCase("error-type")) {
 			insideErrorTypeTag = false;
 			error.setType(ErrorType.valueOf(errorTypeTagContent.toString().toUpperCase()));
-			errorTypeTagContent  = new StringBuffer();
+			errorTypeTagContent = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-tag")) {
 			insideErrorTagTag = false;
 			error.setTag(ErrorTag.valueOf(errorTagTagContent.toString()));
-			errorTagTagContent  = new StringBuffer();
+			errorTagTagContent = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-severity")) {
 			insideErrorSeverityTag = false;
 			error.setSeverity(ErrorSeverity.valueOf(errorSeverityTagContent.toString().toUpperCase()));
-			errorSeverityTagContent  = new StringBuffer();
+			errorSeverityTagContent = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-app-tag")) {
 			insideErrorAppTagTag = false;
 			error.setAppTag(errorAppTagTagContent.toString());
-			errorAppTagTagContent  = new StringBuffer();
+			errorAppTagTagContent = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-path")) {
 			insideErrorPathTag = false;
 			error.setPath(errorPathTagContent.toString());
-			errorPathTagContent  = new StringBuffer();
+			errorPathTagContent = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-message")) {
 			insideErrorMessageTag = false;
 			error.setMessage(errorMessageTagContent.toString());
-			errorMessageTagContent  = new StringBuffer();
+			errorMessageTagContent = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-info")) {
 			insideErrorInfoTag = false;
 			error.setInfo(errorInfoTagContent.toString());
-			errorInfoTagContent  = new StringBuffer();
+			errorInfoTagContent = new StringBuffer();
 		}
 
 		/* get extrafunctionalities */
@@ -297,11 +297,7 @@ public class TransportContentParser extends DefaultHandler2 {
 			insideInterfaceInfoTag = false;
 			reply.setContain(interfaceInfoTagContent.toString());
 			reply.setContainName("get-interface-information");
-			interfaceInfoTagContent  = new StringBuffer();
-		}
-
-		if (insideDataTag) {
-			dataTagContent.append("</" + localName + ">");
+			interfaceInfoTagContent = new StringBuffer();
 		}
 
 	}

@@ -23,6 +23,11 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.Vector;
 
+import net.i2cat.netconf.SessionContext;
+import net.i2cat.netconf.errors.TransportException;
+import net.i2cat.netconf.messageQueue.MessageQueue;
+import net.i2cat.netconf.rpc.RPCElement;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xml.sax.InputSource;
@@ -33,11 +38,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.ConnectionMonitor;
 import ch.ethz.ssh2.Session;
-
-import net.i2cat.netconf.SessionContext;
-import net.i2cat.netconf.errors.TransportException;
-import net.i2cat.netconf.messageQueue.MessageQueue;
-import net.i2cat.netconf.rpc.RPCElement;
 
 public class SSHTransport implements Transport, ConnectionMonitor {
 
@@ -204,7 +204,6 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 				while (!closed)
 				{
 					try {
-						
 
 						String buffer = "";
 						BufferedReader reader = new BufferedReader(new InputStreamReader(session.getStdout()));
@@ -219,7 +218,6 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 						log.info("-------------------------------------------------------");
 						log.debug("Starting parser.");
 						parser.parse(new InputSource(new StringReader(buffer)));
-						
 
 						/*
 						 * // flag to log server response if (sessionContext.isLogRespXML()) { log.debug("Logging to " +
