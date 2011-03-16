@@ -212,6 +212,11 @@ public class MockTransport implements Transport {
 			} else if (op.equals(Operation.UNLOCK)) {
 				error("UNLOCK not implemented");
 			}
+			else if (op.equals(Operation.COMMIT)) {
+				reply.setMessageId(query.getMessageId());
+				reply.setOk(true);
+			}
+			//FIXME ADD ELSE IF FOR ROLLBACK
 			/* include junos capabilities operations */
 			else if (op.equals(Operation.SET_LOGICAL_ROUTER)) {
 				reply.setMessageId(query.getMessageId());
