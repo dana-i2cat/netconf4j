@@ -44,7 +44,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class BaseNetconfTest {
-	private Log				log	= LogFactory.getLog(BaseNetconf.class);
+	private Log				log	= LogFactory.getLog(BaseNetconfTest.class);
 
 	static SessionContext	sessionContext;
 	static NetconfSession	session;
