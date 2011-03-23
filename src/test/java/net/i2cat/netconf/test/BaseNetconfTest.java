@@ -43,7 +43,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class BaseNetconf {
+public class BaseNetconfTest {
 	private Log				log	= LogFactory.getLog(BaseNetconf.class);
 
 	static SessionContext	sessionContext;
