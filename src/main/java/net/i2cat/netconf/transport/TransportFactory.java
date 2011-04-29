@@ -16,10 +16,10 @@
  */
 package net.i2cat.netconf.transport;
 
-import net.i2cat.netconf.errors.TransportNotImplementedException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import net.i2cat.netconf.errors.TransportNotImplementedException;
 
 public class TransportFactory {
 
@@ -32,6 +32,9 @@ public class TransportFactory {
 	public static TypeTransport checkTransportType(String scheme) throws TransportNotImplementedException {
 
 		TypeTransport type;
+
+		if (scheme == null)
+			throw new TransportNotImplementedException("Unknown transport: " + scheme);
 
 		if (scheme.equalsIgnoreCase("ssh"))
 			type = TypeTransport.SSH;

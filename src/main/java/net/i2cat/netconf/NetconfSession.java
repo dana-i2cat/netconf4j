@@ -16,7 +16,13 @@
  */
 package net.i2cat.netconf;
 
+import java.net.URI;
 import java.util.ArrayList;
+
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import net.i2cat.netconf.errors.NetconfProtocolException;
 import net.i2cat.netconf.errors.TransportException;
@@ -31,11 +37,6 @@ import net.i2cat.netconf.rpc.Reply;
 import net.i2cat.netconf.transport.Transport;
 import net.i2cat.netconf.transport.TransportFactory;
 import net.i2cat.netconf.transport.TransportListener;
-
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class NetconfSession implements TransportListener, MessageQueueListener {
 
@@ -61,8 +62,14 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 	public NetconfSession(SessionContext sessionContext) throws TransportNotImplementedException, ConfigurationException {
 		this.sessionContext = sessionContext;
 
-		TransportFactory.checkTransportType(sessionContext.getURI().getScheme()); // throws
-		// TNIE
+		URI uri = sessionContext.getURI();
+
+		if (uri.getScheme() == null ||
+				uri.getHost() == null ||
+				uri.getUserInfo() == null)
+			throw new ConfigurationException("Insuficent information in session context's URI: " + uri);
+
+		TransportFactory.checkTransportType(sessionContext.getURI().getScheme()); // throws TNIE
 	}
 
 	public void connect() throws TransportException, NetconfProtocolException {
@@ -174,8 +181,7 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 	// }
 
 	/**
-	 * Send a Netconf Query and return immediately. You will have to get the
-	 * reply (if any) via a NetconfReplyHandler or polling receiveReply() for
+	 * Send a Netconf Query and return immediately. You will have to get the reply (if any) via a NetconfReplyHandler or polling receiveReply() for
 	 * it.
 	 * 
 	 * Don't set message-id, it will be ignored and overridden by the session.
