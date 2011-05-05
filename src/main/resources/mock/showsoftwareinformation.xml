@@ -1,0 +1,63 @@
+<host-name>m5c</host-name>
+<product-model>m10</product-model>
+<product-name>m10</product-name>
+<package-information>
+<name>junos</name>
+<comment>JUNOS Base OS boot [10.0R1.8]</comment>
+</package-information>
+<package-information>
+<name>jbase</name>
+<comment>JUNOS Base OS Software Suite [10.0R1.8]</comment>
+</package-information>
+<package-information>
+<name>jkernel</name>
+<comment>JUNOS Kernel Software Suite [10.0R1.8]</comment>
+</package-information>
+<package-information>
+<name>jcrypto</name>
+<comment>JUNOS Crypto Software Suite [10.0R1.8]</comment>
+</package-information>
+<package-information>
+<name>jpfe-common</name>
+<comment>JUNOS Packet Forwarding Engine Support (M/T Common) [10.0R1.8]</comment>
+</package-information>
+<package-information>
+<name>jpfe</name>
+<comment>JUNOS Packet Forwarding Engine Support (M5/M10) [10.0R1.8]</comment>
+</package-information>
+<package-information>
+<name>jdocs</name>
+<comment>JUNOS Online Documentation [10.0R1.8]</comment>
+</package-information>
+<package-information>
+<name>jservices-voice</name>
+<comment>JUNOS Voice Services Container package [10.0R1.8]</comment>
+</package-information>
+<package-information>
+<name>jservices-bgf</name>
+<comment>JUNOS Border Gateway Function package [10.0R1.8]</comment>
+</package-information>
+<package-information>
+<name>jservices-aacl</name>
+<comment>JUNOS Services AACL Container package [10.0R1.8]</comment>
+</package-information>
+<package-information>
+<name>jservices-llpdf</name>
+<comment>JUNOS Services LL-PDF Container package [10.0R1.8]</comment>
+</package-information>
+<package-information>
+<name>jservices-sfw</name>
+<comment>JUNOS Services Stateful Firewall [10.0R1.8]</comment>
+</package-information>
+<package-information>
+<name>jservices-appid</name>
+<comment>JUNOS AppId Services [10.0R1.8]</comment>
+</package-information>
+<package-information>
+<name>jservices-idp</name>
+<comment>JUNOS IDP Services [10.0R1.8]</comment>
+</package-information>
+<package-information>
+<name>jroute</name>
+<comment>JUNOS Routing Software Suite [10.0R1.8]</comment>
+</package-information>

@@ -41,10 +41,10 @@ public class Query extends RPCElement implements java.io.Serializable {
 
 	/* id logical router for extra capabilities */
 	private String				idLogicalRouter;
+	private String				rollback;
 
 	/*
-	 * Parameters for get filter. This attribute for netconf is 'subtree' by
-	 * default
+	 * Parameters for get filter. This attribute for netconf is 'subtree' by default
 	 */
 	private String				filterType;
 
@@ -57,6 +57,14 @@ public class Query extends RPCElement implements java.io.Serializable {
 
 	public String getIdLogicalRouter() {
 		return idLogicalRouter;
+	}
+
+	public String getRollback() {
+		return rollback;
+	}
+
+	public void setRollback(String rollback) {
+		this.rollback = rollback;
 	}
 
 	public Operation getOperation() {
@@ -159,6 +167,10 @@ public class Query extends RPCElement implements java.io.Serializable {
 
 		if (idLogicalRouter != null) {
 			xml += "<logical-router>" + idLogicalRouter + "</logical-router>";
+		}
+
+		if (rollback != null) {
+			xml += "<rollback>" + rollback + "</rollback>";
 		}
 
 		if (target != null)

@@ -38,33 +38,37 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * This class was implemented to be a dummy transport which could simulate a
- * real connection with a device. This connection via SSH with netconf
+ * This class was implemented to be a dummy transport which could simulate a real connection with a device. This connection via SSH with netconf
  */
 
 public class MockTransport implements Transport {
 
-	private Log					log							= LogFactory.getLog(MockTransport.class);
+	private Log					log								= LogFactory.getLog(MockTransport.class);
 
-	Vector<TransportListener>	listeners					= new Vector<TransportListener>();
+	Vector<TransportListener>	listeners						= new Vector<TransportListener>();
 
 	SessionContext				context;
 	ArrayList<Capability>		supportedCapabilities;
 	MessageQueue				queue;
 
-	int							lastMessageId				= 0;
+	int							lastMessageId					= 0;
 
-	String						subsystem					= "";
+	String						subsystem						= "";
 
-	boolean						modeErrors					= false;
+	boolean						modeErrors						= false;
 
-	private static String		path						= "/mock/";
+	private static String		path							= "/mock/";
 
-	public static final String	fileIPConfiguration			= path + "ipconfiguration.xml";
+	public static final String	fileIPConfiguration				= path + "ipconfiguration.xml";
 
 	/* Extra capabilities */
-	public static final String	fileIPLogicalRouterConfig	= path + "iplogicalconfiguration.xml";
-	boolean						insideLogicalRouter			= true;
+	public static final String	fileIPLogicalRouterConfig		= path + "iplogicalconfiguration.xml";
+	public static final String	fileShowInterfaceInformation	= path + "showinterfaceinformation.xml";
+	public static final String	fileShowRollbackInformation		= path + "showrollbackinformation.xml";
+	public static final String	fileShowRouteInformation		= path + "showrouteinformation.xml";
+	public static final String	fileShowSoftwareInformation		= path + "showsoftwareinformation.xml";
+
+	boolean						insideLogicalRouter				= true;
 
 	public void addListener(TransportListener handler) {
 		listeners.add(handler);
@@ -158,7 +162,7 @@ public class MockTransport implements Transport {
 				reply.setContain(getDataFromFile(fileIPConfiguration));
 
 			} else if (op.equals(Operation.GET_CONFIG)) {
-				//it is not include any get config, it is an error
+				// it is not include any get config, it is an error
 				if (query.getSource() == null)
 					errors.add(new Error() {
 						{
@@ -211,17 +215,35 @@ public class MockTransport implements Transport {
 				error("LOCK not implemented");
 			} else if (op.equals(Operation.UNLOCK)) {
 				error("UNLOCK not implemented");
-			}
-			else if (op.equals(Operation.COMMIT)) {
+			} else if (op.equals(Operation.COMMIT)) {
 				reply.setMessageId(query.getMessageId());
 				reply.setOk(true);
 			}
-			//FIXME ADD ELSE IF FOR ROLLBACK
+			// FIXME ADD ELSE IF FOR ROLLBACK
 			/* include junos capabilities operations */
 			else if (op.equals(Operation.SET_LOGICAL_ROUTER)) {
 				reply.setMessageId(query.getMessageId());
 				reply.setContain("<cli><logical-system>" + query.getIdLogicalRouter() + "</logical-system></cli>");
 				insideLogicalRouter = true;
+
+			} else if (op.equals(Operation.GET_INTERFACE_INFO)) {
+				reply.setMessageId(query.getMessageId());
+				reply.setContainName("information-information");
+				reply.setContain(getDataFromFile(fileShowInterfaceInformation));
+			} else if (op.equals(Operation.GET_ROUTE_INFO)) {
+				reply.setMessageId(query.getMessageId());
+				reply.setContainName("route-information");
+				reply.setContain(getDataFromFile(fileShowRouteInformation));
+
+			} else if (op.equals(Operation.GET_ROLLBACK_INFO)) {
+				reply.setMessageId(query.getMessageId());
+				reply.setContainName("rollback-information");
+				reply.setContain(getDataFromFile(fileShowRollbackInformation));
+
+			} else if (op.equals(Operation.GET_SOFTWARE_INFO)) {
+				reply.setMessageId(query.getMessageId());
+				reply.setContainName("software-information");
+				reply.setContain(getDataFromFile(fileShowSoftwareInformation));
 
 			}
 

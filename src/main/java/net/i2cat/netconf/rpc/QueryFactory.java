@@ -17,8 +17,7 @@
 package net.i2cat.netconf.rpc;
 
 /**
- * Factory class to create different netconf queries. It allows to create
- * queries for the base standard
+ * Factory class to create different netconf queries. It allows to create queries for the base standard
  * 
  * @author carlos
  * 
@@ -57,7 +56,6 @@ public class QueryFactory {
 
 		return query;
 	}
-	
 
 	public static Query newCloseSession() {
 		Query query = new Query();
@@ -115,7 +113,7 @@ public class QueryFactory {
 
 		return query;
 	}
-	
+
 	public static Query newCommit() {
 		Query query = new Query();
 		query.setOperation(Operation.COMMIT);
@@ -129,6 +127,31 @@ public class QueryFactory {
 		Query query = new Query();
 		query.setOperation(Operation.SET_LOGICAL_ROUTER);
 		query.setIdLogicalRouter(idLogicalRouter);
+		return query;
+	}
+
+	public static Query newGetRouteInformation() {
+		Query query = new Query();
+		query.setOperation(Operation.GET_ROUTE_INFO);
+		return query;
+	}
+
+	public static Query newGetInterfaceInformation() {
+		Query query = new Query();
+		query.setOperation(Operation.GET_INTERFACE_INFO);
+		return query;
+	}
+
+	public static Query newGetSoftwareInformation() {
+		Query query = new Query();
+		query.setOperation(Operation.GET_SOFTWARE_INFO);
+		return query;
+	}
+
+	public static Query newGetRollbackInformation(String rollback) {
+		Query query = new Query();
+		query.setOperation(Operation.GET_ROLLBACK_INFO);
+		query.setRollback(rollback);
 		return query;
 	}
 

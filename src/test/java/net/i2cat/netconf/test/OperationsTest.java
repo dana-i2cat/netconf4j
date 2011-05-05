@@ -19,20 +19,16 @@ package net.i2cat.netconf.test;
 import static org.junit.Assert.fail;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Vector;
 
+import junit.framework.Assert;
 import net.i2cat.netconf.NetconfSession;
 import net.i2cat.netconf.SessionContext;
-import net.i2cat.netconf.errors.NetconfProtocolException;
-import net.i2cat.netconf.errors.TransportException;
-import net.i2cat.netconf.errors.TransportNotImplementedException;
 import net.i2cat.netconf.rpc.Error;
 import net.i2cat.netconf.rpc.Query;
 import net.i2cat.netconf.rpc.QueryFactory;
 import net.i2cat.netconf.rpc.Reply;
 
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
@@ -82,21 +78,9 @@ public class OperationsTest {
 
 			reply = session.sendSyncQuery(query);
 
-			log.info(reply.getContain());
+			log.info("<" + reply.getContainName() + ">\n" + reply.getContain() + "\n<\\" + reply.getContainName() + ">");
 
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		} catch (TransportException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		} catch (NetconfProtocolException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		} catch (TransportNotImplementedException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		} catch (ConfigurationException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
@@ -120,7 +104,7 @@ public class OperationsTest {
 
 			Query queryGetConfig = QueryFactory.newGetConfig("running", null, null);
 
-			log.debug(queryGetConfig.toXML());
+			log.info(queryGetConfig.toXML());
 
 			Reply reply = session.sendSyncQuery(queryGetConfig);
 
@@ -137,21 +121,8 @@ public class OperationsTest {
 			}
 
 			session.disconnect();
-
-		} catch (TransportException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		} catch (NetconfProtocolException e) {
-			fail(e.getMessage());
-			e.printStackTrace();
-
-		} catch (ConfigurationException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		} catch (TransportNotImplementedException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		} catch (URISyntaxException e) {
+			log.info("<" + reply.getContainName() + ">\n" + reply.getContain() + "\n<\\" + reply.getContainName() + ">");
+		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
@@ -174,7 +145,7 @@ public class OperationsTest {
 			Query queryKeepAlive = QueryFactory.newKeepAlive();
 			queryKeepAlive.setMessageId("1");
 
-			log.debug(queryKeepAlive.toXML());
+			log.info(queryKeepAlive.toXML());
 
 			Reply reply = session.sendSyncQuery(queryKeepAlive);
 			if (reply.containsErrors()) {
@@ -190,20 +161,181 @@ public class OperationsTest {
 			}
 
 			session.disconnect();
+			log.info("<" + reply.getContainName() + ">\n" + reply.getContain() + "\n<\\" + reply.getContainName() + ">");
 
-		} catch (TransportException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
-		} catch (NetconfProtocolException e) {
+		}
+	}
+
+	@Test
+	public void getInterfaceInformation() {
+		try {
+
+			URI lola = new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
+					"mock://foo:boo@testing.default.net:22"));
+			log.info("URI get: " + lola.toString());
+
+			SessionContext sessionContext = new SessionContext();
+			sessionContext.setURI(lola);
+
+			NetconfSession session = new NetconfSession(sessionContext);
+
+			session.connect();
+			Query getInterfaceInformation = QueryFactory.newGetInterfaceInformation();
+			getInterfaceInformation.setMessageId("1");
+
+			log.info(getInterfaceInformation.toXML());
+
+			Reply reply = session.sendSyncQuery(getInterfaceInformation);
+			if (reply.containsErrors()) {
+				printErrors(reply.getErrors());
+				fail("The response received errors");
+			}
+			log.info("<" + reply.getContainName() + ">\n" + reply.getContain() + "\n</" + reply.getContainName() + ">");
+			Assert.assertNotNull(reply.getContainName());
+			Assert.assertNotNull(reply.getContain());
+
+			reply = session.sendSyncQuery(QueryFactory.newCloseSession());
+
+			if (reply.containsErrors()) {
+				printErrors(reply.getErrors());
+				fail("The response received errors");
+			}
+
+			session.disconnect();
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
-		} catch (ConfigurationException e) {
+		}
+	}
+
+	@Test
+	public void getRouteInformation() {
+		try {
+
+			URI lola = new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
+					"mock://foo:boo@testing.default.net:22"));
+			log.info("URI get: " + lola.toString());
+
+			SessionContext sessionContext = new SessionContext();
+			sessionContext.setURI(lola);
+
+			NetconfSession session = new NetconfSession(sessionContext);
+
+			session.connect();
+			Query getRouteInformation = QueryFactory.newGetRouteInformation();
+			getRouteInformation.setMessageId("1");
+
+			log.info(getRouteInformation.toXML());
+
+			Reply reply = session.sendSyncQuery(getRouteInformation);
+			if (reply.containsErrors()) {
+				printErrors(reply.getErrors());
+				fail("The response received errors");
+			}
+			log.info("<" + reply.getContainName() + ">\n" + reply.getContain() + "\n</" + reply.getContainName() + ">");
+			Assert.assertNotNull(reply.getContainName());
+			Assert.assertNotNull(reply.getContain());
+
+			reply = session.sendSyncQuery(QueryFactory.newCloseSession());
+
+			if (reply.containsErrors()) {
+				printErrors(reply.getErrors());
+				fail("The response received errors");
+			}
+
+			session.disconnect();
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
-		} catch (TransportNotImplementedException e) {
+		}
+	}
+
+	@Test
+	public void getSoftwareInformation() {
+		try {
+
+			URI lola = new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
+					"mock://foo:boo@testing.default.net:22"));
+			log.info("URI get: " + lola.toString());
+
+			SessionContext sessionContext = new SessionContext();
+			sessionContext.setURI(lola);
+
+			NetconfSession session = new NetconfSession(sessionContext);
+
+			session.connect();
+			Query getSoftwareInformation = QueryFactory.newGetSoftwareInformation();
+			getSoftwareInformation.setMessageId("1");
+
+			log.info(getSoftwareInformation.toXML());
+
+			Reply reply = session.sendSyncQuery(getSoftwareInformation);
+			if (reply.containsErrors()) {
+				printErrors(reply.getErrors());
+				fail("The response received errors");
+			}
+			log.info("<" + reply.getContainName() + ">\n" + reply.getContain() + "\n</" + reply.getContainName() + ">");
+			Assert.assertNotNull(reply.getContainName());
+			Assert.assertNotNull(reply.getContain());
+
+			reply = session.sendSyncQuery(QueryFactory.newCloseSession());
+
+			if (reply.containsErrors()) {
+				printErrors(reply.getErrors());
+				fail("The response received errors");
+			}
+
+			session.disconnect();
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
-		} catch (URISyntaxException e) {
+		}
+	}
+
+	@Test
+	public void getRollbackInformation() {
+		try {
+
+			URI lola = new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
+					"mock://foo:boo@testing.default.net:22"));
+			log.info("URI get: " + lola.toString());
+
+			SessionContext sessionContext = new SessionContext();
+			sessionContext.setURI(lola);
+
+			NetconfSession session = new NetconfSession(sessionContext);
+
+			session.connect();
+			Query getRollbackInformation = QueryFactory.newGetRollbackInformation("2");
+			getRollbackInformation.setMessageId("1");
+
+			log.info(getRollbackInformation.toXML());
+
+			Reply reply = session.sendSyncQuery(getRollbackInformation);
+			if (reply.containsErrors()) {
+				printErrors(reply.getErrors());
+				fail("The response received errors");
+			}
+			log.info("<" + reply.getContainName() + ">\n" + reply.getContain() + "\n</" + reply.getContainName() + ">");
+			Assert.assertNotNull(reply.getContainName());
+			Assert.assertNotNull(reply.getContain());
+
+			reply = session.sendSyncQuery(QueryFactory.newCloseSession());
+
+			if (reply.containsErrors()) {
+				printErrors(reply.getErrors());
+				fail("The response received errors");
+			}
+
+			session.disconnect();
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
