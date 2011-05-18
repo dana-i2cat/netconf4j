@@ -38,6 +38,7 @@ public class SessionContext extends CompositeConfiguration {
 	public final static String	CAPABILITIES_SERVER	= BASE + "session.serverCapabilities";
 	public final static String	CAPABILITIES_ACTIVE	= BASE + "session.activeCapabilities";
 	public final static String	URI					= BASE + "session.uri";
+	/* Add keepalive sessions to control connection */
 	public final static String	KEEPALIVE			= BASE + "session.keepalive";
 
 	public final static String	LOGRESPXML			= BASE + "transport.logXMLStream";
@@ -53,6 +54,9 @@ public class SessionContext extends CompositeConfiguration {
 		BaseConfiguration baseConfiguration = new BaseConfiguration();
 		baseConfiguration.addProperty(LOG_STREAM, "false");
 		baseConfiguration.addProperty(LOG_FILE, "server.xml.log");
+
+		/* FIXME WHAT IT IS THE BETTER METHOD PASS STRING OR BOOL */
+		baseConfiguration.addProperty(KEEPALIVE, true);
 
 		return baseConfiguration;
 

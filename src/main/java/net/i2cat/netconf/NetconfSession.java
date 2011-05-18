@@ -19,11 +19,6 @@ package net.i2cat.netconf;
 import java.net.URI;
 import java.util.ArrayList;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import net.i2cat.netconf.errors.NetconfProtocolException;
 import net.i2cat.netconf.errors.TransportException;
 import net.i2cat.netconf.errors.TransportNotImplementedException;
@@ -37,6 +32,11 @@ import net.i2cat.netconf.rpc.Reply;
 import net.i2cat.netconf.transport.Transport;
 import net.i2cat.netconf.transport.TransportFactory;
 import net.i2cat.netconf.transport.TransportListener;
+
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class NetconfSession implements TransportListener, MessageQueueListener {
 

@@ -68,7 +68,7 @@ public class MockTransport implements Transport {
 	public static final String	fileShowRouteInformation		= path + "showrouteinformation.xml";
 	public static final String	fileShowSoftwareInformation		= path + "showsoftwareinformation.xml";
 
-	boolean						insideLogicalRouter				= true;
+	boolean						insideLogicalRouter				= false;
 
 	public void addListener(TransportListener handler) {
 		listeners.add(handler);
