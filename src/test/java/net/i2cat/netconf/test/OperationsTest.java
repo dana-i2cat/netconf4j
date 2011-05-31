@@ -170,6 +170,47 @@ public class OperationsTest {
 	}
 
 	@Test
+	public void Validate() {
+		try {
+
+			URI lola = new URI(System.getProperty("net.i2cat.netconf.test.transportUri",
+					"mock://foo:boo@testing.default.net:22"));
+			log.info("URI get: " + lola.toString());
+
+			SessionContext sessionContext = new SessionContext();
+			sessionContext.setURI(lola);
+
+			NetconfSession session = new NetconfSession(sessionContext);
+
+			session.connect();
+			Query queryValidate = QueryFactory.newValidate("candidate");
+			queryValidate.setMessageId("1");
+
+			log.info(queryValidate.toXML());
+
+			Reply reply = session.sendSyncQuery(queryValidate);
+			if (reply.containsErrors()) {
+				printErrors(reply.getErrors());
+				fail("The response received errors");
+			}
+
+			reply = session.sendSyncQuery(QueryFactory.newCloseSession());
+
+			if (reply.containsErrors()) {
+				printErrors(reply.getErrors());
+				fail("The response received errors");
+			}
+
+			session.disconnect();
+			log.info("<" + reply.getContainName() + ">\n" + reply.getContain() + "\n<\\" + reply.getContainName() + ">");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+
+	@Test
 	public void getInterfaceInformation() {
 		try {
 

@@ -155,4 +155,11 @@ public class QueryFactory {
 		return query;
 	}
 
+	public static Query newValidate(String source) {
+		Query query = new Query();
+		query.setOperation(Operation.VALIDATE);
+		query.setSource(source);
+		return query;
+	}
+
 }

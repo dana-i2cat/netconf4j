@@ -68,6 +68,8 @@ public class Capability implements java.io.Serializable {
 																		// Mandatory
 																		add(BASE);
 																		add(JUNOS);
+
+																		add(VALIDATE);
 																	}
 																};
 
