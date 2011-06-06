@@ -162,4 +162,10 @@ public class QueryFactory {
 		return query;
 	}
 
+	public static Query newDiscardChanges() {
+		Query query = new Query();
+		query.setOperation(Operation.DISCARD);
+		return query;
+	}
+
 }

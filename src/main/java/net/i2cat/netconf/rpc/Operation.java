@@ -58,6 +58,8 @@ public class Operation implements java.io.Serializable {
 	public static final Operation	GET_ROLLBACK_INFO	= new Operation(
 																"get-rollback-information", Capability.JUNOS);
 
+	public static final Operation	DISCARD				= new Operation("discard-changes", Capability.JUNOS);
+
 	public static final Operation	VALIDATE			= new Operation(
 																"validate", Capability.VALIDATE);
 

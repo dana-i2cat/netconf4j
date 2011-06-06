@@ -215,12 +215,6 @@ public class MockTransport implements Transport {
 				error("LOCK not implemented");
 			} else if (op.equals(Operation.UNLOCK)) {
 				error("UNLOCK not implemented");
-			} else if (op.equals(Operation.COMMIT)) {
-				reply.setMessageId(query.getMessageId());
-				reply.setOk(true);
-			} else if (op.equals(Operation.VALIDATE)) {
-				reply.setMessageId(query.getMessageId());
-				reply.setOk(true);
 			} // FIXME ADD ELSE IF FOR ROLLBACK
 			/* include junos capabilities operations */
 			else if (op.equals(Operation.SET_LOGICAL_ROUTER)) {
@@ -247,6 +241,9 @@ public class MockTransport implements Transport {
 				reply.setContainName("software-information");
 				reply.setContain(getDataFromFile(fileShowSoftwareInformation));
 
+			} else if (op.equals(Operation.COMMIT) || op.equals(Operation.DISCARD) || op.equals(Operation.VALIDATE)) {
+				reply.setMessageId(query.getMessageId());
+				reply.setOk(true);
 			}
 
 		}
