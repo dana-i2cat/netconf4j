@@ -23,11 +23,6 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.Vector;
 
-import net.i2cat.netconf.SessionContext;
-import net.i2cat.netconf.errors.TransportException;
-import net.i2cat.netconf.messageQueue.MessageQueue;
-import net.i2cat.netconf.rpc.RPCElement;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xml.sax.InputSource;
@@ -38,6 +33,11 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.ConnectionMonitor;
 import ch.ethz.ssh2.Session;
+
+import net.i2cat.netconf.SessionContext;
+import net.i2cat.netconf.errors.TransportException;
+import net.i2cat.netconf.messageQueue.MessageQueue;
+import net.i2cat.netconf.rpc.RPCElement;
 
 public class SSHTransport implements Transport, ConnectionMonitor {
 
@@ -107,6 +107,9 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 				port = 22;
 
 			subsystem = sessionContext.getSubsystem();
+			if (subsystem == null || subsystem.contentEquals("")) {
+				subsystem = "netconf"; // default subsystem for juniper devices.
+			}
 
 			log.debug("user: " + user);
 			log.debug("pass: " + (password != null ? "yes" : "no"));
