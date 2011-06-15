@@ -178,9 +178,6 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 		PrintWriter writer = new PrintWriter(session.getStdin());
 		String op = query.toXML() + "\n" + delimiter;
 
-		log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-		log.info(op);
-		log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		writer.println(op);
 		writer.flush();
 
@@ -212,11 +209,6 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 							buffer += reader.readLine();
 						} while (!buffer.endsWith(delimiter));
 
-						log.info("Receiving message....");
-						log.info("-------------------------------------------------------");
-						log.info(buffer);
-						log.info("-------------------------------------------------------");
-						log.debug("Starting parser.");
 						parser.parse(new InputSource(new StringReader(buffer)));
 
 						/*

@@ -164,11 +164,20 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 
 		query.setMessageId(generateMessageId());
 		// validate(query);
+		log.debug("--------------------------------------------------");
+		log.debug("sending QUERY");
+		log.debug(query.toXML());
+		log.debug("--------------------------------------------------");
 
 		transport.sendAsyncQuery(query);
 
 		log.info("Sent. Waiting for response...");
 		Reply reply = (Reply) messageQueue.blockingConsumeById(query.getMessageId());
+		log.debug("--------------------------------------------------");
+		log.debug("receiving REPLY ");
+		log.debug(query.toXML());
+		log.debug("--------------------------------------------------");
+
 		log.info("Reply received");
 
 		return reply;
@@ -191,6 +200,10 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 	 */
 	public void sendAsyncQuery(Query query) throws TransportException {
 		query.setMessageId(generateMessageId());
+		log.debug("--------------------------------------------------");
+		log.debug("sending QUERY");
+		log.debug(query.toXML());
+		log.debug("--------------------------------------------------");
 
 		// timerKeepAlive.reset(); // Reset the time for the keep alive
 
