@@ -22,16 +22,6 @@ import static org.junit.Assert.fail;
 import java.net.URI;
 import java.util.ArrayList;
 
-import net.i2cat.netconf.NetconfSession;
-import net.i2cat.netconf.SessionContext;
-import net.i2cat.netconf.errors.TransportException;
-import net.i2cat.netconf.messageQueue.MessageQueueListener;
-import net.i2cat.netconf.rpc.Capability;
-import net.i2cat.netconf.rpc.Query;
-import net.i2cat.netconf.rpc.QueryFactory;
-import net.i2cat.netconf.rpc.RPCElement;
-import net.i2cat.netconf.rpc.Reply;
-
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.logging.Log;
@@ -42,6 +32,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import net.i2cat.netconf.NetconfSession;
+import net.i2cat.netconf.SessionContext;
+import net.i2cat.netconf.errors.TransportException;
+import net.i2cat.netconf.messageQueue.MessageQueueListener;
+import net.i2cat.netconf.rpc.Capability;
+import net.i2cat.netconf.rpc.Query;
+import net.i2cat.netconf.rpc.QueryFactory;
+import net.i2cat.netconf.rpc.RPCElement;
+import net.i2cat.netconf.rpc.Reply;
 
 public class BaseNetconfTest {
 	private Log				log	= LogFactory.getLog(BaseNetconfTest.class);
@@ -166,21 +166,19 @@ public class BaseNetconfTest {
 		ArrayList<Capability> baseVectorCapability = new ArrayList<Capability>();
 		baseVectorCapability.add(Capability.BASE);
 		/*
-		 * If it is not contain the base capability, it is impossible to check
-		 * capabilities
+		 * If it is not contain the base capability, it is impossible to check capabilities
 		 */
-//		boolean isChecked = capabilityVector.equals(baseVectorCapability);
-//		Assert.assertTrue(isChecked);
+		// boolean isChecked = capabilityVector.equals(baseVectorCapability);
+		// Assert.assertTrue(isChecked);
 
-		Assert.assertTrue( session.getActiveCapabilities().contains(Capability.BASE) );
-		
+		Assert.assertTrue(session.getActiveCapabilities().contains(Capability.BASE));
+
 	}
 
 	@Test
 	public void testLoadConfiguration() {
 		try {
-			session.loadConfiguration(new
-					PropertiesConfiguration("netconf-default.properties"));
+			session.loadConfiguration(new PropertiesConfiguration("netconf-default.properties"));
 		} catch (ConfigurationException e) {
 			e.printStackTrace();
 		}
