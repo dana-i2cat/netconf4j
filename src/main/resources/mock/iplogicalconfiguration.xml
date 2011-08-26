@@ -19,6 +19,27 @@
                 <vlan-id>906</vlan-id>
             </unit>
         </interface>
+         <interface>
+            <name>lt-0/1/2</name>
+            <unit>
+                <name>12</name>
+                <encapsulation>ethernet</encapsulation>
+                <peer-unit>102</peer-unit>
+                <family>
+                    <inet>
+                        <address>
+                            <name>193.1.190.129/30</name>
+                        </address>
+                    </inet>
+                </family>
+                <vlan-id>223</vlan-id>
+            </unit>
+            <unit>
+                <name>138</name>
+                <encapsulation>vlan</encapsulation>
+                <vlan-id>139</vlan-id>
+            </unit>
+        </interface>
         <interface>
             <name>lt-1/2/0</name>
             <unit>
