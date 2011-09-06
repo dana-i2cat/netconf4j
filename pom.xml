@@ -4,7 +4,7 @@
 
 	<groupId>net.i2cat.netconf</groupId>
 	<artifactId>netconf4j</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<packaging>bundle</packaging>
 
 	<name>netconf4j</name>
