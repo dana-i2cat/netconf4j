@@ -146,7 +146,7 @@
 		</interfaces>
 	</logical-systems>
 	<logical-systems>
-		<name>routerV1</name>
+		<name>cpe1</name>
 		<routing-options>
 			<static>
 				<route>
@@ -157,7 +157,7 @@
 		</routing-options>
 	</logical-systems>
 	<logical-systems>
-		<name>routerV2</name>
+		<name>cpe2</name>
 		<interfaces>
 			<interface>
 				<name>fe-0/0/3</name>
