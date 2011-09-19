@@ -175,7 +175,7 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 		Reply reply = (Reply) messageQueue.blockingConsumeById(query.getMessageId());
 		log.debug("--------------------------------------------------");
 		log.debug("receiving REPLY ");
-		log.debug(query.toXML());
+		log.debug(reply.getContain());
 		log.debug("--------------------------------------------------");
 
 		log.info("Reply received");
