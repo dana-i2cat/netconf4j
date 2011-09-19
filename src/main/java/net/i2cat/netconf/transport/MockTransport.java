@@ -62,13 +62,17 @@ public class MockTransport implements Transport {
 	public static final String	fileIPConfiguration				= path + "ipconfiguration.xml";
 
 	/* Extra capabilities */
-	public static final String	fileIPLogicalRouterConfig		= path + "iplogicalconfiguration.xml";
+	public static final String	fileCPE1IPLogicalRouterConfig	= path + "cpe1configuration.xml";
+	public static final String	fileCPE2IPLogicalRouterConfig	= path + "cpe2configuration.xml";
+
 	public static final String	fileShowInterfaceInformation	= path + "showinterfaceinformation.xml";
 	public static final String	fileShowRollbackInformation		= path + "showrollbackinformation.xml";
 	public static final String	fileShowRouteInformation		= path + "showrouteinformation.xml";
 	public static final String	fileShowSoftwareInformation		= path + "showsoftwareinformation.xml";
 
-	boolean						insideLogicalRouter				= false;
+	String						logicalRouterName				= null;
+
+	// boolean insideLogicalRouter = false;
 
 	public void addListener(TransportListener handler) {
 		listeners.add(handler);
@@ -196,20 +200,22 @@ public class MockTransport implements Transport {
 				}
 
 				reply.setMessageId(query.getMessageId());
-				if (!insideLogicalRouter) {
+				if (logicalRouterName == null) {
 					reply.setContain(getDataFromFile(fileIPConfiguration));
 				} else {
-					reply.setContain(getDataFromFile(fileIPLogicalRouterConfig));
+
+					String path = createPathFileLogicalRouter(logicalRouterName);
+					reply.setContain(getDataFromFile(path));
 				}
 
 			} else if (op.equals(Operation.KILL_SESSION)) {
-				insideLogicalRouter = false;
+				logicalRouterName = null;
 				disconnect();
 				return;
 			} else if (op.equals(Operation.CLOSE_SESSION)) {
 				reply.setMessageId(query.getMessageId());
 				reply.setOk(true);
-				insideLogicalRouter = false;
+				logicalRouterName = null;
 				disconnect();
 			} else if (op.equals(Operation.LOCK)) {
 				error("LOCK not implemented");
@@ -220,7 +226,7 @@ public class MockTransport implements Transport {
 			else if (op.equals(Operation.SET_LOGICAL_ROUTER)) {
 				reply.setMessageId(query.getMessageId());
 				reply.setContain("<cli><logical-system>" + query.getIdLogicalRouter() + "</logical-system></cli>");
-				insideLogicalRouter = true;
+				logicalRouterName = query.getIdLogicalRouter();
 
 			} else if (op.equals(Operation.GET_INTERFACE_INFO)) {
 				reply.setMessageId(query.getMessageId());
@@ -256,6 +262,10 @@ public class MockTransport implements Transport {
 			reply.setErrors(errors);
 
 		queue.put(reply);
+	}
+
+	private String createPathFileLogicalRouter(String idLogicalRouter) {
+		return path + idLogicalRouter + "configuration.xml";
 	}
 
 	public String getDataFromFile(String fileConfig) throws TransportException {
