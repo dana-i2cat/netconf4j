@@ -67,7 +67,7 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 		if (uri.getScheme() == null ||
 				uri.getHost() == null ||
 				uri.getUserInfo() == null)
-			throw new ConfigurationException("Insuficent information in session context's URI: " + uri);
+			throw new ConfigurationException("Insufficient information in session context's URI: " + uri);
 
 		TransportFactory.checkTransportType(sessionContext.getURI().getScheme()); // throws TNIE
 	}

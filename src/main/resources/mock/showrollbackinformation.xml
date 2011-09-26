@@ -1,4 +1,5 @@
-<configuration xmlns="http://xml.juniper.net/xnm/1.1/xnm" junos:changed-seconds="1267007923" junos:changed-localtime="2010-02-24 10:38:43 UTC">
+<?xml version="1.0"?>
+<configuration xmlns="http://xml.juniper.net/xnm/1.1/xnm" changed-seconds="1267007923" changed-localtime="2010-02-24 10:38:43 UTC">
 	<version>10.0R1.8</version>
 	<system>
 		<host-name>m5c</host-name>
@@ -93,18 +94,18 @@
 				<name>*</name>
 				<contents>
 					<name>any</name>
-					<emergency />
+					<emergency/>
 				</contents>
 			</user>
 			<file>
 				<name>messages</name>
 				<contents>
 					<name>any</name>
-					<notice />
+					<notice/>
 				</contents>
 				<contents>
 					<name>authorization</name>
-					<info />
+					<info/>
 				</contents>
 			</file>
 		</syslog>
@@ -201,7 +202,7 @@
 		</interface>
 		<interface>
 			<name>fe-0/0/1</name>
-			<vlan-tagging />
+			<vlan-tagging/>
 			<unit>
 				<name>12</name>
 				<vlan-id>12</vlan-id>
@@ -233,7 +234,7 @@
 		</interface>
 		<interface>
 			<name>fe-0/0/2</name>
-			<vlan-tagging />
+			<vlan-tagging/>
 			<unit>
 				<name>14</name>
 				<vlan-id>24</vlan-id>
@@ -252,7 +253,7 @@
 		</interface>
 		<interface>
 			<name>fe-0/0/3</name>
-			<vlan-tagging />
+			<vlan-tagging/>
 			<unit>
 				<name>43</name>
 				<vlan-id>43</vlan-id>
@@ -339,13 +340,13 @@
 					<protocol>direct</protocol>
 				</from>
 				<then>
-					<accept />
+					<accept/>
 				</then>
 			</term>
 			<term>
 				<name>2</name>
 				<then>
-					<reject />
+					<reject/>
 				</then>
 			</term>
 		</policy-statement>

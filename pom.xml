@@ -1,20 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>net.i2cat.netconf</groupId>
 	<artifactId>netconf4j</artifactId>
 	<version>0.0.2</version>
 	<packaging>bundle</packaging>
-
 	<name>netconf4j</name>
 	<url>http://maven.apache.org</url>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-
-
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -36,19 +31,13 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>1.4</version>
-
 		</dependency>
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
 			<version>1.6</version>
 		</dependency>
-
-
-
-
 	</dependencies>
-
 	<repositories>
 		<repository>
 			<id>JBOSS</id>
@@ -56,18 +45,15 @@
 			<url>http://repository.jboss.org/maven2/</url>
 		</repository>
 	</repositories>
-
 	<organization>
 		<name>http://www.i2cat.net/en</name>
 	</organization>
-
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License</name>
 			<url>http://www.gnu.org/licenses/lgpl.html</url>
 		</license>
 	</licenses>
-
 	<developers>
 		<developer>
 			<name>Pau Minoves</name>
@@ -78,7 +64,6 @@
 			<email>carlos.baez@i2cat.net</email>
 		</developer>
 	</developers>
-	
 	<build>
 		<resources>
 			<resource>
@@ -142,16 +127,12 @@
 					</execution>
 				</executions>
 			</plugin>
-			
-			
 			<!-- 
 			<plugin>
 		        <groupId>org.apache.maven.plugins</groupId>
 		        <artifactId>maven-dependency-plugin</artifactId>
 	      </plugin>
 	       -->
-			
-			
 			<plugin>
 				<groupId>org.ops4j</groupId>
 				<artifactId>maven-pax-plugin</artifactId>
@@ -183,17 +164,12 @@
 						<!--
 							<Private-Package></Private-Package> if i need a private package
 						-->
-						
 						<Import-Package>!${project.artifactId}.*,*</Import-Package>
-						
 						<Export-Package>net.i2cat.netconf.*</Export-Package>
-						
-						
 						<Bundle-ClassPath>.,
 									lib/ganymed-ssh2-build210.jar
 						</Bundle-ClassPath>
-						
-    					<Embed-Directory>lib</Embed-Directory>
+						<Embed-Directory>lib</Embed-Directory>
 						<Embed-Dependency>ganymed-ssh2;scope=compile|runtime</Embed-Dependency>
 					</instructions>
 				</configuration>
