@@ -217,10 +217,6 @@ public class MockTransport implements Transport {
 				reply.setOk(true);
 				logicalRouterName = null;
 				disconnect();
-			} else if (op.equals(Operation.LOCK)) {
-				error("LOCK not implemented");
-			} else if (op.equals(Operation.UNLOCK)) {
-				error("UNLOCK not implemented");
 			} // FIXME ADD ELSE IF FOR ROLLBACK
 			/* include junos capabilities operations */
 			else if (op.equals(Operation.SET_LOGICAL_ROUTER)) {
@@ -247,7 +243,7 @@ public class MockTransport implements Transport {
 				reply.setContainName("software-information");
 				reply.setContain(getDataFromFile(fileShowSoftwareInformation));
 
-			} else if (op.equals(Operation.COMMIT) || op.equals(Operation.DISCARD) || op.equals(Operation.VALIDATE)) {
+			} else if (op.equals(Operation.COMMIT) || op.equals(Operation.DISCARD) || op.equals(Operation.VALIDATE) || op.equals(Operation.LOCK) || op.equals(Operation.UNLOCK)) {
 				reply.setMessageId(query.getMessageId());
 				reply.setOk(true);
 			}
