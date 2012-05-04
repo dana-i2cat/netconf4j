@@ -33,6 +33,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import net.i2cat.netconf.INetconfSession;
 import net.i2cat.netconf.NetconfSession;
 import net.i2cat.netconf.SessionContext;
 import net.i2cat.netconf.errors.TransportException;
@@ -47,7 +48,7 @@ public class BaseNetconfTest {
 	private Log				log	= LogFactory.getLog(BaseNetconfTest.class);
 
 	static SessionContext	sessionContext;
-	static NetconfSession	session;
+	static INetconfSession	session;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {

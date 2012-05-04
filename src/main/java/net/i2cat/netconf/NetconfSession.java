@@ -38,7 +38,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class NetconfSession implements TransportListener, MessageQueueListener {
+public class NetconfSession implements TransportListener, MessageQueueListener, INetconfSession {
 
 	// TimerKeepAlive timerKeepAlive;
 
@@ -72,6 +72,9 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 		TransportFactory.checkTransportType(sessionContext.getURI().getScheme()); // throws TNIE
 	}
 
+	/* (non-Javadoc)
+	 * @see net.i2cat.netconf.INetconfSession#connect()
+	 */
 	public void connect() throws TransportException, NetconfProtocolException {
 		RPCElement reply;
 		Hello clientHello;
@@ -143,20 +146,17 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see net.i2cat.netconf.INetconfSession#disconnect()
+	 */
 	public void disconnect() throws TransportException {
 		// if (timerKeepAlive != null)
 		// timerKeepAlive.close();
 		transport.disconnect();
 	}
 
-	/**
-	 * Send a Netconf Query and wait for the response.
-	 * 
-	 * Don't set message-id, it will be ignored and overridden by the session.
-	 * 
-	 * @param query
-	 * @return
-	 * @throws TransportException
+	/* (non-Javadoc)
+	 * @see net.i2cat.netconf.INetconfSession#sendSyncQuery(net.i2cat.netconf.rpc.Query)
 	 */
 	public Reply sendSyncQuery(Query query) throws TransportException {
 
@@ -189,14 +189,8 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 	// // check active capabilities too, to see additional constrains.
 	// }
 
-	/**
-	 * Send a Netconf Query and return immediately. You will have to get the reply (if any) via a NetconfReplyHandler or polling receiveReply() for
-	 * it.
-	 * 
-	 * Don't set message-id, it will be ignored and overridden by the session.
-	 * 
-	 * @param querys
-	 * @throws TransportException
+	/* (non-Javadoc)
+	 * @see net.i2cat.netconf.INetconfSession#sendAsyncQuery(net.i2cat.netconf.rpc.Query)
 	 */
 	public void sendAsyncQuery(Query query) throws TransportException {
 		query.setMessageId(generateMessageId());
@@ -220,26 +214,44 @@ public class NetconfSession implements TransportListener, MessageQueueListener {
 	 * Facade methods
 	 */
 
+	/* (non-Javadoc)
+	 * @see net.i2cat.netconf.INetconfSession#loadConfiguration(org.apache.commons.configuration.Configuration)
+	 */
 	public void loadConfiguration(Configuration source) {
 		sessionContext.newConfiguration(source);
 	}
 
+	/* (non-Javadoc)
+	 * @see net.i2cat.netconf.INetconfSession#getActiveCapabilities()
+	 */
 	public ArrayList<Capability> getActiveCapabilities() {
 		return sessionContext.getActiveCapabilities();
 	}
 
+	/* (non-Javadoc)
+	 * @see net.i2cat.netconf.INetconfSession#getClientCapabilities()
+	 */
 	public ArrayList<Capability> getClientCapabilities() {
 		return sessionContext.getClientCapabilities();
 	}
 
+	/* (non-Javadoc)
+	 * @see net.i2cat.netconf.INetconfSession#getServerCapabilities()
+	 */
 	public ArrayList<Capability> getServerCapabilities() {
 		return sessionContext.getServerCapabilities();
 	}
 
+	/* (non-Javadoc)
+	 * @see net.i2cat.netconf.INetconfSession#registerTransportListener(net.i2cat.netconf.transport.TransportListener)
+	 */
 	public void registerTransportListener(TransportListener handler) {
 		transport.addListener(handler);
 	}
 
+	/* (non-Javadoc)
+	 * @see net.i2cat.netconf.INetconfSession#registerMessageQueueListener(net.i2cat.netconf.messageQueue.MessageQueueListener)
+	 */
 	public void registerMessageQueueListener(MessageQueueListener handler) {
 		messageQueue.addListener(handler);
 	}

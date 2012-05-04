@@ -22,6 +22,7 @@ import java.net.URI;
 import java.util.Vector;
 
 import junit.framework.Assert;
+import net.i2cat.netconf.INetconfSession;
 import net.i2cat.netconf.NetconfSession;
 import net.i2cat.netconf.SessionContext;
 import net.i2cat.netconf.rpc.Error;
@@ -58,7 +59,7 @@ public class OperationsTest {
 			SessionContext sessionContext = new SessionContext();
 			sessionContext.setURI(lola);
 
-			NetconfSession session = new NetconfSession(sessionContext);
+			INetconfSession session = new NetconfSession(sessionContext);
 
 			session.connect();
 
@@ -98,7 +99,7 @@ public class OperationsTest {
 			SessionContext sessionContext = new SessionContext();
 			sessionContext.setURI(lola);
 
-			NetconfSession session = new NetconfSession(sessionContext);
+			INetconfSession session = new NetconfSession(sessionContext);
 
 			session.connect();
 
@@ -139,7 +140,7 @@ public class OperationsTest {
 			SessionContext sessionContext = new SessionContext();
 			sessionContext.setURI(lola);
 
-			NetconfSession session = new NetconfSession(sessionContext);
+			INetconfSession session = new NetconfSession(sessionContext);
 
 			session.connect();
 			Query queryKeepAlive = QueryFactory.newKeepAlive();
@@ -180,7 +181,7 @@ public class OperationsTest {
 			SessionContext sessionContext = new SessionContext();
 			sessionContext.setURI(lola);
 
-			NetconfSession session = new NetconfSession(sessionContext);
+			INetconfSession session = new NetconfSession(sessionContext);
 
 			session.connect();
 			Query queryValidate = QueryFactory.newValidate("candidate");
@@ -221,7 +222,7 @@ public class OperationsTest {
 			SessionContext sessionContext = new SessionContext();
 			sessionContext.setURI(lola);
 
-			NetconfSession session = new NetconfSession(sessionContext);
+			INetconfSession session = new NetconfSession(sessionContext);
 
 			session.connect();
 			Query getInterfaceInformation = QueryFactory.newGetInterfaceInformation();
@@ -264,7 +265,7 @@ public class OperationsTest {
 			SessionContext sessionContext = new SessionContext();
 			sessionContext.setURI(lola);
 
-			NetconfSession session = new NetconfSession(sessionContext);
+			INetconfSession session = new NetconfSession(sessionContext);
 
 			session.connect();
 			Query getRouteInformation = QueryFactory.newGetRouteInformation();
@@ -307,7 +308,7 @@ public class OperationsTest {
 			SessionContext sessionContext = new SessionContext();
 			sessionContext.setURI(lola);
 
-			NetconfSession session = new NetconfSession(sessionContext);
+			INetconfSession session = new NetconfSession(sessionContext);
 
 			session.connect();
 			Query getSoftwareInformation = QueryFactory.newGetSoftwareInformation();
@@ -350,7 +351,7 @@ public class OperationsTest {
 			SessionContext sessionContext = new SessionContext();
 			sessionContext.setURI(lola);
 
-			NetconfSession session = new NetconfSession(sessionContext);
+			INetconfSession session = new NetconfSession(sessionContext);
 
 			session.connect();
 			Query getRollbackInformation = QueryFactory.newGetRollbackInformation("2");

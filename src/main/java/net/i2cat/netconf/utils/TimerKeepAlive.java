@@ -21,7 +21,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import net.i2cat.netconf.NetconfSession;
+import net.i2cat.netconf.INetconfSession;
 import net.i2cat.netconf.errors.TransportException;
 import net.i2cat.netconf.rpc.Query;
 import net.i2cat.netconf.rpc.QueryFactory;
@@ -34,14 +34,14 @@ public class TimerKeepAlive implements Runnable {
 	private Log					log		= LogFactory.getLog(TimerKeepAlive.class);
 
 	private Query				query	= QueryFactory.newKeepAlive();
-	private NetconfSession		netconfSession;
+	private INetconfSession		netconfSession;
 	ScheduledExecutorService	timer;
 	private int					period	= 0;
 	private ScheduledFuture<?>	schedulerHandler;
 
 	public static final int		DELAY	= 1;
 
-	public TimerKeepAlive(NetconfSession netconfSession) {
+	public TimerKeepAlive(INetconfSession netconfSession) {
 		this.netconfSession = netconfSession;
 		timer = Executors.newSingleThreadScheduledExecutor();
 	}
