@@ -258,17 +258,17 @@ public class TransportContentParser extends DefaultHandler2 {
 		}
 		if (localName.equalsIgnoreCase("error-type")) {
 			insideErrorTypeTag = false;
-			error.setType(ErrorType.valueOf(errorTypeTagContent.toString().toUpperCase()));
+			error.setType(ErrorType.getErrorTypeByValue(errorTypeTagContent.toString()));
 			errorTypeTagContent = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-tag")) {
 			insideErrorTagTag = false;
-			error.setTag(ErrorTag.valueOf(errorTagTagContent.toString()));
+			error.setTag(ErrorTag.getErrorTagByValue((errorTagTagContent.toString())));
 			errorTagTagContent = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-severity")) {
 			insideErrorSeverityTag = false;
-			error.setSeverity(ErrorSeverity.valueOf(errorSeverityTagContent.toString().toUpperCase()));
+			error.setSeverity(ErrorSeverity.getErrorSeverityByValue(errorSeverityTagContent.toString()));
 			errorSeverityTagContent = new StringBuffer();
 		}
 		if (localName.equalsIgnoreCase("error-app-tag")) {
