@@ -23,6 +23,11 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.Vector;
 
+import net.i2cat.netconf.SessionContext;
+import net.i2cat.netconf.errors.TransportException;
+import net.i2cat.netconf.messageQueue.MessageQueue;
+import net.i2cat.netconf.rpc.RPCElement;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xml.sax.InputSource;
@@ -33,11 +38,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.ConnectionMonitor;
 import ch.ethz.ssh2.Session;
-
-import net.i2cat.netconf.SessionContext;
-import net.i2cat.netconf.errors.TransportException;
-import net.i2cat.netconf.messageQueue.MessageQueue;
-import net.i2cat.netconf.rpc.RPCElement;
 
 public class SSHTransport implements Transport, ConnectionMonitor {
 
@@ -78,7 +78,7 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 			parser.setContentHandler(xmlHandler);
 			parser.setErrorHandler(xmlHandler);
 		} catch (SAXException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 	}
 
@@ -155,11 +155,10 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 
 		log.debug("Closing session - exit status: " + session.getExitStatus());
 		session.close();
-		stopParsing();
 
 		log.debug("Closing connection");
-		connection.close();
 		closed = true;
+		connection.close();
 
 		log.info("Disconnected");
 
@@ -200,17 +199,17 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 			@Override
 			public void run() {
 				log.debug("Parsing thread start");
-
+				BufferedReader reader = null;
 				while (!closed)
 				{
 					try {
 
 						String buffer = "";
-						BufferedReader reader = new BufferedReader(new InputStreamReader(session.getStdout()));
+						reader = new BufferedReader(new InputStreamReader(session.getStdout()));
 
 						do {
 							buffer += reader.readLine();
-						} while (!buffer.endsWith(delimiter));
+						} while (!buffer.endsWith(delimiter) && !closed);
 
 						parser.parse(new InputSource(new StringReader(buffer)));
 
@@ -223,7 +222,7 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 						 * offset, length); } }))); }
 						 */
 					} catch (IOException e) {
-						e.printStackTrace();
+						log.error(e.getMessage());
 					} catch (SAXException e) {
 						if (e.getMessage().contentEquals("Content is not allowed in trailing section.")) {
 							// Using shitty non-xml delimiters forces us to detect
@@ -233,21 +232,23 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 						}
 						else {
 							log.error(e.getMessage());
-							e.printStackTrace();
 							disconnect();
 						}
 						log.info("End of parsing.");
+					} finally {
+						if (reader != null) {
+							try {
+								reader.close();
+							} catch (IOException e) {
+								log.error(e.getMessage());
+							}
+						}
 					}
 					log.debug("Looping");
 				}
 				log.debug("Parsing thread ended");
 			}
 		};
-
 		parserThread.start();
-	}
-
-	private void stopParsing() {
-		parserThread.interrupt();
 	}
 }
