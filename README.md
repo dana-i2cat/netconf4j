@@ -1,4 +1,4 @@
-netconf4j
+NETCONF4J
 =========
 
 A simple, from scratch implementation of the Netconf protocol. We are currently testing the current code base in order to release a beta version with basic functionality. See roadmap for more details and things to come.
@@ -8,21 +8,21 @@ Contributors are welcomed!
 Features
 --------
 
-    * Low, atomic dependencies (commons-logging, commons-configuration, commons-io, junit, ganymed-ssh2).
-    * OSGi ready.
-    * Test coverage.
-    * Support for both sync and async calls.
-    * Maven based, easy to build & contribute.
-    * Efficient (SAX based) parsing.
-    * Transport abstraction (currently, SSH and Virtual).
-    * This is an RPC only implementation. Configuration data passed to user untouched. 
+ * Low, atomic dependencies (commons-logging, commons-configuration, commons-io, junit, ganymed-ssh2).
+ * OSGi ready.
+ * Test coverage.
+ * Support for both sync and async calls.
+ * Maven based, easy to build & contribute.
+ * Efficient (SAX based) parsing.
+ * Transport abstraction (currently, SSH and Virtual).
+ * This is an RPC only implementation. Configuration data passed to user untouched. 
 
 Roadmap
 -------
 
-    * Fully support base Netconf (RFC4741) with all its capabilities.
-    * Support for events (RFC5277) and SOAP transport (RFC4743).
-    * Add vendor (i.e. Juniper) specific capabilities utils project. 
+ * Fully support base Netconf (RFC4741) with all its capabilities.
+ * Support for events (RFC5277) and SOAP transport (RFC4743).
+ * Add vendor (i.e. Juniper) specific capabilities utils project. 
 
 Usage
 -----
@@ -58,21 +58,23 @@ From java, you can open a netconf session with:
 
 For the library interface check:
 
-    * INetconfSession here.
-    * SessionContext here.
-    * The RPC objects here. 
+ * INetconfSession here.
+ * SessionContext here.
+ * The RPC objects here. 
 
 Some usage examples can be found at:
 
-    * The JUnit tests inside the library here.
-    * The OpenNaaS protocol bundle here. 
+ * The JUnit tests inside the library here.
+ * The OpenNaaS protocol bundle here. 
 
 Origin
 ------
 
-This project is a spin-off of the Manticore 2 and Mantychore FP7* projects. See http://www.mantychore.eu/about/ for further details.
+This project is a spin-off of the Manticore 2 and Mantychore FP7 projects. See http://www.mantychore.eu/about/ for further details.
 
 Mantychore FP7 project is funded by the European Commission.
+
 Contact
+-------
 
 Mail { user | dev } @ lists.opennaas.org for further information. 
