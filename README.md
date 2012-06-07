@@ -1,7 +1,7 @@
 NETCONF4J
 =========
 
-A simple, from scratch implementation of the Netconf protocol. We are currently testing the current code base in order to release a beta version with basic functionality. See roadmap for more details and things to come.
+A simple, from scratch implementation of the Netconf protocol. We are currently using this library at OpenNaaS and quite happy with its feature set. See roadmap for more details and things to come.
 
 Contributors are welcomed!
 
