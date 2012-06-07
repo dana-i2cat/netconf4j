@@ -27,9 +27,9 @@ Roadmap
 Usage
 -----
 
-See how to checkout the code here.
+Check out the code using normal github procedure.
 
-Will as usual. Both maven2 and maven3 should work:
+Build as usual. Both maven2 and maven3 should work:
 
 	cd netconf-read-only/
 	mvn install
@@ -58,14 +58,14 @@ From java, you can open a netconf session with:
 
 For the library interface check:
 
- * INetconfSession here.
- * SessionContext here.
- * The RPC objects here. 
+ * INetconfSession [here](https://github.com/dana-i2cat/netconf4j/blob/master/src/main/java/net/i2cat/netconf/INetconfSession.java).
+ * SessionContext [here](https://github.com/dana-i2cat/netconf4j/blob/master/src/main/java/net/i2cat/netconf/SessionContext.java).
+ * The RPC objects [here](https://github.com/dana-i2cat/netconf4j/tree/master/src/main/java/net/i2cat/netconf/rpc). 
 
 Some usage examples can be found at:
 
- * The JUnit tests inside the library here.
- * The OpenNaaS protocol bundle here. 
+ * The JUnit tests inside the library [here](https://github.com/dana-i2cat/netconf4j/tree/master/src/test/java/net/i2cat/netconf/test).
+ * The OpenNaaS protocol bundle [here](https://github.com/dana-i2cat/opennaas/tree/master/extensions/bundles/protocols.netconf). 
 
 Origin
 ------
