@@ -236,6 +236,22 @@ public class SessionContext extends CompositeConfiguration {
 		return (String) this.getProperty(KEY_USERNAME);
 	}
 	
+	public void setKeyPassword(String password){
+		this.setProperty(KEY_PASSWORD, password);
+	}
+	
+	public void setKeyLocation(String location){
+		this.setProperty(KEY_LOCATION, location);
+	}
+	
+	public void setKeyUsername(String username) {
+		this.setProperty(KEY_USERNAME, username);
+	}
+	
+	public void setAuthenticationType(AuthType type){
+		this.setProperty(AUTH_TYPE, type);
+	}
+	
 	// Override method to reset the configuration before add a new
 	public void newConfiguration(Configuration source) {
 		this.clear();
