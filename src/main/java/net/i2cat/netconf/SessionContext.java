@@ -199,7 +199,10 @@ public class SessionContext extends CompositeConfiguration {
 	}
 
 	public String getPass() {
-		return ((URI) this.getProperty(URI)).getUserInfo().split(":")[1];
+		if (((URI) this.getProperty(URI)).getUserInfo().contains(":"))
+			return ((URI) this.getProperty(URI)).getUserInfo().split(":")[1];
+		else
+			return null;
 	}
 
 	public String getHost() {
