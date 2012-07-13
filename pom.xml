@@ -1,15 +1,41 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>net.i2cat.netconf</groupId>
-	<artifactId>netconf4j</artifactId>
-	<version>0.0.2</version>
-	<packaging>bundle</packaging>
+
 	<name>netconf4j</name>
-	<url>http://maven.apache.org</url>
+
+	<artifactId>netconf4j</artifactId>
+	<groupId>net.i2cat.netconf</groupId>
+	<version>0.0.2</version>
+
+	<packaging>bundle</packaging>
+	<modelVersion>4.0.0</modelVersion>
+
+	<organization>
+		<name>http://www.i2cat.net/en</name>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License</name>
+			<url>http://www.gnu.org/licenses/lgpl.html</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Pau Minoves</name>
+			<email>pau.minoves@i2cat.net</email>
+		</developer>
+		<developer>
+			<name>Carlos Baez</name>
+			<email>carlos.baez@i2cat.net</email>
+		</developer>
+	</developers>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -38,6 +64,7 @@
 			<version>1.6</version>
 		</dependency>
 	</dependencies>
+
 	<repositories>
 		<repository>
 			<id>JBOSS</id>
@@ -50,30 +77,11 @@
 		<repository>
 			<uniqueVersion>false</uniqueVersion>
 			<id>maven.i2cat.net</id>
-			<name>&gt;maven.i2cat.net-releases</name>
+			<name>maven.i2cat.net-releases</name>
 			<url>http://maven.i2cat.net:8081/artifactory/libs-release-local</url>
         </repository>
     </distributionManagement>
 
-	<organization>
-		<name>http://www.i2cat.net/en</name>
-	</organization>
-	<licenses>
-		<license>
-			<name>GNU Lesser General Public License</name>
-			<url>http://www.gnu.org/licenses/lgpl.html</url>
-		</license>
-	</licenses>
-	<developers>
-		<developer>
-			<name>Pau Minoves</name>
-			<email>pau.minoves@i2cat.net</email>
-		</developer>
-		<developer>
-			<name>Carlos Baez</name>
-			<email>carlos.baez@i2cat.net</email>
-		</developer>
-	</developers>
 	<build>
 		<resources>
 			<resource>
