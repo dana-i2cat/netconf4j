@@ -45,6 +45,16 @@
 			<url>http://repository.jboss.org/maven2/</url>
 		</repository>
 	</repositories>
+
+    <distributionManagement> 
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>maven.i2cat.net</id>
+			<name>&gt;maven.i2cat.net-releases</name>
+			<url>http://maven.i2cat.net:8081/artifactory/libs-release-local</url>
+        </repository>
+    </distributionManagement>
+
 	<organization>
 		<name>http://www.i2cat.net/en</name>
 	</organization>
