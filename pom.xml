@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.i2cat.netconf</groupId>
 	<artifactId>netconf4j</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<packaging>bundle</packaging>
 	<name>netconf4j</name>
 	<url>http://maven.apache.org</url>
