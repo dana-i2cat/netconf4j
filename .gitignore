@@ -1,6 +1,18 @@
 target/
 *.class
+*.swp
+.classpath
+.project
+.settings/
+.svn/
+.metadata
+.DS_Store
+target/
+core/*/META-INF
+core/*/OSGI-INF
+core/*/build.properties
 
+=======
 # Package Files #
 *.jar
 *.war
@@ -10,3 +22,5 @@ target/
 .classpath
 .project
 .settings/
+=======
+
