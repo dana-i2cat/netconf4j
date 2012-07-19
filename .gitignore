@@ -1,3 +1,4 @@
+target/
 *.class
 *.swp
 .classpath
@@ -10,4 +11,16 @@ target/
 core/*/META-INF
 core/*/OSGI-INF
 core/*/build.properties
+
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Eclipse settings Files #
+.classpath
+.project
+.settings/
+
 

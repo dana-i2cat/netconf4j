@@ -31,6 +31,26 @@ import org.apache.commons.logging.LogFactory;
 
 public class SessionContext extends CompositeConfiguration {
 
+	public enum AuthType {
+		PASSWORD ("password"),
+		PUBLICKEY ("publickey");
+		
+		String value;
+		
+		AuthType(String value) {
+			this.value = value;
+		}
+		
+		public static AuthType getByValue(String value) {
+			for (AuthType authType : values()) {
+				if (authType.value.equals(value)) {
+					return authType;
+				}
+			}
+			throw new IllegalArgumentException("No enum const class " + AuthType.class.getName() + "." + value);
+		}
+	}
+	
 	public final static String	BASE				= "net.i2cat.netconf.";
 
 	public final static String	LASTMESSAGEID		= BASE + "session.lastMessageId";
@@ -47,7 +67,16 @@ public class SessionContext extends CompositeConfiguration {
 	public final static String	LOG_STREAM			= "transport.logXMLStream";
 	public final static String	LOG_FILE			= "transport.logXMLOutputFile";
 
+	public final static String	AUTH_TYPE			= BASE + "session.auth.type";
+	public final static String	USERNAME			= BASE + "session.auth.username";
+	public final static String	PASSWORD			= BASE + "session.auth.password";
+	public static final String 	KEY_USERNAME		= BASE + "session.auth.key.username";
+	public final static String	KEY_LOCATION		= BASE + "session.auth.key.location";
+	public final static String	KEY_PASSWORD		= BASE + "session.auth.key.password";
+	
 	public final static Log		log					= LogFactory.getLog(SessionContext.class);
+
+	
 
 	private Configuration createDefaultConfiguration() {
 
@@ -57,7 +86,7 @@ public class SessionContext extends CompositeConfiguration {
 
 		/* FIXME WHAT IT IS THE BETTER METHOD PASS STRING OR BOOL */
 		baseConfiguration.addProperty(KEEPALIVE, true);
-
+		
 		return baseConfiguration;
 
 	}
@@ -65,6 +94,9 @@ public class SessionContext extends CompositeConfiguration {
 	public SessionContext() throws ConfigurationException {
 
 		this.addConfiguration(createDefaultConfiguration());
+		
+		//Default Auth type is password
+		this.setProperty(AUTH_TYPE, AuthType.PASSWORD);
 
 		try {
 			String path = new java.io.File(".").getCanonicalPath();
@@ -167,7 +199,10 @@ public class SessionContext extends CompositeConfiguration {
 	}
 
 	public String getPass() {
-		return ((URI) this.getProperty(URI)).getUserInfo().split(":")[1];
+		if (((URI) this.getProperty(URI)).getUserInfo().contains(":"))
+			return ((URI) this.getProperty(URI)).getUserInfo().split(":")[1];
+		else
+			return null;
 	}
 
 	public String getHost() {
@@ -187,7 +222,39 @@ public class SessionContext extends CompositeConfiguration {
 		return ((URI) this.getProperty(URI)).getScheme();
 
 	}
-
+	
+	public AuthType getAuthenticationType() {
+		return (AuthType) this.getProperty(AUTH_TYPE);
+	}
+	
+	public String getKeyLocation() {
+		return (String) this.getProperty(KEY_LOCATION);
+	}
+	
+	public String getKeyPassword() {
+		return (String) this.getProperty(KEY_PASSWORD);
+	}
+	
+	public String getKeyUsername() {
+		return (String) this.getProperty(KEY_USERNAME);
+	}
+	
+	public void setKeyPassword(String password){
+		this.setProperty(KEY_PASSWORD, password);
+	}
+	
+	public void setKeyLocation(String location){
+		this.setProperty(KEY_LOCATION, location);
+	}
+	
+	public void setKeyUsername(String username) {
+		this.setProperty(KEY_USERNAME, username);
+	}
+	
+	public void setAuthenticationType(AuthType type){
+		this.setProperty(AUTH_TYPE, type);
+	}
+	
 	// Override method to reset the configuration before add a new
 	public void newConfiguration(Configuration source) {
 		this.clear();

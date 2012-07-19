@@ -17,6 +17,7 @@
 package net.i2cat.netconf.transport;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -24,6 +25,7 @@ import java.io.StringReader;
 import java.util.Vector;
 
 import net.i2cat.netconf.SessionContext;
+import net.i2cat.netconf.SessionContext.AuthType;
 import net.i2cat.netconf.errors.TransportException;
 import net.i2cat.netconf.messageQueue.MessageQueue;
 import net.i2cat.netconf.rpc.RPCElement;
@@ -124,8 +126,7 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 			connection.connect();
 
 			log.debug("Authentication");
-			if (!connection.authenticateWithPassword(user, password))
-				throw new TransportException("Authentication Error)");
+			authenticate(connection, sessionContext);
 
 			/* Opening session */
 			log.debug("Opening session");
@@ -188,6 +189,56 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 
 	public boolean isParsingActive() {
 		return parserThread.isAlive();
+	}
+	
+	
+	private boolean authenticate(Connection connection, SessionContext sessionContext) throws TransportException, IOException {
+		
+		SessionContext.AuthType authType = sessionContext.getAuthenticationType();
+		boolean authenticated = false;
+		if (authType.equals(AuthType.PASSWORD)){
+			authenticated = authenticateWithPassword(connection, sessionContext);
+		} else if (authType.equals(AuthType.PUBLICKEY)){
+			authenticated = authenticateWithPublicKey(connection, sessionContext);
+		} else {
+			throw new TransportException("Unsupported authentication mechanism " + authType);
+		}
+		
+		if (! authenticated) {
+			throw new TransportException("Authentication Error)");
+		}
+		
+		return authenticated;
+	}
+
+	private boolean authenticateWithPassword(Connection connection,
+			SessionContext sessionContext) throws IOException {
+		
+		String user = sessionContext.getUser();
+		String password = sessionContext.getPass();
+		
+		log.debug("Authenticate with password");
+		log.debug("user: " + user);
+		log.debug("pass: " + (password != null ? "yes" : "no"));
+		
+		return connection.authenticateWithPassword(user, password);
+	}
+	
+	private boolean authenticateWithPublicKey(Connection connection,
+			SessionContext sessionContext) throws IOException {
+		
+		String user = sessionContext.getKeyUsername();
+		String keyPEMFileLocation = sessionContext.getKeyLocation();
+		String keyPassword = sessionContext.getKeyPassword();
+		
+		log.debug("Authenticate with public key");
+		log.debug("user: " + user);
+		log.debug("keyLocation: " + keyPEMFileLocation);
+		log.debug("keyPass: " + (keyPassword != null ? "yes" : "no"));
+		
+		File pemFile = new File(keyPEMFileLocation);
+		
+		return connection.authenticateWithPublicKey(user, pemFile, keyPassword);
 	}
 
 	private void startParsing() {
