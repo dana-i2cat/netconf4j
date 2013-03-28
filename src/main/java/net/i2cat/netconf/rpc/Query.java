@@ -43,8 +43,8 @@ public class Query extends RPCElement implements java.io.Serializable {
 	private String				idLogicalRouter;
 	private String				rollback;
 
-    /* Parameter for including arbitrary text inside operation tags. */
-    private String              body;
+	/* Parameter for including arbitrary text inside operation tags. */
+	private String				body;
 
 	/*
 	 * Parameters for get filter. This attribute for netconf is 'subtree' by default
@@ -158,15 +158,20 @@ public class Query extends RPCElement implements java.io.Serializable {
 		this.filterType = attrFilter;
 	}
 
-    public String getBody() {
-        return body;
-    }
+	public String getBody() {
+		return body;
+	}
 
-    public void setBody(String body) {
-        this.body = body;
-    }
+	/**
+	 * Parameter for including arbitrary text inside operation tags.
+	 * 
+	 * @param body
+	 */
+	public void setBody(String body) {
+		this.body = body;
+	}
 
-    public String toXML() {
+	public String toXML() {
 		String xml = "";
 
 		// TOFIX workaround for buggy netconf server, must be configurable
@@ -174,52 +179,55 @@ public class Query extends RPCElement implements java.io.Serializable {
 		// xml += "<rpc message-id=\"" + messageId + "\" xmlns=\"" +
 		// operation.getNamespace() + "\">";
 
-		xml += "<" + operation.getName() + ">";
+		if (operation.equals(Operation.CLOSE_CONFIG)) // one-liners
+			xml += "<" + operation.getName() + "/>";
+		else
+		{
+			xml += "<" + operation.getName() + ">";
 
-		if (idLogicalRouter != null) {
-			xml += "<logical-router>" + idLogicalRouter + "</logical-router>";
+			if (idLogicalRouter != null) {
+				xml += "<logical-router>" + idLogicalRouter + "</logical-router>";
+			}
+
+			if (rollback != null) {
+				xml += "<rollback>" + rollback + "</rollback>";
+			}
+
+			if (target != null)
+				xml += "<target><" + target + "/></target>";
+
+			if (source != null)
+				xml += "<source><" + source + "/></source>";
+			if (filter != null) {
+				xml += "<filter";
+				if (filterType != null)
+					xml += " type=" + filterType;
+				xml += ">" + filter + "</filter>";
+			}
+
+			if (sessionId != null)
+				xml += "<session-id>" + sessionId + "</session-id>";
+
+			if (defaultOperation != null)
+				xml += "<default-operation>" + defaultOperation + "</default-operation>";
+
+			if (editOperation != null)
+				xml += "<edit-operation>" + defaultOperation + "</edit-operation>";
+
+			if (testOption != null)
+				xml += "<test-option>" + defaultOperation + "</test-option>";
+
+			if (errorOption != null)
+				xml += "<error-option>" + errorOption + "</error-option>";
+
+			if (config != null)
+				xml += "<config>" + config + "</config>";
+
+			if (body != null)
+				xml += body;
+
+			xml += "</" + operation.getName() + ">";
 		}
-
-		if (rollback != null) {
-			xml += "<rollback>" + rollback + "</rollback>";
-		}
-
-		if (target != null)
-			xml += "<target><" + target + "/></target>";
-
-		if (source != null)
-			xml += "<source><" + source + "/></source>";
-		if (filter != null) {
-			xml += "<filter";
-			if (filterType != null)
-				xml += " type=" + filterType;
-			xml += ">" + filter + "</filter>";
-
-		}
-
-		if (sessionId != null)
-			xml += "<session-id>" + sessionId + "</session-id>";
-
-		if (defaultOperation != null)
-			xml += "<default-operation>" + defaultOperation + "</default-operation>";
-
-		if (editOperation != null)
-			xml += "<edit-operation>" + defaultOperation + "</edit-operation>";
-
-		if (testOption != null)
-			xml += "<test-option>" + defaultOperation + "</test-option>";
-
-		if (errorOption != null)
-			xml += "<error-option>" + errorOption + "</error-option>";
-
-		if (config != null)
-			xml += "<config>" + config + "</config>";
-
-        if (body != null)
-            xml += body;
-
-		xml += "</" + operation.getName() + ">";
-
 		xml += "</rpc>";
 
 		return xml;
