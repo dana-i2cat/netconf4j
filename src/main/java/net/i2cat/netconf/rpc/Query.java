@@ -43,8 +43,8 @@ public class Query extends RPCElement implements java.io.Serializable {
 	private String				idLogicalRouter;
 	private String				rollback;
 
-    /* Parameter for including arbitrary text inside operation tags. */
-    private String              body;
+	/* Parameter for including arbitrary text inside operation tags. */
+	private String				body;
 
 	/*
 	 * Parameters for get filter. This attribute for netconf is 'subtree' by default
@@ -158,15 +158,19 @@ public class Query extends RPCElement implements java.io.Serializable {
 		this.filterType = attrFilter;
 	}
 
-    public String getBody() {
-        return body;
-    }
+	public String getBody() {
+		return body;
+	}
 
-    public void setBody(String body) {
-        this.body = body;
-    }
+	/**
+	 * Parameter for including arbitrary text inside operation tags. 
+	 * @param body
+	 */
+	public void setBody(String body) {
+		this.body = body;
+	}
 
-    public String toXML() {
+	public String toXML() {
 		String xml = "";
 
 		// TOFIX workaround for buggy netconf server, must be configurable
@@ -215,8 +219,8 @@ public class Query extends RPCElement implements java.io.Serializable {
 		if (config != null)
 			xml += "<config>" + config + "</config>";
 
-        if (body != null)
-            xml += body;
+		if (body != null)
+			xml += body;
 
 		xml += "</" + operation.getName() + ">";
 
