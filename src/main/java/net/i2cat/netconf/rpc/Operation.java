@@ -60,6 +60,8 @@ public class Operation implements java.io.Serializable {
 
 	public static final Operation	DISCARD				= new Operation("discard-changes", Capability.JUNOS);
 
+    public static final Operation   OPEN_CONFIG         = new Operation("open-configuration", Capability.JUNOS);
+
 	public static final Operation	VALIDATE			= new Operation(
 																"validate", Capability.VALIDATE);
 
