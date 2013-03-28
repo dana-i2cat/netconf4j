@@ -169,6 +169,7 @@ public class QueryFactory {
 	public static Query newOpenConfiguration(String scope){
 		Query query = new Query();
 		query.setOperation(Operation.OPEN_CONFIG);
+		query.setBody("<"+scope+"/>");
 		return query;
 	}
 	
