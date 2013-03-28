@@ -161,6 +161,23 @@ public class QueryFactory {
 		query.setSource(source);
 		return query;
 	}
+	
+	public static Query newOpenConfiguration(){
+		return newOpenConfiguration("private");
+	}
+	
+	public static Query newOpenConfiguration(String scope){
+		Query query = new Query();
+		query.setOperation(Operation.OPEN_CONFIG);
+		query.setBody("<"+scope+"/>");
+		return query;
+	}
+	
+	public static Query newCloseConfiguration(String scope){
+		Query query = new Query();
+		query.setOperation(Operation.CLOSE_CONFIG);
+		return query;
+	}
 
 	public static Query newDiscardChanges() {
 		Query query = new Query();
