@@ -201,7 +201,7 @@ public class Query extends RPCElement implements java.io.Serializable {
 			if (filter != null) {
 				xml += "<filter";
 				if (filterType != null)
-					xml += " type=" + filterType;
+					xml += " type=\"" + filterType + "\"";
 				xml += ">" + filter + "</filter>";
 			}
 
