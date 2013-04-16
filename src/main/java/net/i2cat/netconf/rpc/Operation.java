@@ -43,7 +43,7 @@ public class Operation implements java.io.Serializable {
 	public static final Operation	DISCARD				= new Operation("discard-changes", Capability.JUNOS);
 	public static final Operation	OPEN_CONFIG			= new Operation("open-configuration", Capability.JUNOS);
 	public static final Operation	CLOSE_CONFIG		= new Operation("close-configuration", Capability.JUNOS);
-	public static final Operation   LOAD_CONFIGURATION  = new Operation("load-configuration", Capability.JUNOS);
+	public static final Operation	LOAD_CONFIGURATION  = new Operation("load-configuration", Capability.JUNOS);
 	public static final Operation	VALIDATE			= new Operation("validate", Capability.VALIDATE);
 
 	protected Operation(String name, Capability capability) {
