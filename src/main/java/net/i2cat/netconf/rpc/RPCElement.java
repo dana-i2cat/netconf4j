@@ -21,7 +21,6 @@ import org.apache.commons.configuration.CompositeConfiguration;
 public class RPCElement implements java.io.Serializable {
 
 	String					messageId;
-
 	// extra parameters from
 	CompositeConfiguration	ctx;
 
@@ -48,5 +47,4 @@ public class RPCElement implements java.io.Serializable {
 	public String toXML() {
 		return "NOT IMPLEMENTED";
 	}
-
 }
