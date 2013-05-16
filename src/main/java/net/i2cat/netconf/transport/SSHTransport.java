@@ -68,6 +68,7 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 	SessionContext				sessionContext;
 
 	final String				delimiter	= "]]>]]>";
+	final int                   read_size   = 4096;
 
 	public SSHTransport() {
 		listeners = new Vector<TransportListener>();
@@ -255,14 +256,17 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 				{
 					try {
 
-						String buffer = "";
+						int count;
+						char[] tmpBuffer = new char[read_size];
+						StringBuilder buffer = new StringBuilder();
 						reader = new BufferedReader(new InputStreamReader(session.getStdout()));
 
 						do {
-							buffer += reader.readLine();
-						} while (!buffer.endsWith(delimiter) && !closed);
-
-						parser.parse(new InputSource(new StringReader(buffer)));
+							count = reader.read(tmpBuffer, 0, read_size);
+							if (count > 0 )
+								buffer.append(tmpBuffer,0,count);
+						} while (buffer.lastIndexOf(delimiter)<0 && !closed && count > 0);
+						parser.parse(new InputSource(new StringReader(buffer.toString())));
 
 						/*
 						 * // flag to log server response if (sessionContext.isLogRespXML()) { log.debug("Logging to " +
