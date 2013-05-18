@@ -255,13 +255,13 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 				{
 					try {
 
-                        String tmp;
+						String tmp;
 						StringBuilder buffer = new StringBuilder();
 						reader = new BufferedReader(new InputStreamReader(session.getStdout()));
 
-                        do {
-                            tmp = reader.readLine();
-                            buffer.append(tmp);
+						do {
+							tmp = reader.readLine();
+							buffer.append(tmp);
 						} while (!tmp.endsWith(delimiter) && !closed);
 						parser.parse(new InputSource(new StringReader(buffer.toString())));
 
