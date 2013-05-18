@@ -261,8 +261,10 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 
 						do {
 							tmp = reader.readLine();
-							buffer.append(tmp);
-						} while (!tmp.endsWith(delimiter) && !closed);
+							if (tmp != null) {
+								buffer.append(tmp);
+							}
+						} while (tmp != null && !tmp.endsWith(delimiter) && !closed);
 
 						parser.parse(new InputSource(new StringReader(buffer.toString())));
 
