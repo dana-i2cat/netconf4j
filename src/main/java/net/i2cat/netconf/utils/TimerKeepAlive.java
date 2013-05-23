@@ -16,30 +16,27 @@
  */
 package net.i2cat.netconf.utils;
 
+import net.i2cat.netconf.INetconfSession;
+import net.i2cat.netconf.IQuery;
+import net.i2cat.netconf.errors.TransportException;
+import net.i2cat.netconf.rpc.QueryFactory;
+import net.i2cat.netconf.rpc.Reply;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import net.i2cat.netconf.INetconfSession;
-import net.i2cat.netconf.errors.TransportException;
-import net.i2cat.netconf.rpc.Query;
-import net.i2cat.netconf.rpc.QueryFactory;
-import net.i2cat.netconf.rpc.Reply;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public class TimerKeepAlive implements Runnable {
-	private Log					log		= LogFactory.getLog(TimerKeepAlive.class);
-
-	private Query				query	= QueryFactory.newKeepAlive();
-	private INetconfSession		netconfSession;
+	public static final int		DELAY	= 1;
 	ScheduledExecutorService	timer;
+	private Log					log		= LogFactory.getLog(TimerKeepAlive.class);
+	private IQuery				query	= QueryFactory.newKeepAlive();
+	private INetconfSession		netconfSession;
 	private int					period	= 0;
 	private ScheduledFuture<?>	schedulerHandler;
-
-	public static final int		DELAY	= 1;
 
 	public TimerKeepAlive(INetconfSession netconfSession) {
 		this.netconfSession = netconfSession;

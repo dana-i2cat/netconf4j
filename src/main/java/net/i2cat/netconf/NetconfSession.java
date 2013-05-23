@@ -158,7 +158,7 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 	/* (non-Javadoc)
 	 * @see net.i2cat.netconf.INetconfSession#sendSyncQuery(net.i2cat.netconf.rpc.Query)
 	 */
-	public Reply sendSyncQuery(Query query) throws TransportException {
+	public Reply sendSyncQuery(IQuery query) throws TransportException {
 
 		log.info("Sending query (" + query.getOperation().getName() + ")");
 
@@ -169,7 +169,7 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 		log.debug(query.toXML());
 		log.debug("--------------------------------------------------");
 
-		transport.sendAsyncQuery(query);
+		transport.sendAsyncQuery(query.getRpcElement());
 
 		log.info("Sent. Waiting for response...");
 		Reply reply = (Reply) messageQueue.blockingConsumeById(query.getMessageId());
@@ -192,7 +192,7 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 	/* (non-Javadoc)
 	 * @see net.i2cat.netconf.INetconfSession#sendAsyncQuery(net.i2cat.netconf.rpc.Query)
 	 */
-	public void sendAsyncQuery(Query query) throws TransportException {
+	public void sendAsyncQuery(IQuery query) throws TransportException {
 		query.setMessageId(generateMessageId());
 		log.debug("--------------------------------------------------");
 		log.debug("sending QUERY");
@@ -201,7 +201,7 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 
 		// timerKeepAlive.reset(); // Reset the time for the keep alive
 
-		transport.sendAsyncQuery(query);
+		transport.sendAsyncQuery(query.getRpcElement());
 
 	}
 

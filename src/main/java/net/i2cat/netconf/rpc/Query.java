@@ -16,7 +16,9 @@
  */
 package net.i2cat.netconf.rpc;
 
-public class Query extends RPCElement implements java.io.Serializable {
+import net.i2cat.netconf.IQuery;
+
+public class Query extends RPCElement implements java.io.Serializable, IQuery {
 
 	/**
 	 * 
@@ -72,6 +74,10 @@ public class Query extends RPCElement implements java.io.Serializable {
 
 	public Operation getOperation() {
 		return operation;
+	}
+
+	public RPCElement getRpcElement() {
+		return this;
 	}
 
 	public void setOperation(Operation operation) {
