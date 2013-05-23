@@ -255,14 +255,18 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 				{
 					try {
 
-						String buffer = "";
+						String tmp;
+						StringBuilder buffer = new StringBuilder();
 						reader = new BufferedReader(new InputStreamReader(session.getStdout()));
 
 						do {
-							buffer += reader.readLine();
-						} while (!buffer.endsWith(delimiter) && !closed);
+							tmp = reader.readLine();
+							if (tmp != null) {
+								buffer.append(tmp);
+							}
+						} while (tmp != null && !tmp.endsWith(delimiter) && !closed);
 
-						parser.parse(new InputSource(new StringReader(buffer)));
+						parser.parse(new InputSource(new StringReader(buffer.toString())));
 
 						/*
 						 * // flag to log server response if (sessionContext.isLogRespXML()) { log.debug("Logging to " +
