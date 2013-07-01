@@ -18,7 +18,11 @@ package net.i2cat.netconf.messageQueue;
 
 import java.util.LinkedHashMap;
 import java.util.Vector;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
+import com.google.common.util.concurrent.SimpleTimeLimiter;
+import com.google.common.util.concurrent.UncheckedTimeoutException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -92,6 +96,7 @@ public class MessageQueue {
 		}
 	}
 
+    // TODO: Create a version that takes a timeout.
 	public RPCElement blockingConsume() {
 
 		RPCElement element;
@@ -125,4 +130,49 @@ public class MessageQueue {
 		}
 		return element;
 	}
+
+    /**
+     * Wait for a new message with the id <code>messageId</code> to arrive in the queue.
+     *
+     * @param messageId a string identifying the message to consume.
+     * @param timeout a long indicating the length of the timeout in milliseconds. If zero or less, no timeout.
+     * @throws Exception an UncheckedTimeoutException if there is no message with <code>messageId</code> after waiting for the specified timeout.
+     * @return
+     */
+    public RPCElement blockingConsumeById(String messageId, long timeout) throws Exception {
+
+        final String messageIdFinal = messageId;
+        Callable<RPCElement> consumeCaller = new Callable<RPCElement>() {
+            public RPCElement call() throws Exception {
+                RPCElement element;
+                synchronized (queue) {
+                    while ((element = consumeById(messageIdFinal)) == null) {
+                        try {
+                            log.debug("Waiting (" + messageIdFinal + ")...");
+                            queue.wait();
+                        } catch (InterruptedException e) {
+                            // Do nothing. It's probably a timeout.
+                        }
+                    }
+                }
+                return element;
+            }
+        };
+
+        if (timeout <= 0) {
+            return consumeCaller.call();
+        }
+
+        SimpleTimeLimiter timeLimiter = new SimpleTimeLimiter();
+
+        try {
+            return timeLimiter.callWithTimeout(consumeCaller, timeout, TimeUnit.MILLISECONDS, true);
+        } catch (UncheckedTimeoutException e) {
+            log.debug("BlockingConsumeById(messageId=" + messageId + ") failed due to timeout.", e);
+            throw e;
+        } catch (Exception e) {
+            log.debug("BlockingConsumeById(messageId=" + messageId + ") failed.", e);
+            throw e;
+        }
+    }
 }

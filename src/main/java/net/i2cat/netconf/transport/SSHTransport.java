@@ -140,7 +140,7 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 
 			// notify handlers
 			for (TransportListener handler : listeners)
-				handler.transportOpenned();
+				handler.transportOpened();
 
 			startParsing();
 
@@ -190,8 +190,7 @@ public class SSHTransport implements Transport, ConnectionMonitor {
 	public boolean isParsingActive() {
 		return parserThread.isAlive();
 	}
-	
-	
+
 	private boolean authenticate(Connection connection, SessionContext sessionContext) throws TransportException, IOException {
 		
 		SessionContext.AuthType authType = sessionContext.getAuthenticationType();
