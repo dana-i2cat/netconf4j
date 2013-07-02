@@ -114,21 +114,8 @@ public class MessageQueue {
 		return element;
 	}
 
-	public RPCElement blockingConsumeById(String messageId) {
-
-		RPCElement element;
-
-		synchronized (queue) {
-			while ((element = consumeById(messageId)) == null) {
-				try {
-					log.debug("Waiting (" + messageId + ")...");
-					queue.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return element;
+	public RPCElement blockingConsumeById(String messageId) throws Exception {
+        return blockingConsumeById(messageId, 0);
 	}
 
     /**
