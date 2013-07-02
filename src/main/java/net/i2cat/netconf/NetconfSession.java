@@ -127,7 +127,11 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 		transport.sendAsyncQuery(clientHello);
 
         try {
-            reply = messageQueue.blockingConsumeById("0", sessionContext.getTimeout());
+            if (sessionContext.containsKey(SessionContext.TIMEOUT)) {
+                reply = messageQueue.blockingConsumeById("0", sessionContext.getTimeout());
+            } else {
+                reply = messageQueue.blockingConsumeById("0");
+            }
         } catch (UncheckedTimeoutException e) {
             throw new TransportException("No reply to hello -- timeout.", e);
         } catch (Exception e) {
@@ -196,7 +200,11 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 		log.info("Sent. Waiting for response...");
         Reply reply = null;
         try {
-            reply = (Reply) messageQueue.blockingConsumeById(query.getMessageId(), sessionContext.getTimeout());
+            if (sessionContext.containsKey(SessionContext.TIMEOUT)) {
+                reply = (Reply) messageQueue.blockingConsumeById(query.getMessageId(), sessionContext.getTimeout());
+            } else {
+                reply = (Reply) messageQueue.blockingConsumeById(query.getMessageId());
+            }
         } catch (UncheckedTimeoutException e) {
             throw new TransportException("Timeout while waiting for reply to query.", e);
         } catch (Exception e) {
