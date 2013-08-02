@@ -83,10 +83,13 @@ public class TransportContentParser extends DefaultHandler2 {
 	boolean					insideErrorInfoTag		= false;
 	StringBuffer			errorInfoTagContent		= new StringBuffer();
 
-	/* extra functionalities (out RFC) */
+	/* extra features from JUNOS  (out RFC) */
 
 	boolean					insideInterfaceInfoTag	= false;
 	StringBuffer			interfaceInfoTagContent	= new StringBuffer();
+
+	boolean					insideSoftwareInfoTag	= false;
+	StringBuffer			softwareInfoTagContent	= new StringBuffer();
 
 	public void setMessageQueue(MessageQueue queue) {
 		this.messageQueue = queue;
@@ -101,6 +104,10 @@ public class TransportContentParser extends DefaultHandler2 {
 
 		if (insideDataTag) {
 			dataTagContent.append("<" + localName + ">");
+		}
+
+		if (insideSoftwareInfoTag) {
+			softwareInfoTagContent.append("<" + localName + ">");
 		}
 
 		// log.debug("startElement <" + uri + "::" + localName + ">");
@@ -159,9 +166,16 @@ public class TransportContentParser extends DefaultHandler2 {
 			insideErrorInfoTag = true;
 		}
 
-		/* extra functionalities (out RFC) */
+		/* extra features from JUNOS  (out RFC) */
 		if (localName.equalsIgnoreCase("interface-information")) {
 			insideInterfaceInfoTag = true;
+		}
+		if (localName.equalsIgnoreCase("software-information")) {
+			// software-information is the root node and leaving it in place
+			// makes gives us a well-formed XML document rather than multiple
+			// top-level nodes.
+			softwareInfoTagContent.append("<" + localName + ">");
+			insideSoftwareInfoTag = true;
 		}
 
 	}
@@ -205,11 +219,13 @@ public class TransportContentParser extends DefaultHandler2 {
 			errorTypeTagContent.append(ch, start, length);
 		}
 
-		/* extra functionalities (out RFC) */
+		/* extra features from JUNOS  (out RFC) */
 		if (insideInterfaceInfoTag) {
 			interfaceInfoTagContent.append(ch, start, length);
 		}
-
+		if (insideSoftwareInfoTag) {
+			softwareInfoTagContent.append(ch, start, length);
+		}
 	}
 
 	@Override
@@ -223,6 +239,10 @@ public class TransportContentParser extends DefaultHandler2 {
 
 		if (insideDataTag && !localName.equalsIgnoreCase("data")) {
 			dataTagContent.append("</" + localName + ">");
+		}
+
+		if (insideSoftwareInfoTag && !localName.equalsIgnoreCase("software-information")) {
+			softwareInfoTagContent.append("</" + localName + ">");
 		}
 
 		if (localName.equalsIgnoreCase("hello")) {
@@ -300,6 +320,16 @@ public class TransportContentParser extends DefaultHandler2 {
 			interfaceInfoTagContent = new StringBuffer();
 		}
 
+		if (localName.equalsIgnoreCase("software-information")) {
+			insideSoftwareInfoTag = false;
+			// software-information is the root node and leaving it in place
+			// makes gives us a well-formed XML document rather than multiple
+			// top-level nodes.
+			softwareInfoTagContent.append("</" + localName + ">");
+			reply.setContain(softwareInfoTagContent.toString());
+			reply.setContainName("software-information");
+			softwareInfoTagContent = new StringBuffer();
+		}
 	}
 
 	@Override
