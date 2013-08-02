@@ -204,6 +204,8 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 			}
 		} catch (UncheckedTimeoutException e) {
 			throw new TransportException("Timeout while waiting for reply to query.", e);
+		} catch (TransportException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new TransportException("Error getting reply to query: " + e.getMessage(), e);
 		}
