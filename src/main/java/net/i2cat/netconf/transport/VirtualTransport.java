@@ -138,7 +138,7 @@ public class VirtualTransport implements Transport {
 
 		// notify handlers
 		for (TransportListener handler : listeners)
-			handler.transportOpenned();
+			handler.transportOpened();
 
 		startParsing();
 	}
