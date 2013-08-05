@@ -56,7 +56,7 @@ public interface INetconfSession {
 	 * @return
 	 * @throws TransportException
 	 */
-	public abstract Reply sendSyncQuery(Query query) throws TransportException;
+	public abstract Reply sendSyncQuery(IQuery query) throws TransportException;
 
 	/**
 	 * Send a Netconf Query and return immediately. You will have to get the reply (if any) via a NetconfReplyHandler or polling receiveReply() for
@@ -67,7 +67,7 @@ public interface INetconfSession {
 	 * @param querys
 	 * @throws TransportException
 	 */
-	public abstract void sendAsyncQuery(Query query) throws TransportException;
+	public abstract void sendAsyncQuery(IQuery query) throws TransportException;
 
 	/**
 	 * Load a properties file with configuration parameters.

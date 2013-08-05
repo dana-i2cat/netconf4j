@@ -16,6 +16,8 @@
  */
 package net.i2cat.netconf.rpc;
 
+import net.i2cat.netconf.IQuery;
+
 /**
  * Factory class to create different netconf queries. It allows to create queries for the base standard
  * 
@@ -185,4 +187,7 @@ public class QueryFactory {
 		return query;
 	}
 
+    public static IQuery newLoadConfiguration(String url, LoadConfigurationQuery.Action action, LoadConfigurationQuery.Format format, String config) {
+        return new LoadConfigurationQuery(url, action, format, config);
+    }
 }
