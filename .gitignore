@@ -11,7 +11,7 @@ target/
 core/*/META-INF
 core/*/OSGI-INF
 core/*/build.properties
-netconf4j.iml
+
 
 # Package Files #
 *.jar

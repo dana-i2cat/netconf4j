@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
 
 public class SessionContext extends CompositeConfiguration {
 
-    public enum AuthType {
+	public enum AuthType {
 		PASSWORD ("password"),
 		PUBLICKEY ("publickey");
 		
@@ -60,7 +60,7 @@ public class SessionContext extends CompositeConfiguration {
 	public final static String	URI					= BASE + "session.uri";
 	/* Add keepalive sessions to control connection */
 	public final static String	KEEPALIVE			= BASE + "session.keepalive";
-    public final static String  TIMEOUT             = BASE + "session.timeout";
+	public final static String  TIMEOUT             = BASE + "session.timeout";
 
 	public final static String	LOGRESPXML			= BASE + "transport.logXMLStream";
 	public final static String	LOGFILEXML			= BASE + "transport.logXMLOutputFile";
@@ -171,13 +171,13 @@ public class SessionContext extends CompositeConfiguration {
 		this.setProperty(URI, uRI);
 	}
 
-    public long getTimeout() {
-        return this.getLong(TIMEOUT);
-    }
+	public long getTimeout() {
+		return this.getLong(TIMEOUT);
+	}
 
-    public void setTimeout(long timeout){
-        this.setProperty(TIMEOUT, timeout);
-    }
+	public void setTimeout(long timeout){
+		this.setProperty(TIMEOUT, timeout);
+	}
 
 	public boolean isKeepAlive() {
 		return this.getBoolean(KEEPALIVE);
