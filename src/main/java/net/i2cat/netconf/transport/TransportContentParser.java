@@ -83,7 +83,7 @@ public class TransportContentParser extends DefaultHandler2 {
 	boolean					insideErrorInfoTag		= false;
 	StringBuffer			errorInfoTagContent		= new StringBuffer();
 
-	/* extra features from JUNOS  (out RFC) */
+	/* extra features from JUNOS (out RFC) */
 
 	boolean					insideInterfaceInfoTag	= false;
 	StringBuffer			interfaceInfoTagContent	= new StringBuffer();
@@ -106,7 +106,7 @@ public class TransportContentParser extends DefaultHandler2 {
 			dataTagContent.append("<" + localName + ">");
 		}
 
-		if (insideSoftwareInfoTag) {
+		else if (insideSoftwareInfoTag) {
 			softwareInfoTagContent.append("<" + localName + ">");
 		}
 
@@ -119,13 +119,13 @@ public class TransportContentParser extends DefaultHandler2 {
 		// if (localName.equalsIgnoreCase("capabilities")) {
 		// insideCapabilityTag = false;
 		// }
-		if (localName.equalsIgnoreCase("capability")) {
+		else if (localName.equalsIgnoreCase("capability")) {
 			insideCapabilityTag = true;
 		}
-		if (localName.equalsIgnoreCase("session-id")) {
+		else if (localName.equalsIgnoreCase("session-id")) {
 			insideSessionIdTag = true;
 		}
-		if (localName.equalsIgnoreCase("rpc-reply")) {
+		else if (localName.equalsIgnoreCase("rpc-reply")) {
 			reply = new Reply();
 
 			messageId = attributes.getValue("message-id");
@@ -135,42 +135,42 @@ public class TransportContentParser extends DefaultHandler2 {
 			reply.setMessageId(messageId);
 			reply.setOk(false); // defaults to false
 		}
-		if (localName.equalsIgnoreCase("data")) {
+		else if (localName.equalsIgnoreCase("data")) {
 			insideDataTag = true;
 		}
-		if (localName.equalsIgnoreCase("ok")) {
+		else if (localName.equalsIgnoreCase("ok")) {
 			reply.setOk(true);
 		}
-		if (localName.equalsIgnoreCase("rpc-error")) {
+		else if (localName.equalsIgnoreCase("rpc-error")) {
 			error = new Error();
 		}
-		if (localName.equalsIgnoreCase("error-type")) {
+		else if (localName.equalsIgnoreCase("error-type")) {
 			insideErrorTypeTag = true;
 		}
-		if (localName.equalsIgnoreCase("error-tag")) {
+		else if (localName.equalsIgnoreCase("error-tag")) {
 			insideErrorTagTag = true;
 		}
-		if (localName.equalsIgnoreCase("error-severity")) {
+		else if (localName.equalsIgnoreCase("error-severity")) {
 			insideErrorSeverityTag = true;
 		}
-		if (localName.equalsIgnoreCase("error-app-tag")) {
+		else if (localName.equalsIgnoreCase("error-app-tag")) {
 			insideErrorAppTagTag = true;
 		}
-		if (localName.equalsIgnoreCase("error-path")) {
+		else if (localName.equalsIgnoreCase("error-path")) {
 			insideErrorPathTag = true;
 		}
-		if (localName.equalsIgnoreCase("error-message")) {
+		else if (localName.equalsIgnoreCase("error-message")) {
 			insideErrorMessageTag = true;
 		}
-		if (localName.equalsIgnoreCase("error-info")) {
+		else if (localName.equalsIgnoreCase("error-info")) {
 			insideErrorInfoTag = true;
 		}
 
-		/* extra features from JUNOS  (out RFC) */
-		if (localName.equalsIgnoreCase("interface-information")) {
+		/* extra features from JUNOS (out RFC) */
+		else if (localName.equalsIgnoreCase("interface-information")) {
 			insideInterfaceInfoTag = true;
 		}
-		if (localName.equalsIgnoreCase("software-information")) {
+		else if (localName.equalsIgnoreCase("software-information")) {
 			// software-information is the root node and leaving it in place
 			// makes gives us a well-formed XML document rather than multiple
 			// top-level nodes.
@@ -191,39 +191,39 @@ public class TransportContentParser extends DefaultHandler2 {
 			capabilityTagContent.append(ch, start, length);
 			// log.debug("capability content:" + capabilityTagContent);
 		}
-		if (insideSessionIdTag) {
+		else if (insideSessionIdTag) {
 			sessionIdTagContent.append(ch, start, length);
 		}
-		if (insideDataTag) {
+		else if (insideDataTag) {
 			dataTagContent.append(ch, start, length);
 		}
-		if (insideErrorAppTagTag) {
+		else if (insideErrorAppTagTag) {
 			errorAppTagTagContent.append(ch, start, length);
 		}
-		if (insideErrorInfoTag) {
+		else if (insideErrorInfoTag) {
 			errorInfoTagContent.append(ch, start, length);
 		}
-		if (insideErrorMessageTag) {
+		else if (insideErrorMessageTag) {
 			errorMessageTagContent.append(ch, start, length);
 		}
-		if (insideErrorPathTag) {
+		else if (insideErrorPathTag) {
 			errorPathTagContent.append(ch, start, length);
 		}
-		if (insideErrorSeverityTag) {
+		else if (insideErrorSeverityTag) {
 			errorSeverityTagContent.append(ch, start, length);
 		}
-		if (insideErrorTagTag) {
+		else if (insideErrorTagTag) {
 			errorTagTagContent.append(ch, start, length);
 		}
-		if (insideErrorTypeTag) {
+		else if (insideErrorTypeTag) {
 			errorTypeTagContent.append(ch, start, length);
 		}
 
-		/* extra features from JUNOS  (out RFC) */
-		if (insideInterfaceInfoTag) {
+		/* extra features from JUNOS (out RFC) */
+		else if (insideInterfaceInfoTag) {
 			interfaceInfoTagContent.append(ch, start, length);
 		}
-		if (insideSoftwareInfoTag) {
+		else if (insideSoftwareInfoTag) {
 			softwareInfoTagContent.append(ch, start, length);
 		}
 	}
@@ -241,7 +241,7 @@ public class TransportContentParser extends DefaultHandler2 {
 			dataTagContent.append("</" + localName + ">");
 		}
 
-		if (insideSoftwareInfoTag && !localName.equalsIgnoreCase("software-information")) {
+		else if (insideSoftwareInfoTag && !localName.equalsIgnoreCase("software-information")) {
 			softwareInfoTagContent.append("</" + localName + ">");
 		}
 
@@ -249,78 +249,78 @@ public class TransportContentParser extends DefaultHandler2 {
 			messageQueue.put(hello);
 			hello = null;
 		}
-		if (localName.equalsIgnoreCase("capabilities")) {
+		else if (localName.equalsIgnoreCase("capabilities")) {
 			hello.setCapabilities(capabilities);
 		}
-		if (localName.equalsIgnoreCase("capability")) {
+		else if (localName.equalsIgnoreCase("capability")) {
 			insideCapabilityTag = false;
 			capabilities.add(Capability.getCapabilityByNamespace(capabilityTagContent.toString()));
 			capabilityTagContent = new StringBuffer();
 		}
-		if (localName.equalsIgnoreCase("session-id")) {
+		else if (localName.equalsIgnoreCase("session-id")) {
 			insideSessionIdTag = false;
 			hello.setSessionId(sessionIdTagContent.toString());
 			sessionIdTagContent = new StringBuffer();
 		}
-		if (localName.equalsIgnoreCase("rpc-reply")) {
+		else if (localName.equalsIgnoreCase("rpc-reply")) {
 			messageQueue.put(reply);
 			reply = null;
 		}
-		if (localName.equalsIgnoreCase("data")) {
+		else if (localName.equalsIgnoreCase("data")) {
 			insideDataTag = false;
 			reply.setContain(dataTagContent.toString());
 			reply.setContainName("data");
 			dataTagContent = new StringBuffer();
 		}
 
-		if (localName.equalsIgnoreCase("rpc-error")) {
+		else if (localName.equalsIgnoreCase("rpc-error")) {
 			reply.addError(error);
 		}
-		if (localName.equalsIgnoreCase("error-type")) {
+		else if (localName.equalsIgnoreCase("error-type")) {
 			insideErrorTypeTag = false;
 			error.setType(ErrorType.getErrorTypeByValue(errorTypeTagContent.toString()));
 			errorTypeTagContent = new StringBuffer();
 		}
-		if (localName.equalsIgnoreCase("error-tag")) {
+		else if (localName.equalsIgnoreCase("error-tag")) {
 			insideErrorTagTag = false;
 			error.setTag(ErrorTag.getErrorTagByValue((errorTagTagContent.toString())));
 			errorTagTagContent = new StringBuffer();
 		}
-		if (localName.equalsIgnoreCase("error-severity")) {
+		else if (localName.equalsIgnoreCase("error-severity")) {
 			insideErrorSeverityTag = false;
 			error.setSeverity(ErrorSeverity.getErrorSeverityByValue(errorSeverityTagContent.toString()));
 			errorSeverityTagContent = new StringBuffer();
 		}
-		if (localName.equalsIgnoreCase("error-app-tag")) {
+		else if (localName.equalsIgnoreCase("error-app-tag")) {
 			insideErrorAppTagTag = false;
 			error.setAppTag(errorAppTagTagContent.toString());
 			errorAppTagTagContent = new StringBuffer();
 		}
-		if (localName.equalsIgnoreCase("error-path")) {
+		else if (localName.equalsIgnoreCase("error-path")) {
 			insideErrorPathTag = false;
 			error.setPath(errorPathTagContent.toString());
 			errorPathTagContent = new StringBuffer();
 		}
-		if (localName.equalsIgnoreCase("error-message")) {
+		else if (localName.equalsIgnoreCase("error-message")) {
 			insideErrorMessageTag = false;
 			error.setMessage(errorMessageTagContent.toString());
 			errorMessageTagContent = new StringBuffer();
 		}
-		if (localName.equalsIgnoreCase("error-info")) {
+		else if (localName.equalsIgnoreCase("error-info")) {
 			insideErrorInfoTag = false;
 			error.setInfo(errorInfoTagContent.toString());
 			errorInfoTagContent = new StringBuffer();
 		}
 
 		/* get extrafunctionalities */
-		if (localName.equalsIgnoreCase("get-interface-information")) {
+		else if (localName.equalsIgnoreCase("get-interface-information")) {
 			insideInterfaceInfoTag = false;
 			reply.setContain(interfaceInfoTagContent.toString());
 			reply.setContainName("get-interface-information");
 			interfaceInfoTagContent = new StringBuffer();
 		}
 
-		if (localName.equalsIgnoreCase("software-information")) {
+		else if (localName.equalsIgnoreCase("software-information")) {
 			insideSoftwareInfoTag = false;
 			// software-information is the root node and leaving it in place
 			// makes gives us a well-formed XML document rather than multiple
