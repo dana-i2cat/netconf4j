@@ -101,7 +101,7 @@ public class SessionContext extends CompositeConfiguration {
 			log.info("Current path: " + path);
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Exception getting current path", e);
 		}
 	}
 

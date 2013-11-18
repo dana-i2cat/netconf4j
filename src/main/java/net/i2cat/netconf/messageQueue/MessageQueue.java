@@ -45,7 +45,7 @@ public class MessageQueue {
 		RPCElement element;
 
 		synchronized (queue) {
-			log.debug("Received new message (" + value.getMessageId() + ")(waking up waiting threats)");
+			log.debug("Received new message (" + value.getMessageId() + ")(waking up waiting threads)");
 			element = queue.put(key, value);
 			queue.notifyAll();
 		}
@@ -100,7 +100,7 @@ public class MessageQueue {
 					log.debug("Waiting...");
 					queue.wait();
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					log.warn("Interrupted exception");
 				}
 			}
 		}
@@ -117,7 +117,7 @@ public class MessageQueue {
 					log.debug("Waiting (" + messageId + ")...");
 					queue.wait();
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					log.warn("Interrupted exception");
 				}
 			}
 		}
