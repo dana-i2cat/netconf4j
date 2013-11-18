@@ -19,10 +19,10 @@ package net.i2cat.netconf.messageQueue;
 import java.util.LinkedHashMap;
 import java.util.Vector;
 
+import net.i2cat.netconf.rpc.RPCElement;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import net.i2cat.netconf.rpc.RPCElement;
 
 public class MessageQueue {
 
@@ -36,8 +36,7 @@ public class MessageQueue {
 	}
 
 	/**
-	 * put() element in (internal) queue, but triggers event to listeners before
-	 * returning.
+	 * put() element in (internal) queue, but triggers event to listeners before returning.
 	 * 
 	 * This methods is thread safe.
 	 */
@@ -59,8 +58,7 @@ public class MessageQueue {
 	}
 
 	/**
-	 * Commodity method. Same as put(k,v) but takes the key by calling
-	 * getMessageId from the value.
+	 * Commodity method. Same as put(k,v) but takes the key by calling getMessageId from the value.
 	 * 
 	 * @param value
 	 * @return
