@@ -21,8 +21,6 @@ import java.util.Vector;
 
 public class Reply extends RPCElement {
 
-	Operation				operation;
-
 	Vector<Error>			errors;
 
 	boolean					ok	= false;
@@ -36,14 +34,6 @@ public class Reply extends RPCElement {
 	public Reply() {
 		errors = new Vector<Error>();
 		attributes = new HashMap<String, String>();
-	}
-
-	public void setOperation(Operation operation) {
-		this.operation = operation;
-	}
-
-	public Operation getOperation() {
-		return operation;
 	}
 
 	public boolean isOk() {
