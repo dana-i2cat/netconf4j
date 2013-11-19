@@ -74,7 +74,10 @@ public class MessageQueue {
 
 	public RPCElement consume() {
 		synchronized (queue) {
-			RPCElement element = queue.remove(queue.keySet().iterator().next()); // get first (older)
+			RPCElement element = null;
+			if (queue.keySet().iterator().hasNext()) {
+				element = queue.remove(queue.keySet().iterator().next()); // get first (older)
+			}
 			if (element != null)
 				log.debug("Consuming message");
 			return element;
