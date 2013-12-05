@@ -40,7 +40,7 @@ public class ReplyFactory {
 		reply.setAttributes(attributes);
 
 		// configuration
-		reply.setContain("configuration");
+		reply.setContainName("data");
 		reply.setContain(configuration);
 
 		return reply;
