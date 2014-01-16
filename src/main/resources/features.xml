@@ -15,7 +15,7 @@
 		<bundle dependency="true">mvn:org.apache.geronimo.specs/geronimo-servlet_2.5_spec/1.1.2</bundle>
 		<bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-collections/3.2.1_1</bundle>
 		<bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-jxpath/1.2_5</bundle>
-		<bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-lang/2.4_4</bundle>
+		<bundle dependency="true">mvn:commons-lang/commons-lang/2.5</bundle>
 		<bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.ant/1.7.0_4</bundle>
 		<bundle dependency="true">mvn:commons-codec/commons-codec/1.4</bundle>
 		<bundle dependency="true">mvn:commons-digester/commons-digester/2.1</bundle>
