@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features>
+	<feature name="netconf4j" version="${project.version}">
+		<feature version="1.6">netconf4j-commons-config</feature>
+		<bundle dependency="true">mvn:commons-io/commons-io/1.4</bundle>
+		
+		<bundle>mvn:net.i2cat.netconf/netconf4j/${project.version}</bundle>
+	</feature>
+	
+	<feature name="netconf4j-commons-config" version="1.6">
+		
+		<!-- dependencies for commons-configuration-->
+		<bundle dependency="true">mvn:javax.mail/mail/1.4.4</bundle>
+		<bundle dependency="true">mvn:org.apache.commons/com.springsource.org.apache.commons.beanutils/1.8.0</bundle>
+		<bundle dependency="true">mvn:org.apache.geronimo.specs/geronimo-servlet_2.5_spec/1.1.2</bundle>
+		<bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-collections/3.2.1_1</bundle>
+		<bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-jxpath/1.2_5</bundle>
+		<bundle dependency="true">mvn:commons-lang/commons-lang/2.5</bundle>
+		<bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.ant/1.7.0_4</bundle>
+		<bundle dependency="true">mvn:commons-codec/commons-codec/1.4</bundle>
+		<bundle dependency="true">mvn:commons-digester/commons-digester/2.1</bundle>
+		
+		<bundle dependency="true">mvn:commons-configuration/commons-configuration/1.6</bundle>
+	</feature>
+</features>

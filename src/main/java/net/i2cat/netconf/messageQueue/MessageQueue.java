@@ -40,8 +40,7 @@ public class MessageQueue {
 	}
 
 	/**
-	 * put() element in (internal) queue, but triggers event to listeners before
-	 * returning.
+	 * put() element in (internal) queue, but triggers event to listeners before returning.
 	 * 
 	 * This methods is thread safe.
 	 */
@@ -50,7 +49,7 @@ public class MessageQueue {
 		RPCElement element;
 
 		synchronized (queue) {
-			log.debug("Received new message (" + value.getMessageId() + ")(waking up waiting threats)");
+			log.debug("Received new message (" + value.getMessageId() + ")(waking up waiting threads)");
 			element = queue.put(key, value);
 			queue.notifyAll();
 		}
@@ -63,8 +62,7 @@ public class MessageQueue {
 	}
 
 	/**
-	 * Commodity method. Same as put(k,v) but takes the key by calling
-	 * getMessageId from the value.
+	 * Commodity method. Same as put(k,v) but takes the key by calling getMessageId from the value.
 	 * 
 	 * @param value
 	 * @return
@@ -80,7 +78,10 @@ public class MessageQueue {
 
 	public RPCElement consume() {
 		synchronized (queue) {
-			RPCElement element = queue.remove(0); // get first (older)
+			RPCElement element = null;
+			if (queue.keySet().iterator().hasNext()) {
+				element = queue.remove(queue.keySet().iterator().next()); // get first (older)
+			}
 			if (element != null)
 				log.debug("Consuming message");
 			return element;
@@ -107,7 +108,7 @@ public class MessageQueue {
 					log.debug("Waiting...");
 					queue.wait();
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					log.warn("Interrupted exception");
 				}
 			}
 		}
