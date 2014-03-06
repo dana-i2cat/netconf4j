@@ -16,9 +16,9 @@
  */
 package net.i2cat.netconf.errors;
 
-public class TransportNotImplementedException extends NetconfException {
+public class TransportNotRegisteredException extends NetconfException {
 
-	public TransportNotImplementedException(String description) {
+	public TransportNotRegisteredException(String description) {
 		super(description);
 	}
 }

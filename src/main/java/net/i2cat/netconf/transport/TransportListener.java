@@ -20,5 +20,5 @@ public interface TransportListener {
 
 	public void transportClosed();
 
-	public void transportOpenned();
+	public void transportOpened();
 }

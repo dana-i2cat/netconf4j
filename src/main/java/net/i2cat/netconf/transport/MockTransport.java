@@ -105,10 +105,10 @@ public class MockTransport implements Transport {
 		queue.put(hello);
 
 		for (TransportListener listener : listeners)
-			listener.transportOpenned();
+			listener.transportOpened();
 	}
 
-	public void disconnect() throws TransportException {
+	public void disconnect() {
 		for (TransportListener listener : listeners)
 			listener.transportClosed();
 	}
