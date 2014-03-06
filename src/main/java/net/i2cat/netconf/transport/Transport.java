@@ -27,7 +27,7 @@ public interface Transport {
 
 	public void connect(SessionContext sessionContext) throws TransportException;
 
-	public void disconnect() throws TransportException;
+	public void disconnect();
 
 	public void sendAsyncQuery(RPCElement query) throws TransportException;
 

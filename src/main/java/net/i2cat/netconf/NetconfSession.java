@@ -19,14 +19,14 @@ package net.i2cat.netconf;
 import java.net.URI;
 import java.util.ArrayList;
 
+import com.google.common.util.concurrent.UncheckedTimeoutException;
 import net.i2cat.netconf.errors.NetconfProtocolException;
 import net.i2cat.netconf.errors.TransportException;
-import net.i2cat.netconf.errors.TransportNotImplementedException;
+import net.i2cat.netconf.errors.TransportNotRegisteredException;
 import net.i2cat.netconf.messageQueue.MessageQueue;
 import net.i2cat.netconf.messageQueue.MessageQueueListener;
 import net.i2cat.netconf.rpc.Capability;
 import net.i2cat.netconf.rpc.Hello;
-import net.i2cat.netconf.rpc.Query;
 import net.i2cat.netconf.rpc.RPCElement;
 import net.i2cat.netconf.rpc.Reply;
 import net.i2cat.netconf.transport.Transport;
@@ -55,11 +55,19 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 	Transport				transport;
 	// URI transportId;
 
+	TransportFactory		transportFactory;
+
 	String					sessionId;
 
 	MessageQueue			messageQueue;
 
-	public NetconfSession(SessionContext sessionContext) throws TransportNotImplementedException, ConfigurationException {
+	public NetconfSession(SessionContext sessionContext) throws TransportNotRegisteredException, ConfigurationException {
+		this(sessionContext, new TransportFactory());
+	}
+
+	public NetconfSession(SessionContext sessionContext, TransportFactory transportFactory)
+			throws TransportNotRegisteredException, ConfigurationException {
+		this.transportFactory = transportFactory;
 		this.sessionContext = sessionContext;
 
 		URI uri = sessionContext.getURI();
@@ -69,7 +77,11 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 				uri.getUserInfo() == null)
 			throw new ConfigurationException("Insufficient information in session context's URI: " + uri);
 
-		TransportFactory.checkTransportType(sessionContext.getURI().getScheme()); // throws TNIE
+
+		if (!transportFactory.isAwareOfScheme(uri.getScheme())) {
+			throw new TransportNotRegisteredException("Scheme '" + uri.getScheme() +
+					"' given in URI has not been registered with TransportFactory.");
+		}
 	}
 
 	/* (non-Javadoc)
@@ -88,8 +100,8 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 		messageQueue.addListener(this);
 
 		try {
-			transport = TransportFactory.getTransport(sessionContext.getURI().getScheme());
-		} catch (TransportNotImplementedException e) {
+			transport = transportFactory.getTransport(sessionContext.getURI().getScheme());
+		} catch (TransportNotRegisteredException e) {
 			TransportException te = new TransportException(e.getMessage());
 			te.initCause(e);
 			throw te;
@@ -111,7 +123,18 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 		log.info("Sending hello");
 		transport.sendAsyncQuery(clientHello);
 
-		reply = messageQueue.blockingConsumeById("0"); // <hello> has no
+		try {
+			if (sessionContext.containsKey(SessionContext.TIMEOUT)) {
+				reply = messageQueue.blockingConsumeById("0", sessionContext.getTimeout());
+			} else {
+				reply = messageQueue.blockingConsumeById("0");
+			}
+		} catch (UncheckedTimeoutException e) {
+			throw new TransportException("No reply to hello -- timeout.", e);
+		} catch (Exception e) {
+			throw new TransportException("Error while getting reply: " + e.getMessage(), e);
+		}
+
 		// message-id, it is
 		// indexed under 0.
 
@@ -149,7 +172,7 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 	/* (non-Javadoc)
 	 * @see net.i2cat.netconf.INetconfSession#disconnect()
 	 */
-	public void disconnect() throws TransportException {
+	public void disconnect() {
 		// if (timerKeepAlive != null)
 		// timerKeepAlive.close();
 		transport.disconnect();
@@ -172,7 +195,18 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 		transport.sendAsyncQuery(query.getRpcElement());
 
 		log.info("Sent. Waiting for response...");
-		Reply reply = (Reply) messageQueue.blockingConsumeById(query.getMessageId());
+		Reply reply = null;
+		try {
+			if (sessionContext.containsKey(SessionContext.TIMEOUT)) {
+				reply = (Reply) messageQueue.blockingConsumeById(query.getMessageId(), sessionContext.getTimeout());
+			} else {
+				reply = (Reply) messageQueue.blockingConsumeById(query.getMessageId());
+			}
+		} catch (UncheckedTimeoutException e) {
+			throw new TransportException("Timeout while waiting for reply to query.", e);
+		} catch (Exception e) {
+			throw new TransportException("Error getting reply to query: " + e.getMessage(), e);
+		}
 		log.debug("--------------------------------------------------");
 		log.debug("receiving REPLY ");
 		log.debug(reply.getContain());
@@ -261,8 +295,8 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 	 */
 
 	// TransportListener
-	public void transportOpenned() {
-		log.info("Transport openned event");
+	public void transportOpened() {
+		log.info("Transport opened event");
 	}
 
 	// TransportListener
