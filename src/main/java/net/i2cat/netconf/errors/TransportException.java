@@ -21,7 +21,7 @@ public class TransportException extends NetconfException {
 		super(description);
 	}
 
-    public TransportException(String description, Exception exception) {
-        super(description, exception);
-    }
+	public TransportException(String description, Exception exception) {
+		super(description, exception);
+	}
 }

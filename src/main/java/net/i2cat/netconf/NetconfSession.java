@@ -55,43 +55,40 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 	Transport				transport;
 	// URI transportId;
 
-    TransportFactory        transportFactory;
+	TransportFactory		transportFactory;
 
 	String					sessionId;
 
 	MessageQueue			messageQueue;
 
-
-
-    public NetconfSession(SessionContext sessionContext) throws TransportNotRegisteredException, ConfigurationException {
+	public NetconfSession(SessionContext sessionContext) throws TransportNotRegisteredException, ConfigurationException {
 		this(sessionContext, new TransportFactory());
 	}
 
-    public NetconfSession(SessionContext sessionContext, TransportFactory transportFactory)
-            throws TransportNotRegisteredException, ConfigurationException {
-        this.transportFactory = transportFactory;
-        this.sessionContext = sessionContext;
+	public NetconfSession(SessionContext sessionContext, TransportFactory transportFactory)
+			throws TransportNotRegisteredException, ConfigurationException {
+		this.transportFactory = transportFactory;
+		this.sessionContext = sessionContext;
 
-        URI uri = sessionContext.getURI();
+		URI uri = sessionContext.getURI();
 
-        if (uri.getScheme() == null ||
-                uri.getHost() == null ||
-                uri.getUserInfo() == null)
-            throw new ConfigurationException("Insufficient information in session context's URI: " + uri);
+		if (uri.getScheme() == null ||
+				uri.getHost() == null ||
+				uri.getUserInfo() == null)
+			throw new ConfigurationException("Insufficient information in session context's URI: " + uri);
 
 
-        if (!transportFactory.isAwareOfScheme(uri.getScheme())) {
-            throw new TransportNotRegisteredException("Scheme '" + uri.getScheme() +
-                    "' given in URI has not been registered with TransportFactory.");
-        }
-    }
+		if (!transportFactory.isAwareOfScheme(uri.getScheme())) {
+			throw new TransportNotRegisteredException("Scheme '" + uri.getScheme() +
+					"' given in URI has not been registered with TransportFactory.");
+		}
+	}
 
 	/* (non-Javadoc)
 	 * @see net.i2cat.netconf.INetconfSession#connect()
 	 */
 	public void connect() throws TransportException, NetconfProtocolException {
-
-        RPCElement reply;
+		RPCElement reply;
 		Hello clientHello;
 		Hello serverHello;
 
@@ -126,19 +123,19 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 		log.info("Sending hello");
 		transport.sendAsyncQuery(clientHello);
 
-        try {
-            if (sessionContext.containsKey(SessionContext.TIMEOUT)) {
-                reply = messageQueue.blockingConsumeById("0", sessionContext.getTimeout());
-            } else {
-                reply = messageQueue.blockingConsumeById("0");
-            }
-        } catch (UncheckedTimeoutException e) {
-            throw new TransportException("No reply to hello -- timeout.", e);
-        } catch (Exception e) {
-            throw new TransportException("Error while getting reply: " + e.getMessage(), e);
-        }
+		try {
+			if (sessionContext.containsKey(SessionContext.TIMEOUT)) {
+				reply = messageQueue.blockingConsumeById("0", sessionContext.getTimeout());
+			} else {
+				reply = messageQueue.blockingConsumeById("0");
+			}
+		} catch (UncheckedTimeoutException e) {
+			throw new TransportException("No reply to hello -- timeout.", e);
+		} catch (Exception e) {
+			throw new TransportException("Error while getting reply: " + e.getMessage(), e);
+		}
 
-        // message-id, it is
+		// message-id, it is
 		// indexed under 0.
 
 		if (!(reply instanceof Hello))
@@ -198,19 +195,19 @@ public class NetconfSession implements TransportListener, MessageQueueListener, 
 		transport.sendAsyncQuery(query.getRpcElement());
 
 		log.info("Sent. Waiting for response...");
-        Reply reply = null;
-        try {
-            if (sessionContext.containsKey(SessionContext.TIMEOUT)) {
-                reply = (Reply) messageQueue.blockingConsumeById(query.getMessageId(), sessionContext.getTimeout());
-            } else {
-                reply = (Reply) messageQueue.blockingConsumeById(query.getMessageId());
-            }
-        } catch (UncheckedTimeoutException e) {
-            throw new TransportException("Timeout while waiting for reply to query.", e);
-        } catch (Exception e) {
-            throw new TransportException("Error getting reply to query: " + e.getMessage(), e);
-        }
-        log.debug("--------------------------------------------------");
+		Reply reply = null;
+		try {
+			if (sessionContext.containsKey(SessionContext.TIMEOUT)) {
+				reply = (Reply) messageQueue.blockingConsumeById(query.getMessageId(), sessionContext.getTimeout());
+			} else {
+				reply = (Reply) messageQueue.blockingConsumeById(query.getMessageId());
+			}
+		} catch (UncheckedTimeoutException e) {
+			throw new TransportException("Timeout while waiting for reply to query.", e);
+		} catch (Exception e) {
+			throw new TransportException("Error getting reply to query: " + e.getMessage(), e);
+		}
+		log.debug("--------------------------------------------------");
 		log.debug("receiving REPLY ");
 		log.debug(reply.getContain());
 		log.debug("--------------------------------------------------");

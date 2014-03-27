@@ -40,8 +40,7 @@ public class MessageQueue {
 	}
 
 	/**
-	 * put() element in (internal) queue, but triggers event to listeners before
-	 * returning.
+	 * put() element in (internal) queue, but triggers event to listeners before returning.
 	 * 
 	 * This methods is thread safe.
 	 */
@@ -50,7 +49,7 @@ public class MessageQueue {
 		RPCElement element;
 
 		synchronized (queue) {
-			log.debug("Received new message (" + value.getMessageId() + ")(waking up waiting threats)");
+			log.debug("Received new message (" + value.getMessageId() + ")(waking up waiting threads)");
 			element = queue.put(key, value);
 			queue.notifyAll();
 		}
@@ -63,8 +62,7 @@ public class MessageQueue {
 	}
 
 	/**
-	 * Commodity method. Same as put(k,v) but takes the key by calling
-	 * getMessageId from the value.
+	 * Commodity method. Same as put(k,v) but takes the key by calling getMessageId from the value.
 	 * 
 	 * @param value
 	 * @return
@@ -80,7 +78,10 @@ public class MessageQueue {
 
 	public RPCElement consume() {
 		synchronized (queue) {
-			RPCElement element = queue.remove(0); // get first (older)
+			RPCElement element = null;
+			if (queue.keySet().iterator().hasNext()) {
+				element = queue.remove(queue.keySet().iterator().next()); // get first (older)
+			}
 			if (element != null)
 				log.debug("Consuming message");
 			return element;
@@ -96,7 +97,7 @@ public class MessageQueue {
 		}
 	}
 
-    // TODO: Create a version that takes a timeout.
+	// TODO: Create a version that takes a timeout.
 	public RPCElement blockingConsume() {
 
 		RPCElement element;
@@ -107,7 +108,7 @@ public class MessageQueue {
 					log.debug("Waiting...");
 					queue.wait();
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					log.warn("Interrupted exception");
 				}
 			}
 		}
@@ -115,51 +116,51 @@ public class MessageQueue {
 	}
 
 	public RPCElement blockingConsumeById(String messageId) throws Exception {
-        return blockingConsumeById(messageId, 0);
+		return blockingConsumeById(messageId, 0);
 	}
 
-    /**
-     * Wait for a new message with the id <code>messageId</code> to arrive in the queue.
-     *
-     * @param messageId a string identifying the message to consume.
-     * @param timeout a long indicating the length of the timeout in milliseconds. If zero or less, no timeout.
-     * @throws Exception an UncheckedTimeoutException if there is no message with <code>messageId</code> after waiting for the specified timeout.
-     * @return
-     */
-    public RPCElement blockingConsumeById(String messageId, long timeout) throws Exception {
+	/**
+	 * Wait for a new message with the id <code>messageId</code> to arrive in the queue.
+	 *
+	 * @param messageId a string identifying the message to consume.
+	 * @param timeout a long indicating the length of the timeout in milliseconds. If zero or less, no timeout.
+	 * @throws Exception an UncheckedTimeoutException if there is no message with <code>messageId</code> after waiting for the specified timeout.
+	 * @return
+	 */
+	public RPCElement blockingConsumeById(String messageId, long timeout) throws Exception {
 
-        final String messageIdFinal = messageId;
-        Callable<RPCElement> consumeCaller = new Callable<RPCElement>() {
-            public RPCElement call() throws Exception {
-                RPCElement element;
-                synchronized (queue) {
-                    while ((element = consumeById(messageIdFinal)) == null) {
-                        try {
-                            log.debug("Waiting (" + messageIdFinal + ")...");
-                            queue.wait();
-                        } catch (InterruptedException e) {
-                            // Do nothing. It's probably a timeout.
-                        }
-                    }
-                }
-                return element;
-            }
-        };
+		final String messageIdFinal = messageId;
+		Callable<RPCElement> consumeCaller = new Callable<RPCElement>() {
+			public RPCElement call() throws Exception {
+				RPCElement element;
+				synchronized (queue) {
+					while ((element = consumeById(messageIdFinal)) == null) {
+						try {
+							log.debug("Waiting (" + messageIdFinal + ")...");
+							queue.wait();
+						} catch (InterruptedException e) {
+							// Do nothing. It's probably a timeout.
+						}
+					}
+				}
+				return element;
+			}
+		};
 
-        if (timeout <= 0) {
-            return consumeCaller.call();
-        }
+		if (timeout <= 0) {
+			return consumeCaller.call();
+		}
 
-        SimpleTimeLimiter timeLimiter = new SimpleTimeLimiter();
+		SimpleTimeLimiter timeLimiter = new SimpleTimeLimiter();
 
-        try {
-            return timeLimiter.callWithTimeout(consumeCaller, timeout, TimeUnit.MILLISECONDS, true);
-        } catch (UncheckedTimeoutException e) {
-            log.debug("BlockingConsumeById(messageId=" + messageId + ") failed due to timeout.", e);
-            throw e;
-        } catch (Exception e) {
-            log.debug("BlockingConsumeById(messageId=" + messageId + ") failed.", e);
-            throw e;
-        }
-    }
+		try {
+			return timeLimiter.callWithTimeout(consumeCaller, timeout, TimeUnit.MILLISECONDS, true);
+		} catch (UncheckedTimeoutException e) {
+			log.debug("BlockingConsumeById(messageId=" + messageId + ") failed due to timeout.", e);
+			throw e;
+		} catch (Exception e) {
+			log.debug("BlockingConsumeById(messageId=" + messageId + ") failed.", e);
+			throw e;
+		}
+	}
 }

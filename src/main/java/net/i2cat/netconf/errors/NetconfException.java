@@ -22,7 +22,7 @@ public class NetconfException extends Exception {
 		super(description);
 	}
 
-    public NetconfException(String description, Exception cause) {
-        super(description, cause);
-    }
+	public NetconfException(String description, Exception cause) {
+		super(description, cause);
+	}
 }
