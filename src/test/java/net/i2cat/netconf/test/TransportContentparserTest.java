@@ -25,9 +25,13 @@ import net.i2cat.netconf.rpc.Error;
 import net.i2cat.netconf.rpc.ErrorSeverity;
 import net.i2cat.netconf.rpc.ErrorTag;
 import net.i2cat.netconf.rpc.ErrorType;
+import net.i2cat.netconf.rpc.RPCElement;
 import net.i2cat.netconf.rpc.Reply;
 import net.i2cat.netconf.transport.TransportContentParser;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.InputSource;
@@ -37,9 +41,13 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 public class TransportContentparserTest {
 
-	XMLReader				parser;
-	TransportContentParser	xmlHandler;
-	MessageQueue			queue;
+	private static Log			log										= LogFactory.getLog(TransportContentparserTest.class);
+
+	private static final String	LLDP_NEIGHBORS_INFORMATION_REPLY_FILE	= "/netconf-messages/netconf-lldp-neighbors-information-reply.xml";
+
+	XMLReader					parser;
+	TransportContentParser		xmlHandler;
+	MessageQueue				queue;
 
 	@Before
 	public void initParser() throws SAXException {
@@ -113,6 +121,20 @@ public class TransportContentparserTest {
 		}
 	}
 
+	@Test
+	public void parseUnknownReply() throws IOException, SAXException {
+		parseMessage(buildLLDPNeighborsInformationReply());
+
+		RPCElement rpcElement = queue.consume();
+		Assert.assertNotNull(rpcElement);
+		Assert.assertTrue(rpcElement instanceof Reply);
+		Reply reply = (Reply) rpcElement;
+
+		Assert.assertEquals("Contain must be 'lldp-neighbors-information'", "lldp-neighbors-information", reply.getContainName());
+		Assert.assertNotNull("Contain must not be null", reply.getContain());
+		log.info(reply.getContain());
+	}
+
 	private String buildErrorRepy(String messageId, String type, String tag, String severity, String message) {
 
 		StringBuilder sb = new StringBuilder();
@@ -145,4 +167,11 @@ public class TransportContentparserTest {
 		}
 	}
 
+	private String buildLLDPNeighborsInformationReply() throws IOException {
+		StringBuilder sb = new StringBuilder();
+		sb.append(IOUtils.toString(this.getClass().getResourceAsStream(LLDP_NEIGHBORS_INFORMATION_REPLY_FILE)));
+		sb.append("]]>]]>");
+
+		return sb.toString();
+	}
 }

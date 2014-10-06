@@ -39,6 +39,7 @@ import org.xml.sax.ext.DefaultHandler2;
  * This class intends to be a reusable (across transports) component that receives SAX events and returns instantiated Netconf's RPCElement objects.
  * 
  * @author Pau Minoves
+ * @author Julio Carlos Barrera
  * 
  */
 public class TransportContentParser extends DefaultHandler2 {
@@ -91,6 +92,12 @@ public class TransportContentParser extends DefaultHandler2 {
 	boolean					insideSoftwareInfoTag	= false;
 	StringBuffer			softwareInfoTagContent	= new StringBuffer();
 
+	// any other under <rpc-reply> tag
+	boolean					insideRPCReplyTag		= false;
+	String					underRPCReplyTagName;
+	StringBuffer			underRPCReplyTagContent	= new StringBuffer();
+	boolean					insideUnderRPCReplyTag	= false;
+
 	public void setMessageQueue(MessageQueue queue) {
 		this.messageQueue = queue;
 	}
@@ -134,6 +141,8 @@ public class TransportContentParser extends DefaultHandler2 {
 
 			reply.setMessageId(messageId);
 			reply.setOk(false); // defaults to false
+
+			insideRPCReplyTag = true;
 		}
 		else if (localName.equalsIgnoreCase("data")) {
 			insideDataTag = true;
@@ -176,6 +185,15 @@ public class TransportContentParser extends DefaultHandler2 {
 			// top-level nodes.
 			softwareInfoTagContent.append("<" + localName + ">");
 			insideSoftwareInfoTag = true;
+		}
+		/* any other under <rpc-reply> tag */
+		else if (insideRPCReplyTag) {
+			insideRPCReplyTag = false;
+			underRPCReplyTagName = localName;
+			underRPCReplyTagContent.append("<" + localName + ">");
+			insideUnderRPCReplyTag = true;
+		} else if (insideUnderRPCReplyTag) {
+			underRPCReplyTagContent.append("<" + localName + ">");
 		}
 
 	}
@@ -225,6 +243,11 @@ public class TransportContentParser extends DefaultHandler2 {
 		}
 		else if (insideSoftwareInfoTag) {
 			softwareInfoTagContent.append(ch, start, length);
+		}
+
+		/* any other under <rpc-reply> tag */
+		else if (insideUnderRPCReplyTag) {
+			underRPCReplyTagContent.append(ch, start, length);
 		}
 	}
 
@@ -329,6 +352,17 @@ public class TransportContentParser extends DefaultHandler2 {
 			reply.setContain(softwareInfoTagContent.toString());
 			reply.setContainName("software-information");
 			softwareInfoTagContent = new StringBuffer();
+		}
+
+		/* any other under <rpc-reply> tag */
+		else if (insideUnderRPCReplyTag && localName.equals(underRPCReplyTagName)) {
+			insideUnderRPCReplyTag = false;
+			underRPCReplyTagContent.append("</" + localName + ">");
+			reply.setContainName(underRPCReplyTagName);
+			reply.setContain(underRPCReplyTagContent.toString());
+			underRPCReplyTagContent = new StringBuffer();
+		} else if (insideUnderRPCReplyTag) {
+			underRPCReplyTagContent.append("</" + localName + ">");
 		}
 	}
 
