@@ -3,7 +3,7 @@
 	<feature name="netconf4j" version="${project.version}">
 		<feature version="1.6">netconf4j-commons-config</feature>
 		<bundle dependency="true">mvn:commons-io/commons-io/1.4</bundle>
-		<bundle dependency="true">mvn:com.google.guava/guava/16.0.1</bundle>
+		<bundle dependency="true">mvn:com.google.guava/guava/${guava.version}</bundle>
 		
 		<bundle>mvn:net.i2cat.netconf/netconf4j/${project.version}</bundle>
 	</feature>
