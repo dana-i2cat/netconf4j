@@ -5,7 +5,7 @@
 
 	<artifactId>netconf4j</artifactId>
 	<groupId>net.i2cat.netconf</groupId>
-	<version>0.0.10-SNAPSHOT</version>
+	<version>0.0.9b</version>
 	<packaging>bundle</packaging>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -264,7 +264,7 @@
         <connection>scm:git:git://github.com/dana-i2cat/netconf4j.git</connection>
         <developerConnection>scm:git:git@github.com:dana-i2cat/netconf4j.git</developerConnection>
         <url>http://github.com/dana-i2cat/netconf4j</url>
-	  <tag>HEAD</tag>
+	  <tag>v0.0.9b</tag>
   </scm>
 	
 </project>
