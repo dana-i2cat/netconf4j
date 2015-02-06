@@ -188,7 +188,7 @@
 						<!--
 							<Private-Package></Private-Package> if i need a private package
 						-->
-						<Import-Package>!${project.artifactId}.*,*</Import-Package>
+						<Import-Package>!net.i2cat.netconf,!net.i2cat.netconf.*,*</Import-Package>
 						<Export-Package>net.i2cat.netconf.*</Export-Package>
 						<Bundle-ClassPath>.,
 									lib/ganymed-ssh2-build210.jar
